@@ -2,7 +2,9 @@ import Image from "next/image";
 import Link from "next/link";
 import Icone from "@/app/icones";
 import Carrossel, { type Slide } from "@/app/carrossel";
+import VitrineTema, { type Vitrine } from "@/app/vitrine-tema";
 import { lojas } from "@/lib/dados";
+import { moeda, precoAPartirDe } from "@/lib/precos";
 
 function iniciais(nome: string) {
   return nome
@@ -12,6 +14,28 @@ function iniciais(nome: string) {
     .join("")
     .toUpperCase();
 }
+
+// A mesma vitrine, vista com os olhos de cada pasteleira.
+const vitrines: Vitrine[] = lojas.map(({ confeiteira, produtos }) => ({
+  slug: confeiteira.slug,
+  nome: confeiteira.nome,
+  iniciais: iniciais(confeiteira.nome),
+  cidade: confeiteira.cidade,
+  tagline: confeiteira.tagline,
+  moedaNome: confeiteira.moeda === "EUR" ? "euros" : "francos suíços",
+  tema: confeiteira.tema,
+  entrega: confeiteira.entregas
+    .map(
+      (opcao) =>
+        `${opcao.nome} ${opcao.taxa === 0 ? "grátis" : moeda(opcao.taxa, confeiteira.moeda)}`,
+    )
+    .join(" · "),
+  produtos: produtos.slice(0, 3).map((produto) => ({
+    nome: produto.nome,
+    foto: produto.foto,
+    preco: moeda(precoAPartirDe(produto), confeiteira.moeda),
+  })),
+}));
 
 const passos = [
   {
@@ -287,56 +311,23 @@ export default function Home() {
         </section>
 
         {/* --------------------------------------------------- duas lojas */}
-        <section className="mx-auto max-w-6xl px-6 pb-20">
-          <h2 className="font-titulo text-3xl">
-            Duas pastelarias, dois países, duas moedas
+        <section className="mx-auto max-w-5xl px-6 pb-24">
+          <div className="flex items-center gap-4">
+            <span className="h-px w-12 bg-marca" />
+            <span className="text-xs tracking-[0.18em] text-suave uppercase">
+              A página é sua
+            </span>
+          </div>
+          <h2 className="mt-6 max-w-2xl font-titulo text-3xl leading-snug sm:text-[2.6rem]">
+            A mesma vitrine, com a cara de quem a faz.
           </h2>
-          <p className="mt-3 max-w-lg leading-relaxed text-suave">
-            Cada uma tem o seu endereço, as suas cores e cobra na moeda do país
-            onde trabalha. Entre e experimente montar um bolo.
+          <p className="mt-4 max-w-lg leading-relaxed text-suave">
+            Carregue num nome e veja o endereço, as cores, os preços e a moeda
+            mudarem. É a mesma página — só que de outra pessoa.
           </p>
 
-          <div className="mt-10 grid gap-6 sm:grid-cols-2">
-            {lojas.map(({ confeiteira, produtos }) => (
-              <Link
-                key={confeiteira.slug}
-                href={`/${confeiteira.slug}`}
-                className="group overflow-hidden rounded-3xl border border-borda bg-cartao transition hover:border-marca"
-              >
-                <div className="relative h-52">
-                  <Image
-                    src={produtos[0].foto}
-                    alt=""
-                    fill
-                    sizes="(min-width: 640px) 50vw, 100vw"
-                    className="object-cover transition duration-500 group-hover:scale-[1.03]"
-                  />
-                </div>
-                <div className="flex items-center gap-4 p-7">
-                  <span
-                    className="grid h-12 w-12 shrink-0 place-items-center rounded-full font-titulo text-sm"
-                    style={{
-                      background: confeiteira.tema.marcaSuave,
-                      color: confeiteira.tema.marca,
-                    }}
-                  >
-                    {iniciais(confeiteira.nome)}
-                  </span>
-                  <span>
-                    <span className="block font-titulo text-lg">
-                      {confeiteira.nome}
-                    </span>
-                    <span className="block text-sm text-suave">
-                      {confeiteira.cidade} ·{" "}
-                      {confeiteira.moeda === "EUR" ? "euro" : "franco suíço"}
-                    </span>
-                  </span>
-                  <span className="ml-auto text-suave transition group-hover:translate-x-1">
-                    →
-                  </span>
-                </div>
-              </Link>
-            ))}
+          <div className="mt-10">
+            <VitrineTema vitrines={vitrines} />
           </div>
         </section>
 
