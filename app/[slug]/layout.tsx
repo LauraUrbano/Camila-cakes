@@ -74,7 +74,7 @@ export default async function LayoutDaConfeiteira({
             {confeiteira.instagram} · {confeiteira.whatsapp}
           </p>
           <p className="mt-6 text-xs">
-            Página feita na plataforma Camila Cakes ·{" "}
+            Página feita no Cake Form ·{" "}
             <Link href="/" className="underline underline-offset-2">
               crie a sua
             </Link>

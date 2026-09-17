@@ -11,7 +11,7 @@ const fraunces = Fraunces({
 });
 
 export const metadata: Metadata = {
-  title: "Camila Cakes — a plataforma de quem vende bolo por encomenda",
+  title: "Cake Form — o cardápio e as encomendas da sua pastelaria",
   description:
     "Cardápio online, montagem de bolo com preço automático e gestão de encomendas para pasteleiras em Portugal e na Suíça.",
 };

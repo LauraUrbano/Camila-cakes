@@ -6,8 +6,9 @@ import { lojaPrincipal } from "@/lib/dados";
 const { confeiteira } = lojaPrincipal;
 
 const menu: { href: string; rotulo: string; icone: Nome }[] = [
-  { href: "/dashboard", rotulo: "Visão geral", icone: "grafico" },
+  { href: "/dashboard", rotulo: "Visão geral", icone: "casa" },
   { href: "/dashboard/pedidos", rotulo: "Pedidos", icone: "lista" },
+  { href: "/dashboard/relatorios", rotulo: "Relatórios", icone: "grafico" },
   { href: "/dashboard/cardapio", rotulo: "Cardápio", icone: "bolo" },
   { href: "/dashboard/colecoes", rotulo: "Coleções", icone: "calendario" },
   { href: "/dashboard/pagina", rotulo: "A minha página", icone: "paleta" },
@@ -59,7 +60,7 @@ export default function LayoutDoPainel({ children }: { children: ReactNode }) {
             <span className="block font-medium text-texto">
               Ver a minha página
             </span>
-            camilacakes.app/{confeiteira.slug} ↗
+            cakeform.app/{confeiteira.slug} ↗
           </Link>
         </div>
       </aside>

@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import Icone, { type Nome } from "@/app/icones";
 import { lojas } from "@/lib/dados";
@@ -11,51 +12,72 @@ function iniciais(nome: string) {
     .toUpperCase();
 }
 
-const recursos = [
+const passos = [
   {
-    icone: "ligacao" as Nome,
-    titulo: "A sua página, o seu link",
+    numero: "01",
+    titulo: "Monte o cardápio",
     texto:
-      "Cada pasteleira recebe um endereço próprio para partilhar. Depois é só apontar o seu domínio para ele.",
+      "Tamanhos, massas, recheios e decorações, cada um com o seu preço. Uma vez só.",
   },
   {
-    icone: "calculo" as Nome,
-    titulo: "Preço que se calcula sozinho",
+    numero: "02",
+    titulo: "Partilhe o link",
     texto:
-      "Regista massas, recheios e decorações com os seus acréscimos. A cliente escolhe, o sistema soma.",
+      "A sua página fica pronta. Vai na bio, no story, na conversa — em vez de vinte fotos soltas.",
   },
   {
-    icone: "calendario" as Nome,
+    numero: "03",
+    titulo: "Aceite o que quiser",
+    texto:
+      "O pedido chega montado e com o preço feito. Você combina o pagamento e aceita.",
+  },
+];
+
+const recursos: { icone: Nome; titulo: string; texto: string }[] = [
+  {
+    icone: "calculo",
+    titulo: "Preço por combinação",
+    texto:
+      "O tamanho define o preço de partida e quantos recheios cabem. O resto entra como acréscimo e a soma sai sozinha.",
+  },
+  {
+    icone: "calendario",
     titulo: "Coleções sazonais",
     texto:
-      "Cardápio de Natal, de Páscoa, do Dia da Mãe. Entra na data, sai na data, sem refazer nada.",
+      "Natal, Páscoa, Dia da Mãe. O cardápio entra na data e sai na data, sem refazer nada.",
   },
   {
-    icone: "caixa" as Nome,
+    icone: "caixa",
     titulo: "Limite de produção",
     texto:
       "Diz quantas unidades consegue fazer. Quando esgota, o artigo sai do ar sozinho.",
   },
   {
-    icone: "confirmado" as Nome,
-    titulo: "É você que aceita",
-    texto:
-      "Nada entra na sua agenda sem o seu aval. A cliente pede, você combina o pagamento e aceita.",
-  },
-  {
-    icone: "entrega" as Nome,
+    icone: "entrega",
     titulo: "Entrega à sua maneira",
     texto:
       "Levantamento no atelier, entrega por zona, taxa por região. Você define, a cliente escolhe.",
+  },
+  {
+    icone: "ligacao",
+    titulo: "Domínio próprio",
+    texto:
+      "Comece em cakeform.app/o-seu-nome e aponte o seu domínio quando quiser.",
+  },
+  {
+    icone: "grafico",
+    titulo: "Relatórios",
+    texto:
+      "Receita confirmada, ticket médio, o que mais sai e como o mês está a correr.",
   },
 ];
 
 export default function Home() {
   return (
-    <div>
+    <div className="overflow-hidden">
       <header className="border-b border-borda">
-        <div className="mx-auto flex max-w-5xl items-center justify-between px-6 py-5">
-          <span className="font-titulo text-lg">Camila Cakes</span>
+        <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-5">
+          <span className="font-titulo text-lg">Cake Form</span>
           <div className="flex items-center gap-5 text-sm">
             <Link href="/dashboard" className="text-suave hover:text-texto">
               Painel
@@ -70,90 +92,237 @@ export default function Home() {
         </div>
       </header>
 
-      <main className="mx-auto max-w-5xl px-6">
-        <section className="py-20 sm:py-28">
-          <p className="mb-5 inline-block rounded-full bg-marca-suave px-3.5 py-1.5 text-xs text-marca">
-            Protótipo de visualização — ainda sem base de dados
-          </p>
-          <h1 className="max-w-2xl text-4xl leading-tight sm:text-[3.1rem]">
-            Pare de fechar encomendas no meio de vinte conversas.
-          </h1>
-          <p className="mt-7 max-w-xl text-lg leading-relaxed text-suave">
-            Monte o seu cardápio uma vez. A sua cliente escolhe massa, recheio e
-            decoração, vê o preço na hora e envia o pedido pronto. Você só
-            aceita — ou não.
-          </p>
-          <div className="mt-10 flex flex-wrap gap-3">
-            <Link
-              href={`/${lojas[0].confeiteira.slug}`}
-              className="rounded-full bg-marca px-6 py-3 text-white"
-            >
-              Ver uma página de pasteleira
-            </Link>
-            <Link
-              href="/dashboard"
-              className="rounded-full border border-borda bg-cartao px-6 py-3"
-            >
-              Entrar no painel
-            </Link>
+      <main>
+        {/* ---------------------------------------------------------- hero */}
+        <section className="mx-auto grid max-w-6xl items-center gap-14 px-6 py-16 lg:grid-cols-[1.05fr_1fr] lg:py-24">
+          <div>
+            <p className="inline-block rounded-full bg-marca-suave px-3.5 py-1.5 text-xs text-marca">
+              Protótipo de visualização — ainda sem base de dados
+            </p>
+            <h1 className="mt-6 text-[2.7rem] leading-[1.08] sm:text-6xl">
+              O seu cardápio
+              <br />
+              deixa de ser
+              <br />
+              <span className="text-marca">uma conversa.</span>
+            </h1>
+            <p className="mt-7 max-w-md text-lg leading-relaxed text-suave">
+              A cliente escolhe massa, recheio e decoração, vê o preço na hora e
+              envia a encomenda pronta. Você só aceita — ou não.
+            </p>
+            <div className="mt-9 flex flex-wrap gap-3">
+              <Link
+                href={`/${lojas[0].confeiteira.slug}`}
+                className="rounded-full bg-marca px-7 py-3.5 text-white"
+              >
+                Ver uma página a sério
+              </Link>
+              <Link
+                href="/dashboard"
+                className="rounded-full border border-borda bg-cartao px-7 py-3.5"
+              >
+                Entrar no painel
+              </Link>
+            </div>
+          </div>
+
+          {/* Composição de fotos: mostra o produto sem precisar de explicar. */}
+          <div className="relative mx-auto aspect-square w-full max-w-md">
+            <div className="absolute top-0 right-0 h-[62%] w-[72%] overflow-hidden rounded-[2rem] shadow-sm">
+              <Image
+                src="/produtos/naked-cake.jpg"
+                alt=""
+                fill
+                priority
+                sizes="(min-width: 1024px) 24rem, 70vw"
+                className="object-cover"
+              />
+            </div>
+            <div className="absolute bottom-0 left-0 h-[55%] w-[58%] overflow-hidden rounded-[2rem] border-4 border-fundo shadow-sm">
+              <Image
+                src="/produtos/doces-festa.jpg"
+                alt=""
+                fill
+                sizes="(min-width: 1024px) 18rem, 55vw"
+                className="object-cover"
+              />
+            </div>
+
+            <div className="absolute right-0 bottom-6 w-[58%] rounded-2xl border border-borda bg-cartao p-4 text-xs shadow-sm">
+              <p className="text-suave">Bolo grande · 3 recheios</p>
+              <dl className="mt-3 space-y-1.5 text-suave">
+                <div className="flex justify-between">
+                  <dt>Massa red velvet</dt>
+                  <dd>+ 8,00 €</dd>
+                </div>
+                <div className="flex justify-between">
+                  <dt>Nutella + ninho</dt>
+                  <dd>+ 13,00 €</dd>
+                </div>
+                <div className="flex justify-between">
+                  <dt>Drip de chocolate</dt>
+                  <dd>+ 7,00 €</dd>
+                </div>
+              </dl>
+              <div className="mt-3 flex items-baseline justify-between border-t border-borda pt-3">
+                <span className="text-suave">Total</span>
+                <span className="font-titulo text-lg text-texto">110,00 €</span>
+              </div>
+            </div>
           </div>
         </section>
 
-        <section className="grid gap-px overflow-hidden rounded-3xl border border-borda bg-borda sm:grid-cols-2 lg:grid-cols-3">
-          {recursos.map((recurso) => (
-            <div key={recurso.titulo} className="bg-cartao p-8">
-              <span className="grid h-11 w-11 place-items-center rounded-full bg-marca-suave text-marca">
-                <Icone nome={recurso.icone} />
-              </span>
-              <h3 className="mt-5 font-titulo text-lg">{recurso.titulo}</h3>
-              <p className="mt-2.5 text-sm leading-relaxed text-suave">
-                {recurso.texto}
-              </p>
-            </div>
-          ))}
+        {/* ------------------------------------------------------- 3 passos */}
+        <section className="border-y border-borda bg-cartao">
+          <div className="mx-auto grid max-w-6xl gap-10 px-6 py-16 sm:grid-cols-3">
+            {passos.map((passo) => (
+              <div key={passo.numero}>
+                <span className="font-titulo text-3xl text-marca/40">
+                  {passo.numero}
+                </span>
+                <h3 className="mt-3 font-titulo text-xl">{passo.titulo}</h3>
+                <p className="mt-2.5 text-sm leading-relaxed text-suave">
+                  {passo.texto}
+                </p>
+              </div>
+            ))}
+          </div>
         </section>
 
-        <section className="my-20">
-          <h2 className="text-center font-titulo text-2xl">
-            Duas pasteleiras, dois países, duas moedas
+        {/* ------------------------------------------------------- recursos */}
+        <section className="mx-auto max-w-6xl px-6 py-20">
+          <h2 className="max-w-lg font-titulo text-3xl leading-snug">
+            Tudo o que uma encomenda precisa, sem planilha e sem caderno.
           </h2>
-          <p className="mx-auto mt-3 max-w-md text-center text-sm leading-relaxed text-suave">
+
+          <div className="mt-12 grid gap-x-10 gap-y-12 sm:grid-cols-2 lg:grid-cols-3">
+            {recursos.map((recurso) => (
+              <div key={recurso.titulo}>
+                <span className="grid h-11 w-11 place-items-center rounded-full bg-marca-suave text-marca">
+                  <Icone nome={recurso.icone} />
+                </span>
+                <h3 className="mt-5 font-titulo text-lg">{recurso.titulo}</h3>
+                <p className="mt-2 text-sm leading-relaxed text-suave">
+                  {recurso.texto}
+                </p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* ----------------------------------------------- o aceite manual */}
+        <section className="mx-auto max-w-6xl px-6 pb-20">
+          <div className="grid items-center gap-10 rounded-[2.5rem] bg-marca-suave p-10 sm:p-14 lg:grid-cols-2">
+            <div>
+              <h2 className="font-titulo text-3xl leading-snug">
+                Nenhuma data entra na sua agenda sem você dizer que sim.
+              </h2>
+              <p className="mt-5 max-w-md leading-relaxed text-suave">
+                O pedido feito no site é uma reserva, não um compromisso. Você
+                combina o pagamento como sempre fez — MB WAY, TWINT,
+                transferência — e só depois aceita. Está escrito na tela da
+                cliente, para não haver mal-entendido.
+              </p>
+            </div>
+            <div className="rounded-3xl border border-borda bg-cartao p-7">
+              <p className="text-sm text-suave">Juliana Prado · ENC-104</p>
+              <p className="mt-1.5 font-titulo text-lg">
+                Bolo de festa · Médio
+              </p>
+              <p className="mt-1 text-xs text-suave">
+                massa red velvet · ninho e Nutella · drip de chocolate
+              </p>
+              <div className="mt-6 flex flex-wrap items-center gap-3">
+                <span className="rounded-full bg-marca px-5 py-2.5 text-sm text-white">
+                  Aceitar pedido
+                </span>
+                <span className="rounded-full border border-borda px-5 py-2.5 text-sm">
+                  Recusar
+                </span>
+              </div>
+              <p className="mt-4 flex items-center gap-2 text-xs text-suave">
+                <Icone nome="confirmado" className="h-4 w-4" />
+                aceitar reserva a data na sua agenda
+              </p>
+            </div>
+          </div>
+        </section>
+
+        {/* --------------------------------------------------- duas lojas */}
+        <section className="mx-auto max-w-6xl px-6 pb-20">
+          <h2 className="font-titulo text-3xl">
+            Duas pastelarias, dois países, duas moedas
+          </h2>
+          <p className="mt-3 max-w-lg leading-relaxed text-suave">
             Cada uma tem o seu endereço, as suas cores e cobra na moeda do país
-            onde trabalha.
+            onde trabalha. Entre e experimente montar um bolo.
           </p>
 
           <div className="mt-10 grid gap-6 sm:grid-cols-2">
-            {lojas.map(({ confeiteira }) => (
+            {lojas.map(({ confeiteira, produtos }) => (
               <Link
                 key={confeiteira.slug}
                 href={`/${confeiteira.slug}`}
-                className="rounded-3xl border border-borda bg-cartao p-8 transition hover:border-marca"
+                className="group overflow-hidden rounded-3xl border border-borda bg-cartao transition hover:border-marca"
               >
-                <span
-                  className="grid h-12 w-12 place-items-center rounded-full font-titulo text-sm"
-                  style={{
-                    background: confeiteira.tema.marcaSuave,
-                    color: confeiteira.tema.marca,
-                  }}
-                >
-                  {iniciais(confeiteira.nome)}
-                </span>
-                <h3 className="mt-5 font-titulo text-lg">{confeiteira.nome}</h3>
-                <p className="mt-1.5 text-sm text-suave">
-                  {confeiteira.cidade} ·{" "}
-                  {confeiteira.moeda === "EUR" ? "euro" : "franco suíço"}
-                </p>
-                <p className="mt-5 font-mono text-xs text-suave">
-                  camilacakes.app/{confeiteira.slug} →
-                </p>
+                <div className="relative h-52">
+                  <Image
+                    src={produtos[0].foto}
+                    alt=""
+                    fill
+                    sizes="(min-width: 640px) 50vw, 100vw"
+                    className="object-cover transition duration-500 group-hover:scale-[1.03]"
+                  />
+                </div>
+                <div className="flex items-center gap-4 p-7">
+                  <span
+                    className="grid h-12 w-12 shrink-0 place-items-center rounded-full font-titulo text-sm"
+                    style={{
+                      background: confeiteira.tema.marcaSuave,
+                      color: confeiteira.tema.marca,
+                    }}
+                  >
+                    {iniciais(confeiteira.nome)}
+                  </span>
+                  <span>
+                    <span className="block font-titulo text-lg">
+                      {confeiteira.nome}
+                    </span>
+                    <span className="block text-sm text-suave">
+                      {confeiteira.cidade} ·{" "}
+                      {confeiteira.moeda === "EUR" ? "euro" : "franco suíço"}
+                    </span>
+                  </span>
+                  <span className="ml-auto text-suave transition group-hover:translate-x-1">
+                    →
+                  </span>
+                </div>
               </Link>
             ))}
+          </div>
+        </section>
+
+        {/* ------------------------------------------------------ chamada */}
+        <section className="border-t border-borda bg-cartao">
+          <div className="mx-auto max-w-6xl px-6 py-20 text-center">
+            <h2 className="mx-auto max-w-lg font-titulo text-3xl leading-snug">
+              A sua pastelaria merece mais do que um álbum de fotos.
+            </h2>
+            <Link
+              href={`/${lojas[0].confeiteira.slug}`}
+              className="mt-9 inline-block rounded-full bg-marca px-8 py-4 text-white"
+            >
+              Ver o Cake Form a funcionar
+            </Link>
+            <p className="mt-5 font-mono text-xs text-suave">
+              cakeform.app/o-seu-nome
+            </p>
           </div>
         </section>
       </main>
 
       <footer className="border-t border-borda py-8 text-center text-sm text-suave">
-        Protótipo navegável · dados de exemplo
+        Cake Form · protótipo navegável com dados de exemplo
       </footer>
     </div>
   );

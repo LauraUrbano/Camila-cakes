@@ -1,4 +1,11 @@
-import type { Colecao, Confeiteira, Loja, Pedido, Produto } from "./tipos";
+import type {
+  Colecao,
+  Confeiteira,
+  Loja,
+  MesFechado,
+  Pedido,
+  Produto,
+} from "./tipos";
 
 // Dados fake do protótipo. Nada aqui vem de banco ainda — quando o Supabase
 // entrar, cada lista destas vira uma tabela com a coluna `confeiteira_id`.
@@ -580,6 +587,26 @@ const pedidosSofia: Pedido[] = [
   },
 ];
 
+// Meses já fechados, para os relatórios. Os pedidos acima cobrem só as últimas
+// semanas, então o histórico é ilustrativo — vem do banco quando ele existir.
+const historicoCamila: MesFechado[] = [
+  { mes: "Abr", receita: 620, encomendas: 9 },
+  { mes: "Mai", receita: 845, encomendas: 12 },
+  { mes: "Jun", receita: 730, encomendas: 11 },
+  { mes: "Jul", receita: 1180, encomendas: 17 },
+  { mes: "Ago", receita: 965, encomendas: 14 },
+  { mes: "Set", receita: 1390, encomendas: 19 },
+];
+
+const historicoSofia: MesFechado[] = [
+  { mes: "Abr", receita: 890, encomendas: 7 },
+  { mes: "Mai", receita: 1150, encomendas: 9 },
+  { mes: "Jun", receita: 1020, encomendas: 8 },
+  { mes: "Jul", receita: 1480, encomendas: 12 },
+  { mes: "Ago", receita: 1310, encomendas: 10 },
+  { mes: "Set", receita: 1640, encomendas: 13 },
+];
+
 // ------------------------------------------------------------------- exportes
 
 export const lojas: Loja[] = [
@@ -588,12 +615,14 @@ export const lojas: Loja[] = [
     produtos: produtosCamila,
     colecoes: colecoesCamila,
     pedidos: pedidosCamila,
+    historico: historicoCamila,
   },
   {
     confeiteira: sofia,
     produtos: produtosSofia,
     colecoes: colecoesSofia,
     pedidos: pedidosSofia,
+    historico: historicoSofia,
   },
 ];
 

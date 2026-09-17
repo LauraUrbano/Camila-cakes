@@ -126,6 +126,13 @@ export type Pedido = {
   personalizado?: string;
 };
 
+/** Um mês fechado, para os relatórios. */
+export type MesFechado = {
+  mes: string;
+  receita: number;
+  encomendas: number;
+};
+
 /** Tudo o que pertence a uma confeiteira. No banco, cada lista vira uma
  *  tabela com a coluna `confeiteira_id`. */
 export type Loja = {
@@ -133,4 +140,5 @@ export type Loja = {
   produtos: Produto[];
   colecoes: Colecao[];
   pedidos: Pedido[];
+  historico: MesFechado[];
 };

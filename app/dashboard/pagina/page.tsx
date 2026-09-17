@@ -20,7 +20,7 @@ export default function PaginaDaMinhaPagina() {
         <div className="mt-4 space-y-4 text-sm">
           <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl bg-fundo p-4">
             <span className="font-mono">
-              camilacakes.app/
+              cakeform.app/
               <span className="font-semibold">{confeiteira.slug}</span>
             </span>
             <span className="rounded-full bg-marca-suave px-3 py-1 text-xs font-medium text-marca">
