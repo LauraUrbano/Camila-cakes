@@ -11,10 +11,13 @@ export default function VisaoGeral() {
   const naAgenda = pedidos.filter((pedido) =>
     ["aceito", "producao"].includes(pedido.status),
   );
-  const aReceber = naAgenda.reduce(
-    (soma, pedido) => soma + totalDoPedido(pedido.itens, pedido.entrega.taxa),
-    0,
-  );
+  // Pedido personalizado ainda não tem valor fechado, então fica fora da conta.
+  const aReceber = naAgenda
+    .filter((pedido) => pedido.itens.length > 0)
+    .reduce(
+      (soma, pedido) => soma + totalDoPedido(pedido.itens, pedido.entrega.taxa),
+      0,
+    );
   const acabando = produtos.filter((produto) => {
     const sobrando = restam(produto);
     return sobrando !== null && sobrando <= 10;

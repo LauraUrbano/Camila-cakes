@@ -82,7 +82,9 @@ export default function ListaDePedidos({ iniciais }: { iniciais: Pedido[] }) {
                   </p>
                 </div>
                 <div className="text-right">
-                  <p className="font-semibold">{moeda(total(pedido))}</p>
+                  <p className="font-semibold">
+                    {pedido.itens.length === 0 ? "a orçar" : moeda(total(pedido))}
+                  </p>
                   <p className="text-xs text-suave">
                     entrega {pedido.entregaEm}
                   </p>
