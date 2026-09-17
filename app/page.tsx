@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
-import Icone, { type Nome } from "@/app/icones";
+import Icone from "@/app/icones";
+import Carrossel, { type Slide } from "@/app/carrossel";
 import { lojas } from "@/lib/dados";
 
 function iniciais(nome: string) {
@@ -33,42 +34,81 @@ const passos = [
   },
 ];
 
-const recursos: { icone: Nome; titulo: string; texto: string }[] = [
+const areas: Slide[] = [
   {
+    id: "combinacao",
     icone: "calculo",
     titulo: "Preço por combinação",
     texto:
-      "O tamanho define o preço de partida e quantos recheios cabem. O resto entra como acréscimo e a soma sai sozinha.",
+      "O tamanho define o preço de partida e quantos recheios cabem. Massa, recheio e decoração entram como acréscimo e a soma sai sozinha.",
+    href: "/camila-cakes/produto/bolo-festa",
+    accao: "Montar um bolo",
+    fotos: [
+      { src: "/produtos/bolo-festa.jpg", alt: "Bolo com mirtilos" },
+      { src: "/atelier/creme.jpg", alt: "Creme a ser espalhado no bolo" },
+      { src: "/produtos/naked-cake.jpg", alt: "Naked cake com figos" },
+      { src: "/atelier/piping.jpg", alt: "Pasteleira com saco de pasteleiro" },
+    ],
   },
   {
+    id: "colecoes",
     icone: "calendario",
     titulo: "Coleções sazonais",
     texto:
-      "Natal, Páscoa, Dia da Mãe. O cardápio entra na data e sai na data, sem refazer nada.",
+      "Natal, Páscoa, Dia da Mãe. O cardápio entra na data e sai na data, sem refazer nada — e o mesmo bolo pode viver em várias coleções.",
+    href: "/camila-cakes",
+    accao: "Ver o cardápio",
+    fotos: [
+      { src: "/produtos/bolo-rei.jpg", alt: "Bolo-rei polvilhado" },
+      { src: "/atelier/tabuleiro.jpg", alt: "Pasteleira com tabuleiro" },
+      { src: "/produtos/doces-festa.jpg", alt: "Doces de festa em forminhas" },
+      { src: "/produtos/bolo-festa-ch.jpg", alt: "Bolo com framboesas" },
+    ],
   },
   {
+    id: "limite",
     icone: "caixa",
     titulo: "Limite de produção",
     texto:
-      "Diz quantas unidades consegue fazer. Quando esgota, o artigo sai do ar sozinho.",
+      "Diz quantas unidades consegue fazer no período. O site conta por si e, quando esgota, o artigo sai do ar sozinho.",
+    href: "/dashboard/cardapio",
+    accao: "Ver no painel",
+    fotos: [
+      { src: "/atelier/farinha.jpg", alt: "Farinha a cair sobre a bancada" },
+      { src: "/produtos/pasteis-nata.jpg", alt: "Pastel de nata" },
+      { src: "/atelier/tabuleiro.jpg", alt: "Tabuleiro a sair do forno" },
+      { src: "/produtos/doces-festa.jpg", alt: "Doces em forminhas" },
+    ],
   },
   {
+    id: "entrega",
     icone: "entrega",
     titulo: "Entrega à sua maneira",
     texto:
-      "Levantamento no atelier, entrega por zona, taxa por região. Você define, a cliente escolhe.",
+      "Levantamento no atelier, entrega por zona, taxa por região. Você define as opções, a cliente escolhe uma no momento do pedido.",
+    href: "/dashboard/pagina",
+    accao: "Definir entregas",
+    fotos: [
+      { src: "/atelier/caixas.jpg", alt: "Caixas de cartão empilhadas" },
+      { src: "/atelier/caixas-doces.jpg", alt: "Doces embalados em caixa" },
+      { src: "/produtos/bolo-festa.jpg", alt: "Bolo pronto a entregar" },
+      { src: "/produtos/pasteis-nata.jpg", alt: "Pastéis de nata embalados" },
+    ],
   },
   {
-    icone: "ligacao",
-    titulo: "Domínio próprio",
-    texto:
-      "Comece em cakeform.app/o-seu-nome e aponte o seu domínio quando quiser.",
-  },
-  {
+    id: "relatorios",
     icone: "grafico",
     titulo: "Relatórios",
     texto:
-      "Receita confirmada, ticket médio, o que mais sai e como o mês está a correr.",
+      "Receita confirmada, ticket médio, taxa de aceite e o que mais sai. Pedidos à espera de aceite ficam de fora da conta.",
+    href: "/dashboard/relatorios",
+    accao: "Abrir relatórios",
+    fotos: [
+      { src: "/produtos/naked-cake.jpg", alt: "Naked cake" },
+      { src: "/atelier/piping.jpg", alt: "Decoração a ser aplicada" },
+      { src: "/produtos/bolo-rei.jpg", alt: "Bolo-rei" },
+      { src: "/atelier/creme.jpg", alt: "Creme a ser espalhado" },
+    ],
   },
 ];
 
@@ -189,24 +229,22 @@ export default function Home() {
           </div>
         </section>
 
-        {/* ------------------------------------------------------- recursos */}
-        <section className="mx-auto max-w-6xl px-6 py-20">
-          <h2 className="max-w-lg font-titulo text-3xl leading-snug">
-            Tudo o que uma encomenda precisa, sem planilha e sem caderno.
-          </h2>
+        {/* ------------------------------------------------------- carrossel */}
+        <section className="overflow-hidden py-20">
+          <div className="mx-auto max-w-6xl px-6">
+            <div className="flex items-center gap-4">
+              <span className="h-px w-12 bg-marca" />
+              <span className="text-xs tracking-[0.18em] text-suave uppercase">
+                O que o Cake Form faz
+              </span>
+            </div>
+            <h2 className="mt-6 max-w-2xl font-titulo text-3xl leading-snug sm:text-[2.6rem]">
+              Tudo o que uma encomenda precisa, sem planilha e sem caderno.
+            </h2>
 
-          <div className="mt-12 grid gap-x-10 gap-y-12 sm:grid-cols-2 lg:grid-cols-3">
-            {recursos.map((recurso) => (
-              <div key={recurso.titulo}>
-                <span className="grid h-11 w-11 place-items-center rounded-full bg-marca-suave text-marca">
-                  <Icone nome={recurso.icone} />
-                </span>
-                <h3 className="mt-5 font-titulo text-lg">{recurso.titulo}</h3>
-                <p className="mt-2 text-sm leading-relaxed text-suave">
-                  {recurso.texto}
-                </p>
-              </div>
-            ))}
+            <div className="mt-14">
+              <Carrossel slides={areas} />
+            </div>
           </div>
         </section>
 

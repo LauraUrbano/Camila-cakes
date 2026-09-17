@@ -38,3 +38,61 @@ h3 {
   font-weight: 400;
   letter-spacing: -0.01em;
 }
+
+/* ---------------------------------------------------- animações do carrossel */
+
+@keyframes entrar-cartao {
+  from {
+    opacity: 0;
+    transform: translateX(3.5rem) scale(0.94);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+}
+
+@keyframes entrar-texto {
+  from {
+    opacity: 0;
+    transform: translateY(0.9rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes preencher {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+.entra-cartao {
+  animation: entrar-cartao 0.75s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.entra-texto {
+  animation: entrar-texto 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.barra-tempo {
+  transform-origin: left;
+  animation: preencher linear both;
+}
+
+/* Quem pede menos movimento recebe a troca sem deslizes, só o conteúdo. */
+@media (prefers-reduced-motion: reduce) {
+  .entra-cartao,
+  .entra-texto,
+  .barra-tempo {
+    animation: none;
+  }
+  .barra-tempo {
+    transform: scaleX(1);
+  }
+}
