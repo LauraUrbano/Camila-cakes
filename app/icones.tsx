@@ -17,6 +17,7 @@ export type Nome =
   | "lista"
   | "bolo"
   | "paleta"
+  | "cartao"
   | "enviado"
   | "conversa";
 
@@ -89,6 +90,12 @@ const caminhos: Record<Nome, React.ReactNode> = {
       <path d="M4.5 20h15v-6a3 3 0 0 0-3-3h-9a3 3 0 0 0-3 3z" />
       <path d="M4.5 15.5c1.5 1.2 3 1.2 4.5 0s3-1.2 4.5 0 3 1.2 4.5 0" />
       <path d="M12 8V5" />
+    </>
+  ),
+  cartao: (
+    <>
+      <rect x="2.5" y="5.5" width="19" height="13" rx="2.5" />
+      <path d="M2.5 10h19M6 14.5h3" />
     </>
   ),
   paleta: (

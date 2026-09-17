@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import Link from "next/link";
 import Icone, { type Nome } from "@/app/icones";
+import { Marca } from "@/app/logo";
 import { lojaPrincipal } from "@/lib/dados";
 
 const { confeiteira } = lojaPrincipal;
@@ -12,6 +13,7 @@ const menu: { href: string; rotulo: string; icone: Nome }[] = [
   { href: "/dashboard/cardapio", rotulo: "Cardápio", icone: "bolo" },
   { href: "/dashboard/colecoes", rotulo: "Coleções", icone: "calendario" },
   { href: "/dashboard/pagina", rotulo: "A minha página", icone: "paleta" },
+  { href: "/dashboard/plano", rotulo: "Plano", icone: "cartao" },
 ];
 
 function iniciais(nome: string) {
@@ -27,6 +29,11 @@ export default function LayoutDoPainel({ children }: { children: ReactNode }) {
   return (
     <div className="min-h-full lg:grid lg:grid-cols-[15rem_1fr]">
       <aside className="border-b border-borda bg-cartao lg:border-r lg:border-b-0">
+        <Link href="/" className="flex items-center gap-2 px-6 pt-5">
+          <Marca className="h-7 w-7" />
+          <span className="font-titulo font-semibold">Cakelyo</span>
+        </Link>
+
         <div className="flex items-center gap-3 px-6 py-5">
           <span className="grid h-9 w-9 place-items-center rounded-full bg-marca-suave font-titulo text-xs text-marca">
             {iniciais(confeiteira.nome)}
@@ -60,7 +67,7 @@ export default function LayoutDoPainel({ children }: { children: ReactNode }) {
             <span className="block font-medium text-texto">
               Ver a minha página
             </span>
-            cakeform.app/{confeiteira.slug} ↗
+            cakelyo.app/{confeiteira.slug} ↗
           </Link>
         </div>
       </aside>

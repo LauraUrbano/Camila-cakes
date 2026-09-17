@@ -11,8 +11,8 @@ export default function PaginaDaMinhaPagina() {
     <div className="mx-auto max-w-4xl">
       <h1 className="text-2xl font-semibold">Minha página</h1>
       <p className="mt-2 max-w-xl text-sm leading-relaxed text-suave">
-        Tudo o que a cliente vê é seu: endereço, cores, textos e as formas de
-        receber.
+        Tudo o que a tua cliente vê é teu: endereço, cores, textos e as
+        formas de receber.
       </p>
 
       <section className="mt-8 rounded-2xl border border-borda bg-cartao p-6">
@@ -20,7 +20,7 @@ export default function PaginaDaMinhaPagina() {
         <div className="mt-4 space-y-4 text-sm">
           <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl bg-fundo p-4">
             <span className="font-mono">
-              cakeform.app/
+              cakelyo.app/
               <span className="font-semibold">{confeiteira.slug}</span>
             </span>
             <span className="rounded-full bg-marca-suave px-3 py-1 text-xs font-medium text-marca">
@@ -34,7 +34,7 @@ export default function PaginaDaMinhaPagina() {
             </span>
           </div>
           <p className="text-xs leading-relaxed text-suave">
-            Já tem um domínio? Aponta ele para cá e a sua página passa a
+            Já tens um domínio? Aponta-o para cá e a tua página passa a
             atender pelos dois endereços.
           </p>
         </div>

@@ -1,4 +1,4 @@
-# Cake Form
+# Cakelyo
 
 Plataforma para quem vende bolo por encomenda. Cada confeiteira cria sua conta,
 ganha uma página pública própria (`/camila-cakes`), monta o cardápio uma vez e

@@ -33,9 +33,9 @@ export default function PaginaDoCardapio() {
     <div className="mx-auto max-w-4xl">
       <h1 className="text-2xl font-semibold">Cardápio</h1>
       <p className="mt-2 max-w-xl text-sm leading-relaxed text-suave">
-        O preço não é digitado item por item: você define o preço de cada
-        tamanho e o acréscimo de cada massa, recheio e decoração. A soma da
-        combinação que a cliente montar sai sozinha.
+        O preço não é digitado item por item: defines o preço de cada tamanho
+        e o acréscimo de cada massa, recheio e decoração. A soma da combinação
+        que a tua cliente montar sai sozinha.
       </p>
 
       <div className="mt-8 space-y-6">

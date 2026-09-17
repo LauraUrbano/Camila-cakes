@@ -126,6 +126,51 @@ export type Pedido = {
   personalizado?: string;
 };
 
+// --------------------------------------------------------------- assinatura
+
+/**
+ * Plano da plataforma. Cada plano vira um Product no Stripe e cada preço
+ * (mensal/anual, euro/franco) vira um Price — por isso os valores ficam
+ * separados por moeda e por período.
+ */
+export type Plano = {
+  id: string;
+  nome: string;
+  promessa: string;
+  /** Preço mensal por moeda. 0 = plano gratuito. */
+  mensal: Record<Moeda, number>;
+  /** Preço anual por moeda, já com o desconto aplicado. */
+  anual: Record<Moeda, number>;
+  inclui: string[];
+  /** O que este plano ainda não desbloqueia, dito sem rodeios. */
+  naoInclui?: string[];
+  destaque?: boolean;
+};
+
+export type EstadoAssinatura =
+  | "teste"
+  | "activa"
+  | "pagamento_falhou"
+  | "cancelada";
+
+export type Fatura = {
+  id: string;
+  data: string;
+  valor: number;
+  paga: boolean;
+};
+
+export type Assinatura = {
+  planoId: string;
+  estado: EstadoAssinatura;
+  periodo: "mensal" | "anual";
+  /** Dia em que o Stripe cobra a próxima vez. */
+  renovaEm: string;
+  /** Últimos quatro dígitos do cartão guardado no Stripe. */
+  cartao?: string;
+  faturas: Fatura[];
+};
+
 /** Um mês fechado, para os relatórios. */
 export type MesFechado = {
   mes: string;
@@ -141,4 +186,5 @@ export type Loja = {
   colecoes: Colecao[];
   pedidos: Pedido[];
   historico: MesFechado[];
+  assinatura: Assinatura;
 };

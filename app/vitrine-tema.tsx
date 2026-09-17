@@ -87,7 +87,7 @@ export default function VitrineTema({ vitrines }: { vitrines: Vitrine[] }) {
             className="entra-texto font-mono text-xs"
             style={{ color: v.tema.marca }}
           >
-            cakeform.app/{v.slug}
+            cakelyo.app/{v.slug}
           </span>
         </div>
 

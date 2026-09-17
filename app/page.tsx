@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import Icone from "@/app/icones";
+import Logo from "@/app/logo";
 import Carrossel, { type Slide } from "@/app/carrossel";
 import VitrineTema, { type Vitrine } from "@/app/vitrine-tema";
 import { lojas } from "@/lib/dados";
@@ -40,21 +41,21 @@ const vitrines: Vitrine[] = lojas.map(({ confeiteira, produtos }) => ({
 const passos = [
   {
     numero: "01",
-    titulo: "Monte o cardápio",
+    titulo: "Monta o cardápio",
     texto:
       "Tamanhos, massas, recheios e decorações, cada um com o seu preço. Uma vez só.",
   },
   {
     numero: "02",
-    titulo: "Partilhe o link",
+    titulo: "Partilha o link",
     texto:
-      "A sua página fica pronta. Vai na bio, no story, na conversa — em vez de vinte fotos soltas.",
+      "A tua página fica pronta. Vai na bio, no story, na conversa — em vez de vinte fotos soltas.",
   },
   {
     numero: "03",
-    titulo: "Aceite o que quiser",
+    titulo: "Aceita o que quiseres",
     texto:
-      "O pedido chega montado e com o preço feito. Você combina o pagamento e aceita.",
+      "O pedido chega montado e com o preço feito. Combinas o pagamento e aceitas.",
   },
 ];
 
@@ -109,7 +110,7 @@ const areas: Slide[] = [
     icone: "entrega",
     titulo: "Entrega à sua maneira",
     texto:
-      "Levantamento no atelier, entrega por zona, taxa por região. Você define as opções, a cliente escolhe uma no momento do pedido.",
+      "Levantamento no atelier, entrega por zona, taxa por região. Defines as opções, a tua cliente escolhe uma no momento do pedido.",
     href: "/dashboard/pagina",
     accao: "Definir entregas",
     fotos: [
@@ -141,8 +142,11 @@ export default function Home() {
     <div className="overflow-hidden">
       <header className="border-b border-borda">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-5">
-          <span className="font-titulo text-lg">Cake Form</span>
+          <Logo />
           <div className="flex items-center gap-5 text-sm">
+            <Link href="/precos" className="text-suave hover:text-texto">
+              Preços
+            </Link>
             <Link href="/dashboard" className="text-suave hover:text-texto">
               Painel
             </Link>
@@ -163,16 +167,13 @@ export default function Home() {
             <p className="inline-block rounded-full bg-marca-suave px-3.5 py-1.5 text-xs text-marca">
               Protótipo de visualização — ainda sem base de dados
             </p>
-            <h1 className="mt-6 text-[2.7rem] leading-[1.08] sm:text-6xl">
-              O seu cardápio
-              <br />
-              deixa de ser
-              <br />
-              <span className="text-marca">uma conversa.</span>
+            <h1 className="mt-6 text-[2.6rem] leading-[1.1] sm:text-[3.4rem]">
+              Tudo o que o teu negócio de bolos precisa,{" "}
+              <span className="text-marca">num só lugar.</span>
             </h1>
-            <p className="mt-7 max-w-md text-lg leading-relaxed text-suave">
-              A cliente escolhe massa, recheio e decoração, vê o preço na hora e
-              envia a encomenda pronta. Você só aceita — ou não.
+            <p className="mt-7 max-w-lg text-lg leading-relaxed text-suave">
+              A tua cliente escolhe massa, recheio e decoração, vê o preço na
+              hora e envia a encomenda pronta. Só tens de aceitar — ou não.
             </p>
             <div className="mt-9 flex flex-wrap gap-3">
               <Link
@@ -259,7 +260,7 @@ export default function Home() {
             <div className="flex items-center gap-4">
               <span className="h-px w-12 bg-marca" />
               <span className="text-xs tracking-[0.18em] text-suave uppercase">
-                O que o Cake Form faz
+                O que o Cakelyo faz
               </span>
             </div>
             <h2 className="mt-6 max-w-2xl font-titulo text-3xl leading-snug sm:text-[2.6rem]">
@@ -277,13 +278,13 @@ export default function Home() {
           <div className="grid items-center gap-10 rounded-[2.5rem] bg-marca-suave p-10 sm:p-14 lg:grid-cols-2">
             <div>
               <h2 className="font-titulo text-3xl leading-snug">
-                Nenhuma data entra na sua agenda sem você dizer que sim.
+                Nenhuma data entra na tua agenda sem tu dizeres que sim.
               </h2>
               <p className="mt-5 max-w-md leading-relaxed text-suave">
-                O pedido feito no site é uma reserva, não um compromisso. Você
-                combina o pagamento como sempre fez — MB WAY, TWINT,
-                transferência — e só depois aceita. Está escrito na tela da
-                cliente, para não haver mal-entendido.
+                O pedido feito no site é uma reserva, não um compromisso.
+                Combinas o pagamento como sempre fizeste — MB WAY, TWINT,
+                transferência — e só depois aceitas. Está escrito no ecrã da
+                tua cliente, para não haver mal-entendido.
               </p>
             </div>
             <div className="rounded-3xl border border-borda bg-cartao p-7">
@@ -304,7 +305,7 @@ export default function Home() {
               </div>
               <p className="mt-4 flex items-center gap-2 text-xs text-suave">
                 <Icone nome="confirmado" className="h-4 w-4" />
-                aceitar reserva a data na sua agenda
+                aceitar reserva a data na tua agenda
               </p>
             </div>
           </div>
@@ -335,23 +336,24 @@ export default function Home() {
         <section className="border-t border-borda bg-cartao">
           <div className="mx-auto max-w-6xl px-6 py-20 text-center">
             <h2 className="mx-auto max-w-lg font-titulo text-3xl leading-snug">
-              A sua pastelaria merece mais do que um álbum de fotos.
+              O teu negócio de bolos merece mais do que um álbum de fotos.
             </h2>
             <Link
               href={`/${lojas[0].confeiteira.slug}`}
               className="mt-9 inline-block rounded-full bg-marca px-8 py-4 text-white"
             >
-              Ver o Cake Form a funcionar
+              Ver o Cakelyo a funcionar
             </Link>
             <p className="mt-5 font-mono text-xs text-suave">
-              cakeform.app/o-seu-nome
+              cakelyo.app/o-teu-nome
             </p>
           </div>
         </section>
       </main>
 
       <footer className="border-t border-borda py-8 text-center text-sm text-suave">
-        Cake Form · protótipo navegável com dados de exemplo
+        Cakelyo · gestão do teu negócio de bolos · protótipo com dados de
+        exemplo
       </footer>
     </div>
   );

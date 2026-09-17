@@ -1,9 +1,11 @@
 import type {
+  Assinatura,
   Colecao,
   Confeiteira,
   Loja,
   MesFechado,
   Pedido,
+  Plano,
   Produto,
 } from "./tipos";
 
@@ -607,6 +609,84 @@ const historicoSofia: MesFechado[] = [
   { mes: "Set", receita: 1640, encomendas: 13 },
 ];
 
+// -------------------------------------------------------------- assinaturas
+
+/**
+ * Planos da plataforma. Os valores são uma proposta, fáceis de mudar: no
+ * Stripe cada plano é um Product e cada linha de preço aqui é um Price.
+ * O anual equivale a dez meses — dois meses oferecidos.
+ */
+export const planos: Plano[] = [
+  {
+    id: "prova",
+    nome: "Prova",
+    promessa: "Para pôr o cardápio de pé e ver se serve.",
+    mensal: { EUR: 0, CHF: 0 },
+    anual: { EUR: 0, CHF: 0 },
+    inclui: [
+      "A tua página em cakelyo.app/o-teu-nome",
+      "Até 8 produtos e 1 coleção",
+      "Pedidos e aceite manual sem limite",
+      "Entrega e levantamento",
+    ],
+    naoInclui: ["Coleções sazonais", "Limites de produção", "Relatórios"],
+  },
+  {
+    id: "atelier",
+    nome: "Atelier",
+    promessa: "Para quem já vive disto e tem épocas cheias.",
+    mensal: { EUR: 12, CHF: 14 },
+    anual: { EUR: 120, CHF: 140 },
+    destaque: true,
+    inclui: [
+      "Tudo o do plano Prova",
+      "Produtos e coleções sem limite",
+      "Coleções sazonais com data de entrada e saída",
+      "Limites de produção por artigo",
+      "Relatórios de receita e de aceite",
+    ],
+  },
+  {
+    id: "pastelaria",
+    nome: "Pastelaria",
+    promessa: "Para quem tem marca própria e equipa.",
+    mensal: { EUR: 29, CHF: 32 },
+    anual: { EUR: 290, CHF: 320 },
+    inclui: [
+      "Tudo o do plano Atelier",
+      "Domínio próprio",
+      "Formulário de cardápio por cliente",
+      "Vários utilizadores na mesma conta",
+      "Apoio com resposta em 24 horas",
+    ],
+  },
+];
+
+const assinaturaCamila: Assinatura = {
+  planoId: "atelier",
+  estado: "activa",
+  periodo: "mensal",
+  renovaEm: "14 de outubro",
+  cartao: "4242",
+  faturas: [
+    { id: "FT-2026-09", data: "14/09", valor: 12, paga: true },
+    { id: "FT-2026-08", data: "14/08", valor: 12, paga: true },
+    { id: "FT-2026-07", data: "14/07", valor: 12, paga: true },
+  ],
+};
+
+const assinaturaSofia: Assinatura = {
+  planoId: "prova",
+  estado: "teste",
+  periodo: "mensal",
+  renovaEm: "—",
+  faturas: [],
+};
+
+export function planoPorId(id: string) {
+  return planos.find((plano) => plano.id === id);
+}
+
 // ------------------------------------------------------------------- exportes
 
 export const lojas: Loja[] = [
@@ -616,6 +696,7 @@ export const lojas: Loja[] = [
     colecoes: colecoesCamila,
     pedidos: pedidosCamila,
     historico: historicoCamila,
+    assinatura: assinaturaCamila,
   },
   {
     confeiteira: sofia,
@@ -623,6 +704,7 @@ export const lojas: Loja[] = [
     colecoes: colecoesSofia,
     pedidos: pedidosSofia,
     historico: historicoSofia,
+    assinatura: assinaturaSofia,
   },
 ];
 

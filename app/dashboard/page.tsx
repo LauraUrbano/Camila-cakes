@@ -38,12 +38,12 @@ export default function VisaoGeral() {
           <p className="font-titulo text-lg font-semibold">
             {aguardando.length}{" "}
             {aguardando.length === 1
-              ? "pedido esperando seu aceite"
-              : "pedidos esperando seu aceite"}
+              ? "pedido à espera do teu aceite"
+              : "pedidos à espera do teu aceite"}
           </p>
           <p className="mt-2 text-sm leading-relaxed">
-            Nenhum deles está na sua agenda ainda. Combine o pagamento com a
-            cliente e aceite para reservar a data. →
+            Nenhum deles está na tua agenda ainda. Combina o pagamento com a
+            cliente e aceita para reservar a data. →
           </p>
         </Link>
       )}

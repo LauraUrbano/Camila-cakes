@@ -100,8 +100,8 @@ export default function ListaDePedidos({
         <div>
           <h1 className="text-2xl">Pedidos</h1>
           <p className="mt-2 max-w-xl text-sm leading-relaxed text-suave">
-            Um pedido enviado pelo site é só uma reserva. Entra na sua agenda
-            quando você aceita — normalmente depois de combinar o pagamento.
+            Um pedido enviado pelo site é só uma reserva. Entra na tua agenda
+            quando o aceitas — normalmente depois de combinar o pagamento.
           </p>
         </div>
         {aguardando.length > 0 && (
@@ -326,7 +326,7 @@ export default function ListaDePedidos({
                     Recusar
                   </button>
                   <span className="text-xs text-suave">
-                    aceitar reserva a data na sua agenda
+                    aceitar reserva a data na tua agenda
                   </span>
                 </>
               )}

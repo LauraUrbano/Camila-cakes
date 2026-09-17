@@ -1,17 +1,24 @@
 @import "tailwindcss";
 
 :root {
-  /* Paleta da plataforma: creme quente, castanho suave e muito espaço branco.
-     Nada saturado — a cor forte fica por conta de cada confeiteira. */
-  --fundo: #fcfaf6;
-  --texto: #38332e;
-  --suave: #6f675f;
-  --borda: #ece5db;
+  /* Paleta Cakelyo.
+     Chocolate é a tinta, creme e pêssego são as superfícies, e o rosa entra
+     como acento. O rosa da marca (#F4A7B5) é claro demais para texto ou para
+     levar letra branca por cima, por isso o token de acção usa a versão
+     escura da mesma família e o claro fica para preenchimentos. */
+  --fundo: #fff8f4; /* Creme */
+  --texto: #4a2e2a; /* Chocolate */
+  --suave: #7a6059;
+  --borda: #f2e2da;
   --cartao: #ffffff;
 
-  /* Cores da confeiteira. Cada página pública sobrescreve estas duas. */
-  --marca: #5a6e55;
-  --marca-suave: #edf2e9;
+  --marca: #a34e62; /* Rosa Doce escurecido, para texto e botões */
+  --marca-suave: #fbe9ec;
+
+  /* Cores da paleta usadas como decoração */
+  --rosa: #f4a7b5; /* Rosa Doce */
+  --pessego: #fce4d6; /* Pêssego */
+  --salvia: #a7c4a6; /* Sálvia */
 }
 
 @theme inline {
@@ -22,6 +29,9 @@
   --color-cartao: var(--cartao);
   --color-marca: var(--marca);
   --color-marca-suave: var(--marca-suave);
+  --color-rosa: var(--rosa);
+  --color-pessego: var(--pessego);
+  --color-salvia: var(--salvia);
   --font-sans: var(--fonte-sans);
   --font-titulo: var(--fonte-titulo);
 }
@@ -34,9 +44,9 @@ body {
 h1,
 h2,
 h3 {
-  font-family: var(--fonte-titulo), Georgia, serif;
-  font-weight: 400;
-  letter-spacing: -0.01em;
+  font-family: var(--fonte-titulo), system-ui, sans-serif;
+  font-weight: 600;
+  letter-spacing: -0.02em;
 }
 
 /* ---------------------------------------------------- animações do carrossel */

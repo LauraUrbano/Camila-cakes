@@ -54,7 +54,7 @@ export default function Carrossel({ slides }: { slides: Slide[] }) {
       }}
       role="group"
       aria-roledescription="carrossel"
-      aria-label="Áreas do Cake Form"
+      aria-label="Áreas do Cakelyo"
       className="grid gap-12 lg:grid-cols-[19rem_1fr] lg:gap-16"
     >
       {/* ------------------------------------------------ painel da esquerda */}
