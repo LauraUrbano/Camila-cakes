@@ -1,16 +1,17 @@
 @import "tailwindcss";
 
 :root {
-  /* Cores da plataforma */
-  --fundo: #fffbf8;
-  --texto: #2e1c22;
-  --suave: #6b5860;
-  --borda: #efe3e7;
+  /* Paleta da plataforma: creme quente, castanho suave e muito espaço branco.
+     Nada saturado — a cor forte fica por conta de cada confeiteira. */
+  --fundo: #fcfaf6;
+  --texto: #38332e;
+  --suave: #6f675f;
+  --borda: #ece5db;
   --cartao: #ffffff;
 
   /* Cores da confeiteira. Cada página pública sobrescreve estas duas. */
-  --marca: #b3204d;
-  --marca-suave: #fdeef3;
+  --marca: #5a6e55;
+  --marca-suave: #edf2e9;
 }
 
 @theme inline {
@@ -34,5 +35,6 @@ h1,
 h2,
 h3 {
   font-family: var(--fonte-titulo), Georgia, serif;
-  letter-spacing: -0.015em;
+  font-weight: 400;
+  letter-spacing: -0.01em;
 }

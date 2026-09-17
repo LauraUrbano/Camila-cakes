@@ -1,42 +1,42 @@
 import Link from "next/link";
-import { confeiteira } from "@/lib/dados";
+import { lojas } from "@/lib/dados";
 
 const recursos = [
   {
     emoji: "🔗",
-    titulo: "Sua página, seu link",
+    titulo: "A sua página, o seu link",
     texto:
-      "Cada confeiteira ganha um endereço próprio para mandar no direct. Depois é só apontar seu domínio para ele.",
+      "Cada pasteleira recebe um endereço próprio para partilhar. Depois é só apontar o seu domínio para ele.",
   },
   {
     emoji: "🧮",
     titulo: "Preço que se calcula sozinho",
     texto:
-      "Você cadastra massas, recheios e decorações com seus acréscimos. O cliente monta, o sistema soma.",
+      "Regista massas, recheios e decorações com os seus acréscimos. A cliente escolhe, o sistema soma.",
   },
   {
-    emoji: "🎄",
+    emoji: "🕯️",
     titulo: "Coleções sazonais",
     texto:
-      "Cardápio de Natal, de Páscoa, de Dia das Mães. Liga na data, desliga na data, sem refazer nada.",
+      "Cardápio de Natal, de Páscoa, do Dia da Mãe. Entra na data, sai na data, sem refazer nada.",
   },
   {
     emoji: "📦",
     titulo: "Limite de produção",
     texto:
-      "Diz quantas unidades você dá conta de fazer. Quando esgota, o item sai do ar sozinho.",
+      "Diz quantas unidades consegue fazer. Quando esgota, o artigo sai do ar sozinho.",
   },
   {
     emoji: "✅",
-    titulo: "Você aceita o pedido",
+    titulo: "É você que aceita",
     texto:
-      "Nada entra na sua agenda sem o seu aval. O cliente pede, você combina o pagamento e aceita.",
+      "Nada entra na sua agenda sem o seu aval. A cliente pede, você combina o pagamento e aceita.",
   },
   {
-    emoji: "🚚",
-    titulo: "Entrega do seu jeito",
+    emoji: "🚲",
+    titulo: "Entrega à sua maneira",
     texto:
-      "Retirada no ateliê, entrega por região, taxa por bairro. Você define, o cliente escolhe.",
+      "Levantamento no atelier, entrega por zona, taxa por região. Você define, a cliente escolhe.",
   },
 ];
 
@@ -45,16 +45,14 @@ export default function Home() {
     <div>
       <header className="border-b border-borda">
         <div className="mx-auto flex max-w-5xl items-center justify-between px-6 py-5">
-          <span className="font-titulo text-lg font-semibold">
-            Camila Cakes
-          </span>
+          <span className="font-titulo text-lg">Camila Cakes</span>
           <div className="flex items-center gap-5 text-sm">
             <Link href="/dashboard" className="text-suave hover:text-texto">
               Painel
             </Link>
             <Link
-              href={`/${confeiteira.slug}`}
-              className="rounded-full bg-marca px-4 py-2 font-medium text-white"
+              href={`/${lojas[0].confeiteira.slug}`}
+              className="rounded-full bg-marca px-4 py-2 text-white"
             >
               Ver exemplo
             </Link>
@@ -64,27 +62,27 @@ export default function Home() {
 
       <main className="mx-auto max-w-5xl px-6">
         <section className="py-20 sm:py-28">
-          <p className="mb-4 inline-block rounded-full bg-marca-suave px-3 py-1 text-xs font-medium text-marca">
-            Protótipo de visualização — sem banco de dados
+          <p className="mb-5 inline-block rounded-full bg-marca-suave px-3.5 py-1.5 text-xs text-marca">
+            Protótipo de visualização — ainda sem base de dados
           </p>
-          <h1 className="max-w-2xl text-4xl leading-tight font-semibold sm:text-5xl">
-            Pare de fechar encomenda no meio de vinte conversas de WhatsApp.
+          <h1 className="max-w-2xl text-4xl leading-tight sm:text-[3.1rem]">
+            Pare de fechar encomendas no meio de vinte conversas.
           </h1>
-          <p className="mt-6 max-w-xl text-lg text-suave">
-            Monte seu cardápio uma vez. Seu cliente escolhe massa, recheio e
-            decoração, vê o preço na hora e manda o pedido pronto. Você só
+          <p className="mt-7 max-w-xl text-lg leading-relaxed text-suave">
+            Monte o seu cardápio uma vez. A sua cliente escolhe massa, recheio e
+            decoração, vê o preço na hora e envia o pedido pronto. Você só
             aceita — ou não.
           </p>
-          <div className="mt-9 flex flex-wrap gap-3">
+          <div className="mt-10 flex flex-wrap gap-3">
             <Link
-              href={`/${confeiteira.slug}`}
-              className="rounded-full bg-marca px-6 py-3 font-medium text-white"
+              href={`/${lojas[0].confeiteira.slug}`}
+              className="rounded-full bg-marca px-6 py-3 text-white"
             >
-              Ver uma página de confeiteira
+              Ver uma página de pasteleira
             </Link>
             <Link
               href="/dashboard"
-              className="rounded-full border border-borda bg-cartao px-6 py-3 font-medium"
+              className="rounded-full border border-borda bg-cartao px-6 py-3"
             >
               Entrar no painel
             </Link>
@@ -93,26 +91,49 @@ export default function Home() {
 
         <section className="grid gap-px overflow-hidden rounded-3xl border border-borda bg-borda sm:grid-cols-2 lg:grid-cols-3">
           {recursos.map((recurso) => (
-            <div key={recurso.titulo} className="bg-cartao p-7">
+            <div key={recurso.titulo} className="bg-cartao p-8">
               <span className="text-2xl">{recurso.emoji}</span>
-              <h3 className="mt-4 text-lg font-semibold">{recurso.titulo}</h3>
-              <p className="mt-2 text-sm leading-relaxed text-suave">
+              <h3 className="mt-5 font-titulo text-lg">{recurso.titulo}</h3>
+              <p className="mt-2.5 text-sm leading-relaxed text-suave">
                 {recurso.texto}
               </p>
             </div>
           ))}
         </section>
 
-        <section className="my-20 rounded-3xl bg-marca-suave p-10 text-center">
-          <h2 className="text-2xl font-semibold">
-            Assim fica o endereço da sua confeitaria
+        <section className="my-20">
+          <h2 className="text-center font-titulo text-2xl">
+            Duas pasteleiras, dois países, duas moedas
           </h2>
-          <p className="mt-3 font-mono text-marca">
-            camilacakes.app/<span className="font-semibold">seu-nome</span>
+          <p className="mx-auto mt-3 max-w-md text-center text-sm leading-relaxed text-suave">
+            Cada uma tem o seu endereço, as suas cores e cobra na moeda do país
+            onde trabalha.
           </p>
-          <p className="mt-3 text-sm text-suave">
-            Ou o seu domínio próprio, se você já tiver um.
-          </p>
+
+          <div className="mt-10 grid gap-6 sm:grid-cols-2">
+            {lojas.map(({ confeiteira }) => (
+              <Link
+                key={confeiteira.slug}
+                href={`/${confeiteira.slug}`}
+                className="rounded-3xl border border-borda bg-cartao p-8 transition hover:border-marca"
+              >
+                <span
+                  className="grid h-12 w-12 place-items-center rounded-full text-xl"
+                  style={{ background: confeiteira.tema.marcaSuave }}
+                >
+                  {confeiteira.emoji}
+                </span>
+                <h3 className="mt-5 font-titulo text-lg">{confeiteira.nome}</h3>
+                <p className="mt-1.5 text-sm text-suave">
+                  {confeiteira.cidade} ·{" "}
+                  {confeiteira.moeda === "EUR" ? "euro" : "franco suíço"}
+                </p>
+                <p className="mt-5 font-mono text-xs text-suave">
+                  camilacakes.app/{confeiteira.slug} →
+                </p>
+              </Link>
+            ))}
+          </div>
         </section>
       </main>
 

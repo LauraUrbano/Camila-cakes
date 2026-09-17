@@ -4,7 +4,7 @@ import { useMemo, useState } from "react";
 import Link from "next/link";
 import { calcular, moeda, restam, vagasDeRecheio } from "@/lib/precos";
 import type { Selecao } from "@/lib/precos";
-import type { Confeiteira, Opcao, Produto } from "@/lib/tipos";
+import type { Confeiteira, Moeda, Opcao, Produto } from "@/lib/tipos";
 
 type Props = {
   produto: Produto;
@@ -12,14 +12,13 @@ type Props = {
   slug: string;
 };
 
-function Etiqueta({ opcao }: { opcao: Opcao }) {
-  if (!opcao.disponivel) return <span className="text-xs text-suave">em falta</span>;
+function Etiqueta({ opcao, codigo }: { opcao: Opcao; codigo: Moeda }) {
+  if (!opcao.disponivel)
+    return <span className="text-xs text-suave">em falta</span>;
   if (opcao.acrescimo === 0)
-    return <span className="text-xs text-suave">incluso</span>;
+    return <span className="text-xs text-suave">incluído</span>;
   return (
-    <span className="text-xs font-medium text-marca">
-      + {moeda(opcao.acrescimo)}
-    </span>
+    <span className="text-xs text-marca">+ {moeda(opcao.acrescimo, codigo)}</span>
   );
 }
 
@@ -27,11 +26,13 @@ function Escolha({
   opcao,
   marcada,
   bloqueada,
+  codigo,
   aoClicar,
 }: {
   opcao: Opcao;
   marcada: boolean;
   bloqueada: boolean;
+  codigo: Moeda;
   aoClicar: () => void;
 }) {
   const inativa = !opcao.disponivel || (bloqueada && !marcada);
@@ -51,12 +52,14 @@ function Escolha({
       }`}
     >
       <span className="font-medium">{opcao.nome}</span>
-      <Etiqueta opcao={opcao} />
+      <Etiqueta opcao={opcao} codigo={codigo} />
     </button>
   );
 }
 
 export default function Montador({ produto, confeiteira, slug }: Props) {
+  const fmt = (valor: number) => moeda(valor, confeiteira.moeda);
+
   const [selecao, setSelecao] = useState<Selecao>({
     tamanhoId: produto.tamanhos[0].id,
     massaId: "",
@@ -107,7 +110,7 @@ export default function Montador({ produto, confeiteira, slug }: Props) {
           {confeiteira.nome} recebeu sua reserva e vai te chamar no WhatsApp
           para combinar o pagamento.
         </p>
-        <div className="mt-8 rounded-2xl border-2 border-marca bg-marca-suave p-6 text-left">
+        <div className="mt-8 rounded-2xl border border-marca bg-marca-suave p-6 text-left">
           <p className="font-titulo font-semibold">
             ⚠️ Sua data ainda não está garantida
           </p>
@@ -170,7 +173,7 @@ export default function Montador({ produto, confeiteira, slug }: Props) {
                     {opcao.porcoes}
                   </span>
                   <span className="mt-2 block text-sm font-semibold">
-                    {moeda(opcao.preco)}
+                    {fmt(opcao.preco)}
                   </span>
                   <span className="mt-1 block text-xs text-suave">
                     até {opcao.maxRecheios}{" "}
@@ -191,6 +194,7 @@ export default function Montador({ produto, confeiteira, slug }: Props) {
                 opcao={opcao}
                 marcada={selecao.massaId === opcao.id}
                 bloqueada={false}
+                codigo={confeiteira.moeda}
                 aoClicar={() =>
                   setSelecao((atual) => ({ ...atual, massaId: opcao.id }))
                 }
@@ -215,6 +219,7 @@ export default function Montador({ produto, confeiteira, slug }: Props) {
                 opcao={opcao}
                 marcada={selecao.recheioIds.includes(opcao.id)}
                 bloqueada={vagas === 0}
+                codigo={confeiteira.moeda}
                 aoClicar={() =>
                   alternar("recheioIds", opcao.id, tamanho?.maxRecheios ?? 0)
                 }
@@ -235,6 +240,7 @@ export default function Montador({ produto, confeiteira, slug }: Props) {
               <Escolha
                 key={opcao.id}
                 opcao={opcao}
+                codigo={confeiteira.moeda}
                 marcada={selecao.decoracaoIds.includes(opcao.id)}
                 bloqueada={
                   selecao.decoracaoIds.length >= produto.maxDecoracoes
@@ -269,7 +275,7 @@ export default function Montador({ produto, confeiteira, slug }: Props) {
                   </span>
                 </span>
                 <span className="shrink-0 font-medium">
-                  {opcao.taxa === 0 ? "grátis" : moeda(opcao.taxa)}
+                  {opcao.taxa === 0 ? "grátis" : fmt(opcao.taxa)}
                 </span>
               </button>
             ))}
@@ -289,7 +295,7 @@ export default function Montador({ produto, confeiteira, slug }: Props) {
       </div>
 
       <aside className="lg:sticky lg:top-6 lg:self-start">
-        <div className="rounded-2xl border border-borda bg-cartao p-6">
+        <div className="rounded-3xl border border-borda bg-cartao p-6">
           <h2 className="font-titulo font-semibold">Seu bolo</h2>
 
           <ul className="mt-5 space-y-3 text-sm">
@@ -305,7 +311,7 @@ export default function Montador({ produto, confeiteira, slug }: Props) {
                   </span>
                 </span>
                 <span className="shrink-0 text-suave">
-                  {linha.valor === 0 ? "—" : moeda(linha.valor)}
+                  {linha.valor === 0 ? "—" : fmt(linha.valor)}
                 </span>
               </li>
             ))}
@@ -315,7 +321,7 @@ export default function Montador({ produto, confeiteira, slug }: Props) {
                 <span className="block text-xs text-suave">entrega</span>
               </span>
               <span className="shrink-0 text-suave">
-                {entrega.taxa === 0 ? "—" : moeda(entrega.taxa)}
+                {entrega.taxa === 0 ? "—" : fmt(entrega.taxa)}
               </span>
             </li>
           </ul>
@@ -323,7 +329,7 @@ export default function Montador({ produto, confeiteira, slug }: Props) {
           <div className="mt-5 flex items-baseline justify-between border-t border-borda pt-5">
             <span className="text-sm text-suave">Total</span>
             <span className="text-2xl font-semibold">
-              {moeda(totalComEntrega)}
+              {fmt(totalComEntrega)}
             </span>
           </div>
 

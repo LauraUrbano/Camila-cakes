@@ -1,4 +1,6 @@
-import { confeiteira } from "@/lib/dados";
+import { lojaPrincipal } from "@/lib/dados";
+
+const { confeiteira } = lojaPrincipal;
 import { moeda } from "@/lib/precos";
 
 export default function PaginaDaMinhaPagina() {
@@ -93,7 +95,9 @@ export default function PaginaDaMinhaPagina() {
                 </span>
               </span>
               <span className="shrink-0 font-medium">
-                {entrega.taxa === 0 ? "grátis" : moeda(entrega.taxa)}
+                {entrega.taxa === 0
+                  ? "grátis"
+                  : moeda(entrega.taxa, confeiteira.moeda)}
               </span>
             </li>
           ))}

@@ -41,8 +41,8 @@ export default function PedidoPersonalizado({
 
       <h1 className="mt-5 text-3xl font-semibold">Pedido personalizado</h1>
       <p className="mt-3 leading-relaxed text-suave">
-        Para o que não cabe no cardápio pronto. Descreve a ideia com o máximo de
-        detalhe que você conseguir — quanto mais eu souber, mais preciso fica o
+        Para o que não cabe no cardápio pronto. Descreva a ideia com o máximo de
+        detalhe que conseguir — quanto mais eu souber, mais preciso fica o
         orçamento.
       </p>
 
@@ -55,7 +55,7 @@ export default function PedidoPersonalizado({
       >
         <div className="grid gap-6 sm:grid-cols-2">
           <label className="block text-sm">
-            <span className="font-medium">Seu nome</span>
+            <span className="font-medium">O seu nome</span>
             <input
               required
               className="mt-2 w-full rounded-xl border border-borda bg-cartao p-3 outline-none focus:border-marca"
@@ -94,14 +94,14 @@ export default function PedidoPersonalizado({
             rows={6}
             value={ideia}
             onChange={(evento) => setIdeia(evento.target.value)}
-            placeholder="Tema, cores, sabores que você gosta, referências que viu, restrições alimentares…"
+            placeholder="Tema, cores, sabores de que gosta, referências que viu, restrições alimentares…"
             className="mt-2 w-full rounded-xl border border-borda bg-cartao p-4 outline-none focus:border-marca"
           />
         </label>
 
-        <div className="rounded-2xl border-2 border-marca bg-marca-suave p-5 text-sm leading-relaxed">
+        <div className="rounded-2xl border border-marca bg-marca-suave p-5 text-sm leading-relaxed">
           Pedido personalizado começa como <strong>orçamento</strong>. A data só
-          fica reservada depois que {confeiteira.nome} aceitar o pedido.
+          fica reservada depois de {confeiteira.nome} aceitar o pedido.
         </div>
 
         <button

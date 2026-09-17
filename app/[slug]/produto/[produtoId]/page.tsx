@@ -1,12 +1,14 @@
 import { notFound } from "next/navigation";
-import { confeiteira, produtoPorId, produtos } from "@/lib/dados";
+import { lojaPorSlug, lojas, produtoPorId } from "@/lib/dados";
 import Montador from "./montador";
 
 export function generateStaticParams() {
-  return produtos.map((produto) => ({
-    slug: confeiteira.slug,
-    produtoId: produto.id,
-  }));
+  return lojas.flatMap((loja) =>
+    loja.produtos.map((produto) => ({
+      slug: loja.confeiteira.slug,
+      produtoId: produto.id,
+    })),
+  );
 }
 
 export default async function PaginaDoProduto({
@@ -15,8 +17,11 @@ export default async function PaginaDoProduto({
   params: Promise<{ slug: string; produtoId: string }>;
 }) {
   const { slug, produtoId } = await params;
-  const produto = produtoPorId(produtoId);
-  if (slug !== confeiteira.slug || !produto) notFound();
+  const loja = lojaPorSlug(slug);
+  const produto = loja && produtoPorId(loja, produtoId);
+  if (!loja || !produto) notFound();
 
-  return <Montador produto={produto} confeiteira={confeiteira} slug={slug} />;
+  return (
+    <Montador produto={produto} confeiteira={loja.confeiteira} slug={slug} />
+  );
 }

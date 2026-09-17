@@ -65,6 +65,11 @@ export type OpcaoEntrega = {
   taxa: number;
 };
 
+/** Moedas atendidas pela plataforma. */
+export type Moeda = "EUR" | "CHF";
+
+export type Pais = "PT" | "CH";
+
 export type Tema = {
   marca: string;
   marcaSuave: string;
@@ -78,6 +83,9 @@ export type Confeiteira = {
   tagline: string;
   bio: string;
   cidade: string;
+  pais: Pais;
+  /** Cada confeiteira cobra na moeda do país onde trabalha. */
+  moeda: Moeda;
   whatsapp: string;
   instagram: string;
   emoji: string;
@@ -116,4 +124,13 @@ export type Pedido = {
   itens: ItemPedido[];
   status: StatusPedido;
   personalizado?: string;
+};
+
+/** Tudo o que pertence a uma confeiteira. No banco, cada lista vira uma
+ *  tabela com a coluna `confeiteira_id`. */
+export type Loja = {
+  confeiteira: Confeiteira;
+  produtos: Produto[];
+  colecoes: Colecao[];
+  pedidos: Pedido[];
 };

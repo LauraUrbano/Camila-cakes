@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { moeda } from "@/lib/precos";
-import type { Pedido, StatusPedido } from "@/lib/tipos";
+import type { Moeda, Pedido, StatusPedido } from "@/lib/tipos";
 
 const rotulos: Record<StatusPedido, { texto: string; classe: string }> = {
   aguardando: {
@@ -22,8 +22,15 @@ function total(pedido: Pedido) {
   );
 }
 
-export default function ListaDePedidos({ iniciais }: { iniciais: Pedido[] }) {
+export default function ListaDePedidos({
+  iniciais,
+  codigo,
+}: {
+  iniciais: Pedido[];
+  codigo: Moeda;
+}) {
   const [lista, setLista] = useState(iniciais);
+  const fmt = (valor: number) => moeda(valor, codigo);
 
   function mudarStatus(id: string, status: StatusPedido) {
     setLista((atual) =>
@@ -43,7 +50,7 @@ export default function ListaDePedidos({ iniciais }: { iniciais: Pedido[] }) {
       </p>
 
       {aguardando.length > 0 && (
-        <p className="mt-6 rounded-xl border-2 border-marca bg-marca-suave px-5 py-4 text-sm">
+        <p className="mt-6 rounded-xl border border-marca bg-marca-suave px-5 py-4 text-sm">
           <strong>{aguardando.length}</strong>{" "}
           {aguardando.length === 1
             ? "pedido ainda não foi aceito"
@@ -83,7 +90,7 @@ export default function ListaDePedidos({ iniciais }: { iniciais: Pedido[] }) {
                 </div>
                 <div className="text-right">
                   <p className="font-semibold">
-                    {pedido.itens.length === 0 ? "a orçar" : moeda(total(pedido))}
+                    {pedido.itens.length === 0 ? "a orçar" : fmt(total(pedido))}
                   </p>
                   <p className="text-xs text-suave">
                     entrega {pedido.entregaEm}
@@ -124,7 +131,7 @@ export default function ListaDePedidos({ iniciais }: { iniciais: Pedido[] }) {
                   {pedido.entrega.nome} ·{" "}
                   {pedido.entrega.taxa === 0
                     ? "sem taxa"
-                    : moeda(pedido.entrega.taxa)}
+                    : fmt(pedido.entrega.taxa)}
                 </p>
               </div>
 

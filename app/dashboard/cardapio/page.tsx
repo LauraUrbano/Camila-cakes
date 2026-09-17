@@ -1,6 +1,9 @@
-import { produtos } from "@/lib/dados";
+import { lojaPrincipal } from "@/lib/dados";
 import { moeda, restam } from "@/lib/precos";
-import type { Opcao } from "@/lib/tipos";
+import type { Moeda, Opcao } from "@/lib/tipos";
+
+const { confeiteira, produtos } = lojaPrincipal;
+const codigo: Moeda = confeiteira.moeda;
 
 function Opcoes({ titulo, lista }: { titulo: string; lista: Opcao[] }) {
   return (
@@ -13,7 +16,9 @@ function Opcoes({ titulo, lista }: { titulo: string; lista: Opcao[] }) {
               {opcao.nome}
             </span>
             <span className="shrink-0 text-suave">
-              {opcao.acrescimo === 0 ? "incluso" : `+ ${moeda(opcao.acrescimo)}`}
+              {opcao.acrescimo === 0
+                ? "incluído"
+                : `+ ${moeda(opcao.acrescimo, codigo)}`}
             </span>
           </li>
         ))}
@@ -81,7 +86,7 @@ export default function PaginaDoCardapio() {
                         {tamanho.porcoes}
                       </p>
                       <p className="mt-2 font-semibold">
-                        {moeda(tamanho.preco)}
+                        {moeda(tamanho.preco, codigo)}
                       </p>
                       <p className="mt-1 text-xs text-suave">
                         até {tamanho.maxRecheios}{" "}

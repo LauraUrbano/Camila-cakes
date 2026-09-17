@@ -7,18 +7,18 @@ const inter = Inter({ variable: "--fonte-sans", subsets: ["latin"] });
 const fraunces = Fraunces({
   variable: "--fonte-titulo",
   subsets: ["latin"],
-  weight: ["400", "600", "700"],
+  weight: ["400", "600"],
 });
 
 export const metadata: Metadata = {
   title: "Camila Cakes — a plataforma de quem vende bolo por encomenda",
   description:
-    "Cardápio online, montagem de bolo com preço automático e controle de encomendas para confeiteiras.",
+    "Cardápio online, montagem de bolo com preço automático e gestão de encomendas para pasteleiras em Portugal e na Suíça.",
 };
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="pt-BR" className={`${inter.variable} ${fraunces.variable} h-full`}>
+    <html lang="pt-PT" className={`${inter.variable} ${fraunces.variable} h-full`}>
       <body className="min-h-full font-sans antialiased">{children}</body>
     </html>
   );

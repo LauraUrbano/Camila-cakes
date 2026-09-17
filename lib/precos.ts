@@ -1,4 +1,4 @@
-import type { Produto, Tamanho, Opcao } from "./tipos";
+import type { Moeda, Produto, Tamanho, Opcao } from "./tipos";
 
 export type Selecao = {
   tamanhoId: string;
@@ -21,11 +21,17 @@ export type Orcamento = {
   completo: boolean;
 };
 
-export function moeda(valor: number): string {
-  return valor.toLocaleString("pt-BR", {
-    style: "currency",
-    currency: "BRL",
-  });
+/**
+ * Cada moeda tem o seu formato local: em Portugal o símbolo vem depois do
+ * número e a vírgula separa os cêntimos; na Suíça é o contrário.
+ */
+const formatos: Record<Moeda, Intl.NumberFormat> = {
+  EUR: new Intl.NumberFormat("pt-PT", { style: "currency", currency: "EUR" }),
+  CHF: new Intl.NumberFormat("de-CH", { style: "currency", currency: "CHF" }),
+};
+
+export function moeda(valor: number, codigo: Moeda = "EUR"): string {
+  return formatos[codigo].format(valor);
 }
 
 function acha<T extends { id: string }>(lista: T[], id: string) {

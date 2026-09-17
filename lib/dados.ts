@@ -1,175 +1,182 @@
-import type { Colecao, Confeiteira, Pedido, Produto } from "./tipos";
+import type { Colecao, Confeiteira, Loja, Pedido, Produto } from "./tipos";
 
 // Dados fake do protótipo. Nada aqui vem de banco ainda — quando o Supabase
-// entrar, estes objetos viram linhas de tabela e as telas continuam iguais.
+// entrar, cada lista destas vira uma tabela com a coluna `confeiteira_id`.
+//
+// São duas lojas de propósito: uma em Portugal e outra na Suíça. É o que prova
+// que a página por slug, o tema e a moeda são mesmo de cada confeiteira.
 
-export const confeiteira: Confeiteira = {
+// ---------------------------------------------------------------- Lisboa (€)
+
+const camila: Confeiteira = {
   slug: "camila-cakes",
   nome: "Camila Cakes",
-  tagline: "Bolos de festa feitos sob encomenda",
-  bio: "Confeitaria artesanal há 8 anos. Trabalho com massas leves, recheios caseiros e encomendas com antecedência. Cada bolo é montado no dia da entrega.",
-  cidade: "São Paulo, SP",
-  whatsapp: "(11) 90000-0000",
+  tagline: "Bolos de festa feitos por encomenda",
+  bio: "Pastelaria artesanal há 8 anos em Campo de Ourique. Trabalho com massas leves, recheios caseiros e encomendas com antecedência. Cada bolo é montado no dia da entrega.",
+  cidade: "Lisboa",
+  pais: "PT",
+  moeda: "EUR",
+  whatsapp: "+351 912 000 000",
   instagram: "@camilacakes",
   emoji: "🍰",
-  dominioProprio: "camilacakes.com.br",
+  dominioProprio: "camilacakes.pt",
   tema: {
-    marca: "#B3204D",
-    marcaSuave: "#FDEEF3",
-    fundo: "#FFFBF8",
-    texto: "#2E1C22",
+    marca: "#5A6E55",
+    marcaSuave: "#EDF2E9",
+    fundo: "#FCFAF6",
+    texto: "#38332E",
   },
   entregas: [
     {
-      id: "retirada",
+      id: "levantamento",
       tipo: "retirada",
-      nome: "Retirada no ateliê",
-      descricao: "Vila Mariana — combinamos o horário pelo WhatsApp",
+      nome: "Levantamento no atelier",
+      descricao: "Campo de Ourique — combinamos a hora por mensagem",
       taxa: 0,
     },
     {
-      id: "entrega-zona-sul",
+      id: "entrega-lisboa",
       tipo: "entrega",
-      nome: "Entrega — Zona Sul",
-      descricao: "Vila Mariana, Moema, Saúde, Ipiranga",
-      taxa: 25,
+      nome: "Entrega em Lisboa",
+      descricao: "Dentro da cidade",
+      taxa: 6,
     },
     {
-      id: "entrega-demais",
+      id: "entrega-grande-lisboa",
       tipo: "entrega",
-      nome: "Entrega — demais regiões",
-      descricao: "Consulto a taxa conforme o endereço",
-      taxa: 45,
+      nome: "Entrega na Grande Lisboa",
+      descricao: "Oeiras, Almada, Sintra, Loures",
+      taxa: 12,
     },
   ],
   aceitaPersonalizado: true,
   avisoPagamento:
-    "Confirmo a encomenda com 50% de sinal via Pix. O restante é pago na entrega.",
+    "Confirmo a encomenda com 50% de sinal por MB WAY ou transferência bancária. O restante é pago na entrega.",
 };
 
-export const produtos: Produto[] = [
+const produtosCamila: Produto[] = [
   {
     id: "bolo-festa",
     nome: "Bolo de festa",
     descricao:
-      "O clássico da casa: massa fofinha, recheio generoso e acabamento em chantilly ou ganache.",
+      "O clássico da casa: massa fofa, recheio generoso e acabamento em chantilly ou ganache.",
     categoria: "Bolos",
     emoji: "🎂",
-    cor: "#F7D9E3",
+    cor: "#F2E7D9",
     antecedenciaDias: 5,
     maxDecoracoes: 2,
     tamanhos: [
-      { id: "p", nome: "Pequeno", porcoes: "15 a 20 fatias", preco: 180, maxRecheios: 1 },
-      { id: "m", nome: "Médio", porcoes: "25 a 30 fatias", preco: 260, maxRecheios: 2 },
-      { id: "g", nome: "Grande", porcoes: "40 a 50 fatias", preco: 390, maxRecheios: 3 },
+      { id: "p", nome: "Pequeno", porcoes: "15 a 20 fatias", preco: 38, maxRecheios: 1 },
+      { id: "m", nome: "Médio", porcoes: "25 a 30 fatias", preco: 55, maxRecheios: 2 },
+      { id: "g", nome: "Grande", porcoes: "40 a 50 fatias", preco: 82, maxRecheios: 3 },
     ],
     massas: [
       { id: "branca", nome: "Branca", acrescimo: 0, disponivel: true },
       { id: "chocolate", nome: "Chocolate", acrescimo: 0, disponivel: true },
-      { id: "red-velvet", nome: "Red velvet", acrescimo: 35, disponivel: true },
-      { id: "cenoura", nome: "Cenoura", acrescimo: 15, disponivel: true },
+      { id: "red-velvet", nome: "Red velvet", acrescimo: 8, disponivel: true },
+      { id: "cenoura", nome: "Cenoura", acrescimo: 4, disponivel: true },
     ],
     recheios: [
       { id: "brigadeiro", nome: "Brigadeiro", acrescimo: 0, disponivel: true },
       { id: "doce-de-leite", nome: "Doce de leite", acrescimo: 0, disponivel: true },
-      { id: "ninho", nome: "Creme de ninho", acrescimo: 20, disponivel: true },
-      { id: "nutella", nome: "Nutella", acrescimo: 35, disponivel: true },
-      { id: "morango", nome: "Morango ao creme", acrescimo: 25, disponivel: true },
-      { id: "pistache", nome: "Pistache", acrescimo: 45, disponivel: false },
+      { id: "ninho", nome: "Creme de leite em pó", acrescimo: 5, disponivel: true },
+      { id: "nutella", nome: "Nutella", acrescimo: 8, disponivel: true },
+      { id: "morango", nome: "Morango com natas", acrescimo: 6, disponivel: true },
+      { id: "pistacio", nome: "Pistácio", acrescimo: 12, disponivel: false },
     ],
     decoracoes: [
-      { id: "lisa", nome: "Acabamento liso", acrescimo: 0, disponivel: true },
-      { id: "drip", nome: "Drip de chocolate", acrescimo: 30, disponivel: true },
-      { id: "flores", nome: "Flores naturais", acrescimo: 60, disponivel: true },
-      { id: "topo", nome: "Topo personalizado", acrescimo: 45, disponivel: true },
+      { id: "liso", nome: "Acabamento liso", acrescimo: 0, disponivel: true },
+      { id: "drip", nome: "Drip de chocolate", acrescimo: 7, disponivel: true },
+      { id: "flores", nome: "Flores naturais", acrescimo: 15, disponivel: true },
+      { id: "topo", nome: "Topo personalizado", acrescimo: 10, disponivel: true },
     ],
   },
   {
     id: "naked-cake",
     nome: "Naked cake",
     descricao:
-      "Camadas à mostra, frutas frescas por cima. Bonito de mesa e leve de comer.",
+      "Camadas à mostra, fruta fresca por cima. Bonito de mesa e leve de comer.",
     categoria: "Bolos",
     emoji: "🍰",
-    cor: "#FAE8D4",
+    cor: "#EAF0E4",
     antecedenciaDias: 7,
     maxDecoracoes: 1,
     tamanhos: [
-      { id: "m", nome: "Médio", porcoes: "20 a 25 fatias", preco: 290, maxRecheios: 2 },
-      { id: "g", nome: "Grande", porcoes: "35 a 40 fatias", preco: 420, maxRecheios: 2 },
+      { id: "m", nome: "Médio", porcoes: "20 a 25 fatias", preco: 62, maxRecheios: 2 },
+      { id: "g", nome: "Grande", porcoes: "35 a 40 fatias", preco: 88, maxRecheios: 2 },
     ],
     massas: [
       { id: "branca", nome: "Branca", acrescimo: 0, disponivel: true },
       { id: "chocolate", nome: "Chocolate", acrescimo: 0, disponivel: true },
     ],
     recheios: [
-      { id: "morango", nome: "Morango ao creme", acrescimo: 0, disponivel: true },
-      { id: "frutas-vermelhas", nome: "Frutas vermelhas", acrescimo: 30, disponivel: true },
-      { id: "limao", nome: "Creme de limão", acrescimo: 15, disponivel: true },
+      { id: "morango", nome: "Morango com natas", acrescimo: 0, disponivel: true },
+      { id: "frutos-vermelhos", nome: "Frutos vermelhos", acrescimo: 7, disponivel: true },
+      { id: "limao", nome: "Creme de limão", acrescimo: 4, disponivel: true },
     ],
     decoracoes: [
-      { id: "frutas", nome: "Frutas frescas", acrescimo: 0, disponivel: true },
-      { id: "flores", nome: "Flores naturais", acrescimo: 60, disponivel: true },
+      { id: "fruta", nome: "Fruta fresca", acrescimo: 0, disponivel: true },
+      { id: "flores", nome: "Flores naturais", acrescimo: 15, disponivel: true },
     ],
   },
   {
-    id: "panetone-natal",
-    nome: "Panetone recheado",
+    id: "bolo-rei",
+    nome: "Bolo-rei recheado",
     descricao:
-      "Produção limitada de Natal. Massa artesanal de fermentação lenta, recheio à escolha.",
+      "Produção limitada de Natal. Massa de fermentação lenta, recheio à escolha.",
     categoria: "Natal",
-    emoji: "🎄",
-    cor: "#E3EDDD",
+    emoji: "👑",
+    cor: "#E4EBE3",
     antecedenciaDias: 10,
     maxDecoracoes: 1,
     limite: { total: 40, vendidos: 31 },
     tamanhos: [
-      { id: "500", nome: "500g", porcoes: "6 a 8 fatias", preco: 95, maxRecheios: 1 },
-      { id: "1kg", nome: "1kg", porcoes: "12 a 15 fatias", preco: 165, maxRecheios: 2 },
+      { id: "500", nome: "500g", porcoes: "6 a 8 fatias", preco: 18, maxRecheios: 1 },
+      { id: "1kg", nome: "1kg", porcoes: "12 a 15 fatias", preco: 30, maxRecheios: 2 },
     ],
     massas: [
       { id: "tradicional", nome: "Tradicional", acrescimo: 0, disponivel: true },
-      { id: "chocolate", nome: "Chocolate", acrescimo: 10, disponivel: true },
+      { id: "sem-frutas", nome: "Sem frutas cristalizadas", acrescimo: 2, disponivel: true },
     ],
     recheios: [
-      { id: "brigadeiro", nome: "Brigadeiro", acrescimo: 0, disponivel: true },
-      { id: "ninho", nome: "Creme de ninho", acrescimo: 15, disponivel: true },
-      { id: "nutella", nome: "Nutella", acrescimo: 25, disponivel: true },
+      { id: "creme-ovos", nome: "Creme de ovos", acrescimo: 0, disponivel: true },
+      { id: "chocolate", nome: "Chocolate", acrescimo: 3, disponivel: true },
+      { id: "nozes", nome: "Nozes", acrescimo: 5, disponivel: true },
     ],
     decoracoes: [
       { id: "simples", nome: "Embalagem simples", acrescimo: 0, disponivel: true },
-      { id: "presente", nome: "Embalagem presente", acrescimo: 18, disponivel: true },
+      { id: "presente", nome: "Embalagem de presente", acrescimo: 4, disponivel: true },
     ],
   },
   {
     id: "docinhos",
-    nome: "Docinhos (cento)",
+    nome: "Doces de festa",
     descricao:
-      "Brigadeiro, beijinho, casadinho. Vendidos por cento, sabores misturados.",
+      "Brigadeiro, beijinho, casadinho. Vendidos por dúzia, sabores à escolha.",
     categoria: "Doces",
     emoji: "🍬",
-    cor: "#EDE2F5",
+    cor: "#EDE9F2",
     antecedenciaDias: 4,
     maxDecoracoes: 1,
     tamanhos: [
-      { id: "50", nome: "50 unidades", porcoes: "meia cento", preco: 110, maxRecheios: 2 },
-      { id: "100", nome: "100 unidades", porcoes: "um cento", preco: 200, maxRecheios: 3 },
+      { id: "50", nome: "50 unidades", porcoes: "festa pequena", preco: 25, maxRecheios: 2 },
+      { id: "100", nome: "100 unidades", porcoes: "festa média", preco: 45, maxRecheios: 3 },
     ],
     massas: [{ id: "tradicional", nome: "Tradicional", acrescimo: 0, disponivel: true }],
     recheios: [
       { id: "brigadeiro", nome: "Brigadeiro", acrescimo: 0, disponivel: true },
       { id: "beijinho", nome: "Beijinho", acrescimo: 0, disponivel: true },
-      { id: "casadinho", nome: "Casadinho", acrescimo: 10, disponivel: true },
-      { id: "nozes", nome: "Nozes", acrescimo: 25, disponivel: true },
+      { id: "casadinho", nome: "Casadinho", acrescimo: 3, disponivel: true },
+      { id: "nozes", nome: "Nozes", acrescimo: 6, disponivel: true },
     ],
     decoracoes: [
-      { id: "forminha", nome: "Forminha branca", acrescimo: 0, disponivel: true },
-      { id: "forminha-cor", nome: "Forminha colorida", acrescimo: 15, disponivel: true },
+      { id: "forma-branca", nome: "Forminha branca", acrescimo: 0, disponivel: true },
+      { id: "forma-cor", nome: "Forminha colorida", acrescimo: 4, disponivel: true },
     ],
   },
 ];
 
-export const colecoes: Colecao[] = [
+const colecoesCamila: Colecao[] = [
   {
     id: "natal",
     nome: "Natal 2026",
@@ -177,7 +184,7 @@ export const colecoes: Colecao[] = [
     periodo: "1 nov — 23 dez",
     ativa: true,
     destaque: true,
-    produtoIds: ["panetone-natal", "bolo-festa", "docinhos"],
+    produtoIds: ["bolo-rei", "bolo-festa", "docinhos"],
   },
   {
     id: "sempre",
@@ -191,7 +198,7 @@ export const colecoes: Colecao[] = [
   {
     id: "pascoa",
     nome: "Páscoa",
-    descricao: "Ovos de colher e bolos de chocolate.",
+    descricao: "Folar recheado e bolos de chocolate.",
     periodo: "1 mar — 5 abr",
     ativa: false,
     destaque: false,
@@ -199,84 +206,84 @@ export const colecoes: Colecao[] = [
   },
 ];
 
-export const pedidos: Pedido[] = [
+const pedidosCamila: Pedido[] = [
   {
-    id: "PED-104",
+    id: "ENC-104",
     cliente: "Juliana Prado",
-    telefone: "(11) 98888-1122",
+    telefone: "+351 918 111 222",
     criadoEm: "16/09",
     entregaEm: "27/09",
-    entrega: confeiteira.entregas[1],
+    entrega: camila.entregas[1],
     status: "aguardando",
     itens: [
       {
         produtoNome: "Bolo de festa",
         tamanhoNome: "Médio",
         massaNome: "Red velvet",
-        recheiosNomes: ["Creme de ninho", "Nutella"],
+        recheiosNomes: ["Creme de leite em pó", "Nutella"],
         decoracoesNomes: ["Drip de chocolate"],
-        observacao: "Aniversário de 30 anos, tema vermelho.",
-        total: 380,
+        observacao: "Aniversário de 30 anos, tema em tons de verde.",
+        total: 83,
       },
     ],
   },
   {
-    id: "PED-103",
-    cliente: "Marcos Vinícius",
-    telefone: "(11) 97777-3344",
+    id: "ENC-103",
+    cliente: "Marco Bettencourt",
+    telefone: "+351 917 333 444",
     criadoEm: "15/09",
     entregaEm: "24/09",
-    entrega: confeiteira.entregas[0],
+    entrega: camila.entregas[0],
     status: "aguardando",
     itens: [
       {
-        produtoNome: "Docinhos (cento)",
+        produtoNome: "Doces de festa",
         tamanhoNome: "100 unidades",
         massaNome: "Tradicional",
         recheiosNomes: ["Brigadeiro", "Beijinho", "Nozes"],
         decoracoesNomes: ["Forminha colorida"],
-        total: 240,
+        total: 55,
       },
     ],
   },
   {
-    id: "PED-102",
+    id: "ENC-102",
     cliente: "Renata Alves",
-    telefone: "(11) 96666-5566",
+    telefone: "+351 916 555 666",
     criadoEm: "12/09",
     entregaEm: "21/09",
-    entrega: confeiteira.entregas[1],
+    entrega: camila.entregas[1],
     status: "aceito",
     itens: [
       {
         produtoNome: "Naked cake",
         tamanhoNome: "Grande",
         massaNome: "Branca",
-        recheiosNomes: ["Morango ao creme", "Frutas vermelhas"],
-        decoracoesNomes: ["Frutas frescas"],
-        total: 475,
+        recheiosNomes: ["Morango com natas", "Frutos vermelhos"],
+        decoracoesNomes: ["Fruta fresca"],
+        total: 95,
       },
     ],
   },
   {
-    id: "PED-101",
+    id: "ENC-101",
     cliente: "Fernanda Lima",
-    telefone: "(11) 95555-7788",
+    telefone: "+351 915 777 888",
     criadoEm: "10/09",
     entregaEm: "19/09",
-    entrega: confeiteira.entregas[0],
+    entrega: camila.entregas[0],
     status: "producao",
     personalizado:
-      "Bolo de 3 andares para casamento, 120 convidados, tons de branco e verde.",
+      "Bolo de 3 andares para casamento, 120 convidados, tons de branco e verde-sálvia.",
     itens: [],
   },
   {
-    id: "PED-100",
+    id: "ENC-100",
     cliente: "Ana Beatriz",
-    telefone: "(11) 94444-9900",
+    telefone: "+351 914 999 000",
     criadoEm: "02/09",
     entregaEm: "13/09",
-    entrega: confeiteira.entregas[2],
+    entrega: camila.entregas[2],
     status: "entregue",
     itens: [
       {
@@ -285,18 +292,198 @@ export const pedidos: Pedido[] = [
         massaNome: "Cenoura",
         recheiosNomes: ["Brigadeiro"],
         decoracoesNomes: ["Acabamento liso"],
-        total: 195,
+        total: 42,
       },
     ],
   },
 ];
 
-export function produtoPorId(id: string) {
-  return produtos.find((produto) => produto.id === id);
+// -------------------------------------------------------------- Genebra (CHF)
+
+const sofia: Confeiteira = {
+  slug: "doces-da-sofia",
+  nome: "Doces da Sofia",
+  tagline: "Doçaria portuguesa em Genebra",
+  bio: "Saí de Braga há doze anos e trouxe as receitas da minha avó. Faço bolos de festa e doçaria portuguesa por encomenda, para a comunidade daqui e para quem quiser provar.",
+  cidade: "Genebra",
+  pais: "CH",
+  moeda: "CHF",
+  whatsapp: "+41 79 000 00 00",
+  instagram: "@docesdasofia",
+  emoji: "🧁",
+  tema: {
+    marca: "#6E6280",
+    marcaSuave: "#F1EEF5",
+    fundo: "#FBFAF8",
+    texto: "#35313A",
+  },
+  entregas: [
+    {
+      id: "levantamento",
+      tipo: "retirada",
+      nome: "Levantamento em Carouge",
+      descricao: "Combinamos a hora por mensagem",
+      taxa: 0,
+    },
+    {
+      id: "entrega-genebra",
+      tipo: "entrega",
+      nome: "Entrega em Genebra",
+      descricao: "Cidade e arredores",
+      taxa: 12,
+    },
+    {
+      id: "entrega-vaud",
+      tipo: "entrega",
+      nome: "Entrega no cantão de Vaud",
+      descricao: "Lausanne, Nyon, Morges",
+      taxa: 25,
+    },
+  ],
+  aceitaPersonalizado: false,
+  avisoPagamento:
+    "Confirmo a encomenda com 50% de sinal por TWINT ou transferência. O restante é pago na entrega.",
+};
+
+const produtosSofia: Produto[] = [
+  {
+    id: "bolo-festa",
+    nome: "Bolo de festa",
+    descricao:
+      "Massa fofa e recheio caseiro, como se faz em Portugal. Acabamento em chantilly.",
+    categoria: "Bolos",
+    emoji: "🎂",
+    cor: "#EDE9F2",
+    antecedenciaDias: 6,
+    maxDecoracoes: 1,
+    tamanhos: [
+      { id: "p", nome: "Pequeno", porcoes: "15 a 20 fatias", preco: 65, maxRecheios: 1 },
+      { id: "m", nome: "Médio", porcoes: "25 a 30 fatias", preco: 95, maxRecheios: 2 },
+      { id: "g", nome: "Grande", porcoes: "40 a 50 fatias", preco: 140, maxRecheios: 3 },
+    ],
+    massas: [
+      { id: "branca", nome: "Branca", acrescimo: 0, disponivel: true },
+      { id: "chocolate", nome: "Chocolate", acrescimo: 0, disponivel: true },
+    ],
+    recheios: [
+      { id: "creme-ovos", nome: "Creme de ovos", acrescimo: 0, disponivel: true },
+      { id: "brigadeiro", nome: "Brigadeiro", acrescimo: 0, disponivel: true },
+      { id: "nozes", nome: "Nozes", acrescimo: 10, disponivel: true },
+    ],
+    decoracoes: [
+      { id: "liso", nome: "Acabamento liso", acrescimo: 0, disponivel: true },
+      { id: "flores", nome: "Flores naturais", acrescimo: 25, disponivel: true },
+    ],
+  },
+  {
+    id: "pasteis-nata",
+    nome: "Pastéis de nata",
+    descricao:
+      "Feitos de manhã, entregues no mesmo dia. Vendidos por dúzia.",
+    categoria: "Doçaria",
+    emoji: "🥧",
+    cor: "#F6EDDD",
+    antecedenciaDias: 3,
+    maxDecoracoes: 1,
+    limite: { total: 30, vendidos: 22 },
+    tamanhos: [
+      { id: "12", nome: "1 dúzia", porcoes: "12 unidades", preco: 24, maxRecheios: 1 },
+      { id: "24", nome: "2 dúzias", porcoes: "24 unidades", preco: 45, maxRecheios: 1 },
+    ],
+    massas: [{ id: "tradicional", nome: "Tradicional", acrescimo: 0, disponivel: true }],
+    recheios: [
+      { id: "creme-ovos", nome: "Creme de ovos", acrescimo: 0, disponivel: true },
+    ],
+    decoracoes: [
+      { id: "caixa", nome: "Caixa simples", acrescimo: 0, disponivel: true },
+      { id: "caixa-presente", nome: "Caixa de presente", acrescimo: 8, disponivel: true },
+    ],
+  },
+];
+
+const colecoesSofia: Colecao[] = [
+  {
+    id: "sempre",
+    nome: "Cardápio de sempre",
+    descricao: "Disponível o ano todo.",
+    periodo: "sem data de fim",
+    ativa: true,
+    destaque: false,
+    produtoIds: ["bolo-festa", "pasteis-nata"],
+  },
+];
+
+const pedidosSofia: Pedido[] = [
+  {
+    id: "ENC-042",
+    cliente: "Hélder Sousa",
+    telefone: "+41 78 111 22 33",
+    criadoEm: "16/09",
+    entregaEm: "26/09",
+    entrega: sofia.entregas[1],
+    status: "aguardando",
+    itens: [
+      {
+        produtoNome: "Bolo de festa",
+        tamanhoNome: "Médio",
+        massaNome: "Chocolate",
+        recheiosNomes: ["Brigadeiro", "Nozes"],
+        decoracoesNomes: ["Acabamento liso"],
+        total: 105,
+      },
+    ],
+  },
+  {
+    id: "ENC-041",
+    cliente: "Claudia Ferreira",
+    telefone: "+41 76 444 55 66",
+    criadoEm: "14/09",
+    entregaEm: "20/09",
+    entrega: sofia.entregas[0],
+    status: "aceito",
+    itens: [
+      {
+        produtoNome: "Pastéis de nata",
+        tamanhoNome: "2 dúzias",
+        massaNome: "Tradicional",
+        recheiosNomes: ["Creme de ovos"],
+        decoracoesNomes: ["Caixa de presente"],
+        total: 53,
+      },
+    ],
+  },
+];
+
+// ------------------------------------------------------------------- exportes
+
+export const lojas: Loja[] = [
+  {
+    confeiteira: camila,
+    produtos: produtosCamila,
+    colecoes: colecoesCamila,
+    pedidos: pedidosCamila,
+  },
+  {
+    confeiteira: sofia,
+    produtos: produtosSofia,
+    colecoes: colecoesSofia,
+    pedidos: pedidosSofia,
+  },
+];
+
+/** O painel do protótipo é sempre o da Camila. */
+export const lojaPrincipal = lojas[0];
+
+export function lojaPorSlug(slug: string): Loja | undefined {
+  return lojas.find((loja) => loja.confeiteira.slug === slug);
 }
 
-export function produtosDaColecao(colecao: Colecao) {
+export function produtoPorId(loja: Loja, id: string) {
+  return loja.produtos.find((produto) => produto.id === id);
+}
+
+export function produtosDaColecao(loja: Loja, colecao: Colecao) {
   return colecao.produtoIds
-    .map(produtoPorId)
+    .map((id) => produtoPorId(loja, id))
     .filter((produto): produto is Produto => Boolean(produto));
 }

@@ -1,10 +1,12 @@
 import Link from "next/link";
-import { colecoes, pedidos, produtos } from "@/lib/dados";
+import { lojaPrincipal } from "@/lib/dados";
 import { moeda, restam } from "@/lib/precos";
 
 function totalDoPedido(itens: { total: number }[], taxa: number) {
   return itens.reduce((soma, item) => soma + item.total, 0) + taxa;
 }
+
+const { confeiteira, colecoes, pedidos, produtos } = lojaPrincipal;
 
 export default function VisaoGeral() {
   const aguardando = pedidos.filter((pedido) => pedido.status === "aguardando");
@@ -31,7 +33,7 @@ export default function VisaoGeral() {
       {aguardando.length > 0 && (
         <Link
           href="/dashboard/pedidos"
-          className="mt-8 block rounded-2xl border-2 border-marca bg-marca-suave p-6 transition hover:opacity-90"
+          className="mt-8 block rounded-2xl border border-marca bg-marca-suave p-6 transition hover:opacity-90"
         >
           <p className="font-titulo text-lg font-semibold">
             {aguardando.length}{" "}
@@ -49,7 +51,7 @@ export default function VisaoGeral() {
       <div className="mt-6 grid gap-5 sm:grid-cols-3">
         {[
           { rotulo: "Na agenda", valor: String(naAgenda.length), nota: "pedidos aceitos" },
-          { rotulo: "A receber", valor: moeda(aReceber), nota: "pedidos em aberto" },
+          { rotulo: "A receber", valor: moeda(aReceber, confeiteira.moeda), nota: "pedidos em aberto" },
           {
             rotulo: "Coleções ativas",
             valor: String(colecoes.filter((colecao) => colecao.ativa).length),
@@ -58,7 +60,7 @@ export default function VisaoGeral() {
         ].map((cartao) => (
           <div
             key={cartao.rotulo}
-            className="rounded-2xl border border-borda bg-cartao p-5"
+            className="rounded-3xl border border-borda bg-cartao p-5"
           >
             <p className="text-xs text-suave">{cartao.rotulo}</p>
             <p className="mt-2 text-2xl font-semibold">{cartao.valor}</p>
@@ -69,7 +71,7 @@ export default function VisaoGeral() {
 
       <section className="mt-10">
         <h2 className="font-titulo text-lg font-semibold">Próximas entregas</h2>
-        <ul className="mt-4 divide-y divide-borda overflow-hidden rounded-2xl border border-borda bg-cartao">
+        <ul className="mt-4 divide-y divide-borda overflow-hidden rounded-3xl border border-borda bg-cartao">
           {naAgenda.map((pedido) => (
             <li key={pedido.id} className="flex items-center justify-between gap-4 p-5">
               <span>
@@ -107,7 +109,7 @@ export default function VisaoGeral() {
               return (
                 <li
                   key={produto.id}
-                  className="rounded-2xl border border-borda bg-cartao p-5"
+                  className="rounded-3xl border border-borda bg-cartao p-5"
                 >
                   <div className="flex justify-between text-sm">
                     <span className="font-medium">{produto.nome}</span>

@@ -1,4 +1,6 @@
-import { colecoes, produtosDaColecao } from "@/lib/dados";
+import { lojaPrincipal, produtosDaColecao } from "@/lib/dados";
+
+const { colecoes } = lojaPrincipal;
 
 export default function PaginaDeColecoes() {
   return (
@@ -11,7 +13,7 @@ export default function PaginaDeColecoes() {
 
       <div className="mt-8 space-y-5">
         {colecoes.map((colecao) => {
-          const itens = produtosDaColecao(colecao);
+          const itens = produtosDaColecao(lojaPrincipal, colecao);
           return (
             <section
               key={colecao.id}

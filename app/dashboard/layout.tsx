@@ -1,6 +1,8 @@
 import type { ReactNode } from "react";
 import Link from "next/link";
-import { confeiteira } from "@/lib/dados";
+import { lojaPrincipal } from "@/lib/dados";
+
+const { confeiteira } = lojaPrincipal;
 
 const menu = [
   { href: "/dashboard", rotulo: "Visão geral", emoji: "📊" },
