@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import Icone from "@/app/icones";
 import Logo from "@/app/logo";
-import Carrossel, { type Slide } from "@/app/carrossel";
+import Camadas, { type Camada } from "@/app/camadas";
 import VitrineTema, { type Vitrine } from "@/app/vitrine-tema";
 import { lojas } from "@/lib/dados";
 import { moeda, precoAPartirDe } from "@/lib/precos";
@@ -59,81 +59,66 @@ const passos = [
   },
 ];
 
-const areas: Slide[] = [
+const areas: Camada[] = [
   {
     id: "combinacao",
     icone: "calculo",
     titulo: "Preço por combinação",
+    resumo: "O tamanho manda no preço e no número de recheios",
     texto:
-      "O tamanho define o preço de partida e quantos recheios cabem. Massa, recheio e decoração entram como acréscimo e a soma sai sozinha.",
+      "O tamanho define o preço de partida e quantos recheios cabem. Massa, recheio e decoração entram como acréscimo e a soma sai sozinha — não há tabela de preços para manter à mão.",
     href: "/camila-cakes/produto/bolo-festa",
     accao: "Montar um bolo",
-    fotos: [
-      { src: "/produtos/bolo-festa.jpg", alt: "Bolo com mirtilos" },
-      { src: "/atelier/creme.jpg", alt: "Creme a ser espalhado no bolo" },
-      { src: "/produtos/naked-cake.jpg", alt: "Naked cake com figos" },
-      { src: "/atelier/piping.jpg", alt: "Pasteleira com saco de pasteleiro" },
-    ],
+    foto: "/produtos/bolo-festa.jpg",
+    cor: "#FCE4D6",
   },
   {
     id: "colecoes",
     icone: "calendario",
     titulo: "Coleções sazonais",
+    resumo: "Natal, Páscoa, Dia da Mãe — entram e saem na data",
     texto:
-      "Natal, Páscoa, Dia da Mãe. O cardápio entra na data e sai na data, sem refazer nada — e o mesmo bolo pode viver em várias coleções.",
+      "Montas o cardápio da época uma vez e dizes quando entra e quando sai. O mesmo bolo pode viver em várias coleções, e desligar a de Natal não apaga nada — só tira do ar.",
     href: "/camila-cakes",
     accao: "Ver o cardápio",
-    fotos: [
-      { src: "/produtos/bolo-rei.jpg", alt: "Bolo-rei polvilhado" },
-      { src: "/atelier/tabuleiro.jpg", alt: "Pasteleira com tabuleiro" },
-      { src: "/produtos/doces-festa.jpg", alt: "Doces de festa em forminhas" },
-      { src: "/produtos/bolo-festa-ch.jpg", alt: "Bolo com framboesas" },
-    ],
+    foto: "/produtos/bolo-rei.jpg",
+    cor: "#FBE9EC",
   },
   {
     id: "limite",
     icone: "caixa",
     titulo: "Limite de produção",
+    resumo: "Diz quantos consegues fazer e o site trava sozinho",
     texto:
-      "Diz quantas unidades consegue fazer no período. O site conta por si e, quando esgota, o artigo sai do ar sozinho.",
+      "Dizes quantas unidades dás conta de fazer no período. O site conta por ti e, quando esgota, o artigo sai do ar — ninguém encomenda o que já não podes fazer.",
     href: "/dashboard/cardapio",
     accao: "Ver no painel",
-    fotos: [
-      { src: "/atelier/farinha.jpg", alt: "Farinha a cair sobre a bancada" },
-      { src: "/produtos/pasteis-nata.jpg", alt: "Pastel de nata" },
-      { src: "/atelier/tabuleiro.jpg", alt: "Tabuleiro a sair do forno" },
-      { src: "/produtos/doces-festa.jpg", alt: "Doces em forminhas" },
-    ],
+    foto: "/atelier/tabuleiro.jpg",
+    cor: "#EDF3EC",
   },
   {
     id: "entrega",
     icone: "entrega",
-    titulo: "Entrega à sua maneira",
+    titulo: "Entrega à tua maneira",
+    resumo: "Levantamento, entrega por zona, taxa por região",
     texto:
-      "Levantamento no atelier, entrega por zona, taxa por região. Defines as opções, a tua cliente escolhe uma no momento do pedido.",
+      "Defines as formas de receber e o que cobras por cada uma. A tua cliente escolhe uma no momento do pedido e a taxa entra no total, sem combinar por mensagem.",
     href: "/dashboard/pagina",
     accao: "Definir entregas",
-    fotos: [
-      { src: "/atelier/caixas.jpg", alt: "Caixas de cartão empilhadas" },
-      { src: "/atelier/caixas-doces.jpg", alt: "Doces embalados em caixa" },
-      { src: "/produtos/bolo-festa.jpg", alt: "Bolo pronto a entregar" },
-      { src: "/produtos/pasteis-nata.jpg", alt: "Pastéis de nata embalados" },
-    ],
+    foto: "/atelier/caixas.jpg",
+    cor: "#FCE4D6",
   },
   {
     id: "relatorios",
     icone: "grafico",
     titulo: "Relatórios",
+    resumo: "Receita confirmada, ticket médio e o que mais sai",
     texto:
-      "Receita confirmada, ticket médio, taxa de aceite e o que mais sai. Pedidos à espera de aceite ficam de fora da conta.",
+      "Receita confirmada, ticket médio, taxa de aceite e o ranking dos produtos. Pedidos à espera de aceite ficam de fora da conta — só entra o que já disseste que sim.",
     href: "/dashboard/relatorios",
     accao: "Abrir relatórios",
-    fotos: [
-      { src: "/produtos/naked-cake.jpg", alt: "Naked cake" },
-      { src: "/atelier/piping.jpg", alt: "Decoração a ser aplicada" },
-      { src: "/produtos/bolo-rei.jpg", alt: "Bolo-rei" },
-      { src: "/atelier/creme.jpg", alt: "Creme a ser espalhado" },
-    ],
+    foto: "/atelier/piping.jpg",
+    cor: "#FBE9EC",
   },
 ];
 
@@ -254,9 +239,9 @@ export default function Home() {
           </div>
         </section>
 
-        {/* ------------------------------------------------------- carrossel */}
-        <section className="overflow-hidden py-20">
-          <div className="mx-auto max-w-6xl px-6">
+        {/* --------------------------------------------------------- camadas */}
+        <section className="py-20">
+          <div className="mx-auto max-w-5xl px-6">
             <div className="flex items-center gap-4">
               <span className="h-px w-12 bg-marca" />
               <span className="text-xs tracking-[0.18em] text-suave uppercase">
@@ -266,9 +251,12 @@ export default function Home() {
             <h2 className="mt-6 max-w-2xl font-titulo text-3xl leading-snug sm:text-[2.6rem]">
               Tudo o que uma encomenda precisa, sem planilha e sem caderno.
             </h2>
+            <p className="mt-4 max-w-md leading-relaxed text-suave">
+              Cinco camadas. Abre a que te interessa.
+            </p>
 
-            <div className="mt-14">
-              <Carrossel slides={areas} />
+            <div className="mt-12">
+              <Camadas camadas={areas} />
             </div>
           </div>
         </section>
