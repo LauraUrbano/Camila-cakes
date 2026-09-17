@@ -1,0 +1,38 @@
+@import "tailwindcss";
+
+:root {
+  /* Cores da plataforma */
+  --fundo: #fffbf8;
+  --texto: #2e1c22;
+  --suave: #6b5860;
+  --borda: #efe3e7;
+  --cartao: #ffffff;
+
+  /* Cores da confeiteira. Cada página pública sobrescreve estas duas. */
+  --marca: #b3204d;
+  --marca-suave: #fdeef3;
+}
+
+@theme inline {
+  --color-fundo: var(--fundo);
+  --color-texto: var(--texto);
+  --color-suave: var(--suave);
+  --color-borda: var(--borda);
+  --color-cartao: var(--cartao);
+  --color-marca: var(--marca);
+  --color-marca-suave: var(--marca-suave);
+  --font-sans: var(--fonte-sans);
+  --font-titulo: var(--fonte-titulo);
+}
+
+body {
+  background: var(--fundo);
+  color: var(--texto);
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--fonte-titulo), Georgia, serif;
+  letter-spacing: -0.015em;
+}
