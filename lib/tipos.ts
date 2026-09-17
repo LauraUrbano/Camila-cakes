@@ -31,8 +31,9 @@ export type Produto = {
   nome: string;
   descricao: string;
   categoria: string;
-  emoji: string;
-  /** Cor de fundo do card enquanto não há foto real. */
+  /** Caminho da foto em /public. */
+  foto: string;
+  /** Cor de fundo enquanto a foto carrega. */
   cor: string;
   tamanhos: Tamanho[];
   massas: Opcao[];
@@ -88,7 +89,6 @@ export type Confeiteira = {
   moeda: Moeda;
   whatsapp: string;
   instagram: string;
-  emoji: string;
   dominioProprio?: string;
   tema: Tema;
   entregas: OpcaoEntrega[];

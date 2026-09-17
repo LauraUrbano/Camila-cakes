@@ -1,39 +1,49 @@
 import Link from "next/link";
+import Icone, { type Nome } from "@/app/icones";
 import { lojas } from "@/lib/dados";
+
+function iniciais(nome: string) {
+  return nome
+    .split(" ")
+    .slice(0, 2)
+    .map((palavra) => palavra[0])
+    .join("")
+    .toUpperCase();
+}
 
 const recursos = [
   {
-    emoji: "🔗",
+    icone: "ligacao" as Nome,
     titulo: "A sua página, o seu link",
     texto:
       "Cada pasteleira recebe um endereço próprio para partilhar. Depois é só apontar o seu domínio para ele.",
   },
   {
-    emoji: "🧮",
+    icone: "calculo" as Nome,
     titulo: "Preço que se calcula sozinho",
     texto:
       "Regista massas, recheios e decorações com os seus acréscimos. A cliente escolhe, o sistema soma.",
   },
   {
-    emoji: "🕯️",
+    icone: "calendario" as Nome,
     titulo: "Coleções sazonais",
     texto:
       "Cardápio de Natal, de Páscoa, do Dia da Mãe. Entra na data, sai na data, sem refazer nada.",
   },
   {
-    emoji: "📦",
+    icone: "caixa" as Nome,
     titulo: "Limite de produção",
     texto:
       "Diz quantas unidades consegue fazer. Quando esgota, o artigo sai do ar sozinho.",
   },
   {
-    emoji: "✅",
+    icone: "confirmado" as Nome,
     titulo: "É você que aceita",
     texto:
       "Nada entra na sua agenda sem o seu aval. A cliente pede, você combina o pagamento e aceita.",
   },
   {
-    emoji: "🚲",
+    icone: "entrega" as Nome,
     titulo: "Entrega à sua maneira",
     texto:
       "Levantamento no atelier, entrega por zona, taxa por região. Você define, a cliente escolhe.",
@@ -92,7 +102,9 @@ export default function Home() {
         <section className="grid gap-px overflow-hidden rounded-3xl border border-borda bg-borda sm:grid-cols-2 lg:grid-cols-3">
           {recursos.map((recurso) => (
             <div key={recurso.titulo} className="bg-cartao p-8">
-              <span className="text-2xl">{recurso.emoji}</span>
+              <span className="grid h-11 w-11 place-items-center rounded-full bg-marca-suave text-marca">
+                <Icone nome={recurso.icone} />
+              </span>
               <h3 className="mt-5 font-titulo text-lg">{recurso.titulo}</h3>
               <p className="mt-2.5 text-sm leading-relaxed text-suave">
                 {recurso.texto}
@@ -118,10 +130,13 @@ export default function Home() {
                 className="rounded-3xl border border-borda bg-cartao p-8 transition hover:border-marca"
               >
                 <span
-                  className="grid h-12 w-12 place-items-center rounded-full text-xl"
-                  style={{ background: confeiteira.tema.marcaSuave }}
+                  className="grid h-12 w-12 place-items-center rounded-full font-titulo text-sm"
+                  style={{
+                    background: confeiteira.tema.marcaSuave,
+                    color: confeiteira.tema.marca,
+                  }}
                 >
-                  {confeiteira.emoji}
+                  {iniciais(confeiteira.nome)}
                 </span>
                 <h3 className="mt-5 font-titulo text-lg">{confeiteira.nome}</h3>
                 <p className="mt-1.5 text-sm text-suave">

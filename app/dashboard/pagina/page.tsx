@@ -1,3 +1,4 @@
+import Icone from "@/app/icones";
 import { lojaPrincipal } from "@/lib/dados";
 
 const { confeiteira } = lojaPrincipal;
@@ -87,8 +88,12 @@ export default function PaginaDaMinhaPagina() {
               className="flex items-center justify-between gap-4 rounded-xl bg-fundo p-4"
             >
               <span>
-                <span className="block font-medium">
-                  {entrega.tipo === "retirada" ? "🏠" : "🚚"} {entrega.nome}
+                <span className="flex items-center gap-2 font-medium">
+                  <Icone
+                    nome={entrega.tipo === "retirada" ? "levantamento" : "entrega"}
+                    className="h-4 w-4 text-suave"
+                  />
+                  {entrega.nome}
                 </span>
                 <span className="block text-xs text-suave">
                   {entrega.descricao}

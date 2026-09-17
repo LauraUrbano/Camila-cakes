@@ -1,24 +1,34 @@
 import type { ReactNode } from "react";
 import Link from "next/link";
+import Icone, { type Nome } from "@/app/icones";
 import { lojaPrincipal } from "@/lib/dados";
 
 const { confeiteira } = lojaPrincipal;
 
-const menu = [
-  { href: "/dashboard", rotulo: "Visão geral", emoji: "📊" },
-  { href: "/dashboard/pedidos", rotulo: "Pedidos", emoji: "📋" },
-  { href: "/dashboard/cardapio", rotulo: "Cardápio", emoji: "🍰" },
-  { href: "/dashboard/colecoes", rotulo: "Coleções", emoji: "🎄" },
-  { href: "/dashboard/pagina", rotulo: "Minha página", emoji: "🎨" },
+const menu: { href: string; rotulo: string; icone: Nome }[] = [
+  { href: "/dashboard", rotulo: "Visão geral", icone: "grafico" },
+  { href: "/dashboard/pedidos", rotulo: "Pedidos", icone: "lista" },
+  { href: "/dashboard/cardapio", rotulo: "Cardápio", icone: "bolo" },
+  { href: "/dashboard/colecoes", rotulo: "Coleções", icone: "calendario" },
+  { href: "/dashboard/pagina", rotulo: "A minha página", icone: "paleta" },
 ];
+
+function iniciais(nome: string) {
+  return nome
+    .split(" ")
+    .slice(0, 2)
+    .map((palavra) => palavra[0])
+    .join("")
+    .toUpperCase();
+}
 
 export default function LayoutDoPainel({ children }: { children: ReactNode }) {
   return (
     <div className="min-h-full lg:grid lg:grid-cols-[15rem_1fr]">
       <aside className="border-b border-borda bg-cartao lg:border-r lg:border-b-0">
         <div className="flex items-center gap-3 px-6 py-5">
-          <span className="grid h-9 w-9 place-items-center rounded-full bg-marca-suave">
-            {confeiteira.emoji}
+          <span className="grid h-9 w-9 place-items-center rounded-full bg-marca-suave font-titulo text-xs text-marca">
+            {iniciais(confeiteira.nome)}
           </span>
           <span>
             <span className="block text-sm font-semibold">
@@ -35,7 +45,7 @@ export default function LayoutDoPainel({ children }: { children: ReactNode }) {
               href={item.href}
               className="flex shrink-0 items-center gap-2.5 rounded-xl px-3 py-2.5 text-sm text-suave transition hover:bg-marca-suave hover:text-texto"
             >
-              <span>{item.emoji}</span>
+              <Icone nome={item.icone} className="h-[18px] w-[18px]" />
               {item.rotulo}
             </Link>
           ))}
@@ -47,7 +57,7 @@ export default function LayoutDoPainel({ children }: { children: ReactNode }) {
             className="block rounded-xl border border-borda p-4 text-xs leading-relaxed text-suave transition hover:border-marca"
           >
             <span className="block font-medium text-texto">
-              Ver minha página
+              Ver a minha página
             </span>
             camilacakes.app/{confeiteira.slug} ↗
           </Link>

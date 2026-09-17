@@ -1,7 +1,9 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import Image from "next/image";
 import Link from "next/link";
+import Icone from "@/app/icones";
 import { calcular, moeda, restam, vagasDeRecheio } from "@/lib/precos";
 import type { Selecao } from "@/lib/precos";
 import type { Confeiteira, Moeda, Opcao, Produto } from "@/lib/tipos";
@@ -104,16 +106,16 @@ export default function Montador({ produto, confeiteira, slug }: Props) {
   if (enviado) {
     return (
       <div className="mx-auto max-w-lg px-6 py-20 text-center">
-        <span className="text-5xl">📨</span>
-        <h1 className="mt-6 text-2xl font-semibold">Pedido enviado</h1>
+        <span className="mx-auto grid h-14 w-14 place-items-center rounded-full bg-marca-suave text-marca">
+          <Icone nome="enviado" className="h-7 w-7" />
+        </span>
+        <h1 className="mt-6 text-2xl">Pedido enviado</h1>
         <p className="mt-3 leading-relaxed text-suave">
           {confeiteira.nome} recebeu sua reserva e vai te chamar no WhatsApp
           para combinar o pagamento.
         </p>
         <div className="mt-8 rounded-2xl border border-marca bg-marca-suave p-6 text-left">
-          <p className="font-titulo font-semibold">
-            ⚠️ Sua data ainda não está garantida
-          </p>
+          <p className="font-titulo">A sua data ainda não está garantida</p>
           <p className="mt-2 text-sm leading-relaxed">
             O pedido só entra na agenda quando a confeiteira{" "}
             <strong>aceitar</strong>. Você recebe um aviso assim que isso
@@ -138,10 +140,17 @@ export default function Montador({ produto, confeiteira, slug }: Props) {
         </Link>
 
         <div
-          className="mt-5 grid h-44 place-items-center rounded-2xl text-6xl"
+          className="relative mt-5 h-64 overflow-hidden rounded-3xl sm:h-80"
           style={{ background: produto.cor }}
         >
-          {produto.emoji}
+          <Image
+            src={produto.foto}
+            alt={produto.nome}
+            fill
+            priority
+            sizes="(min-width: 1024px) 40rem, 100vw"
+            className="object-cover"
+          />
         </div>
 
         <h1 className="mt-6 text-3xl font-semibold">{produto.nome}</h1>

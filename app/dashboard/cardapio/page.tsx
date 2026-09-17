@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { lojaPrincipal } from "@/lib/dados";
 import { moeda, restam } from "@/lib/precos";
 import type { Moeda, Opcao } from "@/lib/tipos";
@@ -48,10 +49,16 @@ export default function PaginaDoCardapio() {
               <div className="flex flex-wrap items-center justify-between gap-4 border-b border-borda p-5">
                 <div className="flex items-center gap-4">
                   <span
-                    className="grid h-12 w-12 place-items-center rounded-xl text-2xl"
+                    className="relative h-14 w-14 shrink-0 overflow-hidden rounded-xl"
                     style={{ background: produto.cor }}
                   >
-                    {produto.emoji}
+                    <Image
+                      src={produto.foto}
+                      alt=""
+                      fill
+                      sizes="56px"
+                      className="object-cover"
+                    />
                   </span>
                   <span>
                     <span className="block font-titulo font-semibold">

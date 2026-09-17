@@ -3,6 +3,16 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { lojaPorSlug, lojas } from "@/lib/dados";
 
+/** Duas iniciais servem de marca enquanto a confeiteira não carrega um logótipo. */
+function iniciais(nome: string) {
+  return nome
+    .split(" ")
+    .slice(0, 2)
+    .map((palavra) => palavra[0])
+    .join("")
+    .toUpperCase();
+}
+
 export function generateStaticParams() {
   return lojas.map((loja) => ({ slug: loja.confeiteira.slug }));
 }
@@ -34,8 +44,8 @@ export default async function LayoutDaConfeiteira({
       <header className="border-b border-borda bg-cartao/70 backdrop-blur">
         <div className="mx-auto flex max-w-4xl items-center justify-between px-6 py-5">
           <Link href={`/${slug}`} className="flex items-center gap-3">
-            <span className="grid h-10 w-10 place-items-center rounded-full bg-marca-suave text-lg">
-              {confeiteira.emoji}
+            <span className="grid h-10 w-10 place-items-center rounded-full bg-marca-suave font-titulo text-sm text-marca">
+              {iniciais(confeiteira.nome)}
             </span>
             <span>
               <span className="block font-titulo text-[15px]">

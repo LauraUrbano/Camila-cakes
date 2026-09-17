@@ -54,7 +54,7 @@ export default function PaginaDeColecoes() {
                     key={produto.id}
                     className="rounded-full border border-borda px-3 py-1.5 text-xs"
                   >
-                    {produto.emoji} {produto.nome}
+                    {produto.nome}
                   </li>
                 ))}
               </ul>

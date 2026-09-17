@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { lojaPorSlug, produtosDaColecao } from "@/lib/dados";
@@ -25,10 +26,16 @@ function CardProduto({
       }`}
     >
       <div
-        className="grid h-40 place-items-center text-5xl"
+        className="relative h-44 overflow-hidden"
         style={{ background: produto.cor }}
       >
-        {produto.emoji}
+        <Image
+          src={produto.foto}
+          alt={produto.nome}
+          fill
+          sizes="(min-width: 1024px) 20rem, (min-width: 640px) 50vw, 100vw"
+          className="object-cover transition duration-500 group-hover:scale-[1.03]"
+        />
       </div>
       <div className="p-6">
         <div className="flex items-start justify-between gap-3">

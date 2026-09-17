@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import Icone from "@/app/icones";
 import type { Confeiteira } from "@/lib/tipos";
 
 export default function PedidoPersonalizado({
@@ -17,8 +18,10 @@ export default function PedidoPersonalizado({
   if (enviado) {
     return (
       <div className="mx-auto max-w-lg px-6 py-20 text-center">
-        <span className="text-5xl">💬</span>
-        <h1 className="mt-6 text-2xl font-semibold">Orçamento solicitado</h1>
+        <span className="mx-auto grid h-14 w-14 place-items-center rounded-full bg-marca-suave text-marca">
+          <Icone nome="conversa" className="h-7 w-7" />
+        </span>
+        <h1 className="mt-6 text-2xl">Orçamento pedido</h1>
         <p className="mt-3 leading-relaxed text-suave">
           {confeiteira.nome} vai responder com um valor e, se você aprovar, ela
           aceita o pedido e a data fica reservada.
