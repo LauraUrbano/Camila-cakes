@@ -85,6 +85,30 @@ export default function TabelaPrecos({
         )}
       </div>
 
+      {/* O Cakelyo fatura de Portugal. Para quem paga do Brasil com cartão
+          isso é uma compra internacional, com IOF e spread por cima — e o
+          valor que sai do cartão não é o que está escrito aqui. Dizê-lo à
+          partida evita a surpresa na fatura. O Pix é local e não tem esse
+          custo, mas só serve para pagamento de uma vez. */}
+      {codigo === "BRL" && (
+        <div className="entra-texto mt-6 rounded-2xl border border-borda bg-cartao p-5 text-sm leading-relaxed">
+          <p>
+            <strong>Se pagas do Brasil:</strong> o Cakelyo fatura de Portugal,
+            por isso o cartão trata isto como compra internacional — o teu
+            banco soma IOF e spread cambial, à volta de 7% a mais do que o
+            valor acima.
+          </p>
+          <p className="mt-3 text-suave">
+            Para não pagares isso,{" "}
+            <strong className="text-texto">
+              escolhe o plano anual e paga por Pix
+            </strong>
+            : é um pagamento local em reais, sem IOF e sem câmbio. Sai uma vez
+            por ano e fica exactamente o valor da tabela.
+          </p>
+        </div>
+      )}
+
       <div className="mt-10 grid gap-6 lg:grid-cols-3">
         {planos.map((plano) => {
           const valor = plano[periodo][codigo];

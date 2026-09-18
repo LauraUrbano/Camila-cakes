@@ -17,12 +17,17 @@ const duvidas = [
   {
     pergunta: "Os preços têm IVA?",
     resposta:
-      "Os valores acima são sem imposto. O IVA é somado no fim conforme o país e, se tiveres número de contribuinte de empresa na União Europeia, é aplicada a autoliquidação. No Brasil os valores em real já incluem os impostos devidos.",
+      "Os valores acima são sem imposto. O IVA é somado no fim conforme o país e, se tiveres número de contribuinte de empresa na União Europeia, é aplicada a autoliquidação. A fatura sai de Portugal, seja qual for o país de onde pagas.",
   },
   {
     pergunta: "Que meios de pagamento aceitam?",
     resposta:
-      "Cartão, através do Stripe. Os dados do cartão nunca passam pelos nossos servidores.",
+      "Cartão, através do Stripe, em qualquer um dos países. No Brasil aceitamos também Pix no plano anual. Os dados do cartão nunca passam pelos nossos servidores.",
+  },
+  {
+    pergunta: "Porque é que a minha fatura brasileira vem com valor diferente?",
+    resposta:
+      "Porque o Cakelyo fatura de Portugal e o teu banco trata a cobrança como compra internacional: soma IOF e spread cambial, cerca de 7% acima do preço da tabela. Quem paga o plano anual por Pix não tem esse custo — é um pagamento local em reais.",
   },
 ];
 

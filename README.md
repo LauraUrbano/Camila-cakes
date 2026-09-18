@@ -29,6 +29,30 @@ npm run dev
 | `/dashboard/colecoes` | Coleções sazonais no ar e fora do ar |
 | `/dashboard/pagina` | Endereço, domínio próprio, cores e textos |
 
+## Cobrança e mercados
+
+A empresa fica em **Portugal**, com **uma conta Stripe portuguesa** a liquidar
+em euros. Vendemos à Europa e ao Brasil.
+
+Os planos têm preço próprio em cada moeda — euro, franco suíço e real — e o
+anual equivale sempre a dez meses. Cada plano vira um Product no Stripe e cada
+linha de preço um Price, por isso os valores vivem separados por moeda e por
+período em `lib/dados.ts`.
+
+**O Brasil tem um problema que o código não resolve sozinho.** Como faturamos
+de Portugal, um cartão brasileiro trata a cobrança como compra internacional:
+o banco soma IOF e spread cambial, cerca de 7% acima do preço da tabela, e
+isso aparece na fatura da cliente, não na nossa. A resposta é o **plano anual
+pago por Pix** — pagamento local em reais, sem IOF e sem câmbio, uma vez por
+ano. O mensal por cartão continua disponível, com o aviso à vista em /precos.
+
+O acesso vitalício por código **não passa pelo Stripe**: não tem subscription,
+não renova e não gera fatura. Por isso a assinatura guarda a origem
+(`stripe` ou `codigo`) — ver `lib/tipos.ts`.
+
+⚠️ Os detalhes fiscais e as regras do Stripe por país mudam. Confirmar com o
+Stripe e com contabilista antes de ligar a cobrança a sério.
+
 ## As duas regras que sustentam o produto
 
 **1. Preço por combinação.** A confeiteira não digita o preço de cada bolo
