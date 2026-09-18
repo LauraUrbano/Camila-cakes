@@ -67,9 +67,9 @@ export type OpcaoEntrega = {
 };
 
 /** Moedas atendidas pela plataforma. */
-export type Moeda = "EUR" | "CHF";
+export type Moeda = "EUR" | "CHF" | "BRL";
 
-export type Pais = "PT" | "CH";
+export type Pais = "PT" | "CH" | "BR";
 
 export type Tema = {
   marca: string;
@@ -147,11 +147,39 @@ export type Plano = {
   destaque?: boolean;
 };
 
+/**
+ * Uma linha da tabela comparativa. O valor por plano é `true` para incluído,
+ * `false` para não incluído, ou texto quando o plano tem um limite próprio
+ * ("até 5", "básico").
+ */
+export type LinhaComparacao = {
+  rotulo: string;
+  valores: Record<string, boolean | string>;
+};
+
 export type EstadoAssinatura =
   | "teste"
   | "activa"
+  | "vitalicia"
   | "pagamento_falhou"
   | "cancelada";
+
+/**
+ * De onde vem o acesso. Um acesso vitalício não é uma assinatura do Stripe:
+ * não tem subscription, não renova e não gera faturas — é uma concessão
+ * nossa, guardada do nosso lado. Separar a origem evita ir procurar no Stripe
+ * um contrato que nunca existiu.
+ */
+export type OrigemAssinatura = "stripe" | "codigo";
+
+/** Código que dá acesso vitalício a um plano, sem pagamento. */
+export type CodigoVitalicio = {
+  codigo: string;
+  planoId: string;
+  usos: number;
+  maxUsos: number;
+  nota: string;
+};
 
 export type Fatura = {
   id: string;
@@ -163,11 +191,14 @@ export type Fatura = {
 export type Assinatura = {
   planoId: string;
   estado: EstadoAssinatura;
+  origem: OrigemAssinatura;
   periodo: "mensal" | "anual";
-  /** Dia em que o Stripe cobra a próxima vez. */
+  /** Dia em que o Stripe cobra a próxima vez. Vazio no acesso vitalício. */
   renovaEm: string;
   /** Últimos quatro dígitos do cartão guardado no Stripe. */
   cartao?: string;
+  /** Código usado, quando o acesso veio por aí. */
+  codigo?: string;
   faturas: Fatura[];
 };
 

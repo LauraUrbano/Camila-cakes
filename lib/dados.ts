@@ -1,5 +1,7 @@
 import type {
   Assinatura,
+  CodigoVitalicio,
+  LinhaComparacao,
   Colecao,
   Confeiteira,
   Loja,
@@ -621,22 +623,28 @@ export const planos: Plano[] = [
     id: "prova",
     nome: "Prova",
     promessa: "Para pôr o cardápio de pé e ver se serve.",
-    mensal: { EUR: 0, CHF: 0 },
-    anual: { EUR: 0, CHF: 0 },
+    mensal: { EUR: 0, CHF: 0, BRL: 0 },
+    anual: { EUR: 0, CHF: 0, BRL: 0 },
     inclui: [
       "A tua página em cakelyo.app/o-teu-nome",
-      "Até 8 produtos e 1 coleção",
-      "Pedidos e aceite manual sem limite",
-      "Entrega e levantamento",
+      "Pedidos ilimitados, com aceite manual",
+      "Até 5 produtos e 1 coleção",
+      "Cálculo automático do bolo",
+      "Cores e logótipo à tua escolha",
+      "Agenda de encomendas",
     ],
-    naoInclui: ["Coleções sazonais", "Limites de produção", "Relatórios"],
+    naoInclui: [
+      "Coleções sazonais",
+      "Limites de produção",
+      "Relatórios",
+    ],
   },
   {
     id: "atelier",
     nome: "Atelier",
     promessa: "Para quem já vive disto e tem épocas cheias.",
-    mensal: { EUR: 12, CHF: 14 },
-    anual: { EUR: 120, CHF: 140 },
+    mensal: { EUR: 12.9, CHF: 14, BRL: 24.9 },
+    anual: { EUR: 129, CHF: 140, BRL: 249 },
     destaque: true,
     inclui: [
       "Tudo o do plano Prova",
@@ -644,40 +652,151 @@ export const planos: Plano[] = [
       "Coleções sazonais com data de entrada e saída",
       "Limites de produção por artigo",
       "Relatórios de receita e de aceite",
+      "Histórico completo de clientes",
     ],
+    naoInclui: ["Domínio próprio", "Equipa", "Formulários específicos"],
   },
   {
     id: "pastelaria",
     nome: "Pastelaria",
     promessa: "Para quem tem marca própria e equipa.",
-    mensal: { EUR: 29, CHF: 32 },
-    anual: { EUR: 290, CHF: 320 },
+    mensal: { EUR: 29.9, CHF: 32, BRL: 49.9 },
+    anual: { EUR: 299, CHF: 320, BRL: 499 },
     inclui: [
       "Tudo o do plano Atelier",
       "Domínio próprio",
-      "Formulário de cardápio por cliente",
-      "Vários utilizadores na mesma conta",
-      "Apoio com resposta em 24 horas",
+      "Até 5 utilizadores na mesma conta",
+      "Formulários de cardápio por cliente",
+      "Apoio prioritário",
     ],
   },
 ];
 
+/** A tabela comparativa, linha a linha, como aparece em /precos. */
+export const comparacao: LinhaComparacao[] = [
+  {
+    rotulo: "Página pública",
+    valores: { prova: true, atelier: true, pastelaria: true },
+  },
+  {
+    rotulo: "Pedidos",
+    valores: {
+      prova: "ilimitados",
+      atelier: "ilimitados",
+      pastelaria: "ilimitados",
+    },
+  },
+  {
+    rotulo: "Produtos",
+    valores: {
+      prova: "até 5",
+      atelier: "ilimitados",
+      pastelaria: "ilimitados",
+    },
+  },
+  {
+    rotulo: "Coleções",
+    valores: { prova: "1", atelier: "ilimitadas", pastelaria: "ilimitadas" },
+  },
+  {
+    rotulo: "Personalizar cores e logótipo",
+    valores: { prova: true, atelier: true, pastelaria: true },
+  },
+  {
+    rotulo: "Entrega e levantamento",
+    valores: { prova: true, atelier: true, pastelaria: true },
+  },
+  {
+    rotulo: "Cálculo automático do bolo",
+    valores: { prova: true, atelier: true, pastelaria: true },
+  },
+  {
+    rotulo: "Agenda de encomendas",
+    valores: { prova: true, atelier: true, pastelaria: true },
+  },
+  {
+    rotulo: "Coleções sazonais",
+    valores: { prova: false, atelier: true, pastelaria: true },
+  },
+  {
+    rotulo: "Limites de produção",
+    valores: { prova: false, atelier: true, pastelaria: true },
+  },
+  {
+    rotulo: "Relatórios",
+    valores: { prova: false, atelier: true, pastelaria: true },
+  },
+  {
+    rotulo: "Clientes e histórico",
+    valores: { prova: "básico", atelier: "completo", pastelaria: "completo" },
+  },
+  {
+    rotulo: "Domínio próprio",
+    valores: { prova: false, atelier: false, pastelaria: true },
+  },
+  {
+    rotulo: "Equipa",
+    valores: {
+      prova: false,
+      atelier: false,
+      pastelaria: "até 5 utilizadores",
+    },
+  },
+  {
+    rotulo: "Formulários específicos",
+    valores: { prova: false, atelier: false, pastelaria: true },
+  },
+  {
+    rotulo: "Apoio prioritário",
+    valores: { prova: false, atelier: false, pastelaria: true },
+  },
+];
+
+/**
+ * Códigos que dão o plano Pastelaria para sempre, sem pagar. Servem para
+ * fundadoras, parcerias e casos em que queremos oferecer o acesso.
+ * Quem entra por aqui não passa pelo Stripe.
+ */
+export const codigosVitalicios: CodigoVitalicio[] = [
+  {
+    codigo: "FUNDADORAS2026",
+    planoId: "pastelaria",
+    usos: 12,
+    maxUsos: 50,
+    nota: "As primeiras cinquenta pasteleiras a entrar.",
+  },
+  {
+    codigo: "CAKELYOPARAMIM",
+    planoId: "pastelaria",
+    usos: 3,
+    maxUsos: 10,
+    nota: "Ofertas feitas à mão, caso a caso.",
+  },
+];
+
+export function codigoPorTexto(texto: string) {
+  const limpo = texto.trim().toUpperCase().replace(/[\s-]/g, "");
+  return codigosVitalicios.find((item) => item.codigo === limpo);
+}
+
 const assinaturaCamila: Assinatura = {
   planoId: "atelier",
   estado: "activa",
+  origem: "stripe",
   periodo: "mensal",
   renovaEm: "14 de outubro",
   cartao: "4242",
   faturas: [
-    { id: "FT-2026-09", data: "14/09", valor: 12, paga: true },
-    { id: "FT-2026-08", data: "14/08", valor: 12, paga: true },
-    { id: "FT-2026-07", data: "14/07", valor: 12, paga: true },
+    { id: "FT-2026-09", data: "14/09", valor: 12.9, paga: true },
+    { id: "FT-2026-08", data: "14/08", valor: 12.9, paga: true },
+    { id: "FT-2026-07", data: "14/07", valor: 12.9, paga: true },
   ],
 };
 
 const assinaturaSofia: Assinatura = {
   planoId: "prova",
   estado: "teste",
+  origem: "stripe",
   periodo: "mensal",
   renovaEm: "—",
   faturas: [],

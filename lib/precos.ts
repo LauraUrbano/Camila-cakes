@@ -28,6 +28,7 @@ export type Orcamento = {
 const formatos: Record<Moeda, Intl.NumberFormat> = {
   EUR: new Intl.NumberFormat("pt-PT", { style: "currency", currency: "EUR" }),
   CHF: new Intl.NumberFormat("de-CH", { style: "currency", currency: "CHF" }),
+  BRL: new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }),
 };
 
 export function moeda(valor: number, codigo: Moeda = "EUR"): string {

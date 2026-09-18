@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Logo from "@/app/logo";
-import { planos } from "@/lib/dados";
+import { comparacao, planos } from "@/lib/dados";
 import TabelaPrecos from "./tabela-precos";
 
 const duvidas = [
@@ -17,7 +17,7 @@ const duvidas = [
   {
     pergunta: "Os preços têm IVA?",
     resposta:
-      "Os valores acima são sem imposto. O IVA é somado no fim conforme o país e, se tiveres número de contribuinte de empresa na União Europeia, é aplicada a autoliquidação.",
+      "Os valores acima são sem imposto. O IVA é somado no fim conforme o país e, se tiveres número de contribuinte de empresa na União Europeia, é aplicada a autoliquidação. No Brasil os valores em real já incluem os impostos devidos.",
   },
   {
     pergunta: "Que meios de pagamento aceitam?",
@@ -64,13 +64,22 @@ export default function Precos() {
         </p>
 
         <div className="mt-12">
-          <TabelaPrecos planos={planos} />
+          <TabelaPrecos planos={planos} comparacao={comparacao} />
         </div>
 
-        <p className="mt-8 rounded-2xl border border-borda bg-cartao p-5 text-sm leading-relaxed text-suave">
-          <strong className="text-texto">Isto é um protótipo.</strong> Os
-          valores são uma proposta e nenhum pagamento é processado — a ligação
-          ao Stripe entra quando houver contas e base de dados.
+        <p className="mt-8 rounded-2xl bg-marca-suave p-5 text-sm leading-relaxed">
+          <strong>Recebeste um código de acesso vitalício?</strong> Resgata-o
+          em{" "}
+          <Link href="/dashboard/plano" className="underline underline-offset-2">
+            Plano e faturação
+          </Link>{" "}
+          e ficas com o plano para sempre, sem pagar e sem cartão.
+        </p>
+
+        <p className="mt-4 rounded-2xl border border-borda bg-cartao p-5 text-sm leading-relaxed text-suave">
+          <strong className="text-texto">Isto é um protótipo.</strong> Nenhum
+          pagamento é processado — a ligação ao Stripe entra quando houver
+          contas e base de dados.
         </p>
 
         <section className="mt-20">

@@ -4,9 +4,36 @@ import { useState } from "react";
 import Link from "next/link";
 import Icone from "@/app/icones";
 import { moeda } from "@/lib/precos";
-import type { Moeda, Plano } from "@/lib/tipos";
+import type { LinhaComparacao, Moeda, Plano } from "@/lib/tipos";
 
-export default function TabelaPrecos({ planos }: { planos: Plano[] }) {
+/** Um valor da tabela: incluído, ausente, ou um limite escrito. */
+function Valor({ valor }: { valor: boolean | string }) {
+  if (valor === true)
+    return (
+      <>
+        <Icone nome="confirmado" className="mx-auto h-[18px] w-[18px] text-marca" />
+        <span className="sr-only">incluído</span>
+      </>
+    );
+  if (valor === false)
+    return (
+      <>
+        <span aria-hidden="true" className="text-suave">
+          —
+        </span>
+        <span className="sr-only">não incluído</span>
+      </>
+    );
+  return <span className="text-sm">{valor}</span>;
+}
+
+export default function TabelaPrecos({
+  planos,
+  comparacao,
+}: {
+  planos: Plano[];
+  comparacao: LinhaComparacao[];
+}) {
   const [periodo, setPeriodo] = useState<"mensal" | "anual">("mensal");
   const [codigo, setCodigo] = useState<Moeda>("EUR");
 
@@ -30,7 +57,13 @@ export default function TabelaPrecos({ planos }: { planos: Plano[] }) {
         </div>
 
         <div className="flex rounded-full border border-borda bg-cartao p-1">
-          {(["EUR", "CHF"] as const).map((opcao) => (
+          {(
+            [
+              ["EUR", "€ Portugal"],
+              ["CHF", "CHF Suíça"],
+              ["BRL", "R$ Brasil"],
+            ] as const
+          ).map(([opcao, rotulo]) => (
             <button
               key={opcao}
               type="button"
@@ -40,7 +73,7 @@ export default function TabelaPrecos({ planos }: { planos: Plano[] }) {
                 codigo === opcao ? "bg-marca text-white" : "text-suave"
               }`}
             >
-              {opcao === "EUR" ? "€ Portugal" : "CHF Suíça"}
+              {rotulo}
             </button>
           ))}
         </div>
@@ -126,6 +159,69 @@ export default function TabelaPrecos({ planos }: { planos: Plano[] }) {
           );
         })}
       </div>
+
+      {/* --------------------------------------------------- comparação */}
+      <section className="mt-20">
+        <h2 className="font-titulo text-2xl">Plano a plano</h2>
+        <p className="mt-2 text-sm text-suave">
+          O que muda de um para o outro, sem letra pequena.
+        </p>
+
+        {/* Em ecrã estreito a tabela desliza na horizontal e a primeira
+            coluna fica colada, para não se perder a linha que se está a ler. */}
+        <div className="mt-8 -mx-6 overflow-x-auto px-6 sm:mx-0 sm:px-0">
+          <table className="w-full min-w-[34rem] border-collapse text-sm">
+            <caption className="sr-only">
+              Comparação dos planos Prova, Atelier e Pastelaria
+            </caption>
+            <thead>
+              <tr>
+                <th scope="col" className="sticky left-0 bg-fundo" />
+                {planos.map((plano) => (
+                  <th
+                    key={plano.id}
+                    scope="col"
+                    className="px-3 pb-4 text-center align-bottom"
+                  >
+                    <span className="block font-titulo text-base font-semibold">
+                      {plano.nome}
+                    </span>
+                    <span className="mt-1 block text-xs font-normal text-suave">
+                      {plano[periodo][codigo] === 0
+                        ? "grátis"
+                        : `${moeda(plano[periodo][codigo], codigo)}/${
+                            periodo === "mensal" ? "mês" : "ano"
+                          }`}
+                    </span>
+                  </th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {comparacao.map((linha) => (
+                <tr key={linha.rotulo} className="border-t border-borda">
+                  <th
+                    scope="row"
+                    className="sticky left-0 bg-fundo py-3.5 pr-4 text-left font-normal"
+                  >
+                    {linha.rotulo}
+                  </th>
+                  {planos.map((plano) => (
+                    <td
+                      key={plano.id}
+                      className={`px-3 py-3.5 text-center ${
+                        plano.destaque ? "bg-marca-suave/50" : ""
+                      }`}
+                    >
+                      <Valor valor={linha.valores[plano.id] ?? false} />
+                    </td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </section>
     </div>
   );
 }
