@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useT } from "@/app/lingua";
 import { moeda } from "@/lib/precos";
 import type { Moeda } from "@/lib/tipos";
 
@@ -46,6 +47,7 @@ export function Colunas({
   dados: Ponto[];
   codigo?: Moeda;
 }) {
+  const t = useT();
   const [sobre, setSobre] = useState<number | null>(null);
   const formata = formatador(codigo);
 
@@ -70,7 +72,7 @@ export function Colunas({
         viewBox={`0 0 ${L} ${A}`}
         className="w-full"
         role="img"
-        aria-label="Receita por mês"
+        aria-label={t.painel.relatorios.receitaMes}
       >
         {[0, 0.5, 1].map((fracao) => {
           const y = alturaPlot - fracao * (alturaPlot - topo);
@@ -164,6 +166,7 @@ export function Colunas({
 }
 
 export function Barras({ dados, codigo }: { dados: Ponto[]; codigo?: Moeda }) {
+  const t = useT();
   const formata = formatador(codigo);
   const L = 560;
   const linha = 40;
@@ -177,7 +180,7 @@ export function Barras({ dados, codigo }: { dados: Ponto[]; codigo?: Moeda }) {
       viewBox={`0 0 ${L} ${A}`}
       className="w-full"
       role="img"
-      aria-label="Produtos mais vendidos"
+      aria-label={t.painel.relatorios.maisSai}
     >
       {dados.map((ponto, i) => {
         const largura = Math.max(3, (ponto.valor / max) * util);
@@ -213,6 +216,7 @@ export function Tabela({
   cabecalhos: string[];
   linhas: string[][];
 }) {
+  const t = useT();
   const [aberta, setAberta] = useState(false);
 
   return (
@@ -222,7 +226,7 @@ export function Tabela({
         onClick={() => setAberta((estado) => !estado)}
         className="text-xs text-suave underline underline-offset-2"
       >
-        {aberta ? "Esconder tabela" : "Ver em tabela"}
+        {aberta ? t.painel.relatorios.esconderTabela : t.painel.relatorios.verTabela}
       </button>
       {aberta && (
         <table className="mt-4 w-full text-sm">

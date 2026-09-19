@@ -2,6 +2,8 @@ import type { ReactNode, CSSProperties } from "react";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { lojaPorSlug, lojas } from "@/lib/dados";
+import { dicionarioActual } from "@/lib/i18n/servidor";
+import { SeletorLingua } from "@/app/lingua";
 
 /** Duas iniciais servem de marca enquanto a confeiteira não carrega um logótipo. */
 function iniciais(nome: string) {
@@ -25,6 +27,7 @@ export default async function LayoutDaConfeiteira({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
+  const t = (await dicionarioActual()).loja;
   const loja = lojaPorSlug(slug);
   if (!loja) notFound();
 
@@ -60,7 +63,7 @@ export default async function LayoutDaConfeiteira({
             href="https://wa.me/"
             className="rounded-full border border-borda px-4 py-2 text-sm"
           >
-            Falar comigo
+            {t.falarComigo}
           </a>
         </div>
       </header>
@@ -73,10 +76,13 @@ export default async function LayoutDaConfeiteira({
           <p className="mt-1">
             {confeiteira.instagram} · {confeiteira.whatsapp}
           </p>
+          <div className="mt-6">
+            <SeletorLingua />
+          </div>
           <p className="mt-6 text-xs">
-            Página feita no Cakelyo ·{" "}
+            {t.feitaNo}{" "}
             <Link href="/" className="underline underline-offset-2">
-              crie a sua
+              {t.criaATua}
             </Link>
           </p>
         </div>

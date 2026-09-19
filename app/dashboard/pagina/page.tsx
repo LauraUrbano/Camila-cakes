@@ -1,22 +1,24 @@
 import Icone from "@/app/icones";
 import { lojaPrincipal } from "@/lib/dados";
+import { dicionarioActual } from "@/lib/i18n/servidor";
 
 const { confeiteira } = lojaPrincipal;
 import { moeda } from "@/lib/precos";
 
-export default function PaginaDaMinhaPagina() {
+export default async function PaginaDaMinhaPagina() {
+  const p = (await dicionarioActual()).painel.pagina;
+
   const { tema, entregas } = confeiteira;
 
   return (
     <div className="mx-auto max-w-4xl">
-      <h1 className="text-2xl font-semibold">Minha página</h1>
+      <h1 className="text-2xl font-semibold">{p.titulo}</h1>
       <p className="mt-2 max-w-xl text-sm leading-relaxed text-suave">
-        Tudo o que a tua cliente vê é teu: endereço, cores, textos e as
-        formas de receber.
+        {p.subtitulo}
       </p>
 
       <section className="mt-8 rounded-2xl border border-borda bg-cartao p-6">
-        <h2 className="font-titulo font-semibold">Endereço</h2>
+        <h2 className="font-titulo font-semibold">{p.endereco}</h2>
         <div className="mt-4 space-y-4 text-sm">
           <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl bg-fundo p-4">
             <span className="font-mono">
@@ -24,30 +26,29 @@ export default function PaginaDaMinhaPagina() {
               <span className="font-semibold">{confeiteira.slug}</span>
             </span>
             <span className="rounded-full bg-marca-suave px-3 py-1 text-xs font-medium text-marca">
-              sempre ativo
+              {p.sempreActivo}
             </span>
           </div>
           <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl bg-fundo p-4">
             <span className="font-mono">{confeiteira.dominioProprio}</span>
             <span className="rounded-full bg-marca-suave px-3 py-1 text-xs font-medium text-marca">
-              domínio próprio
+              {p.dominioProprio}
             </span>
           </div>
           <p className="text-xs leading-relaxed text-suave">
-            Já tens um domínio? Aponta-o para cá e a tua página passa a
-            atender pelos dois endereços.
+            {p.dominioNota}
           </p>
         </div>
       </section>
 
       <section className="mt-6 rounded-2xl border border-borda bg-cartao p-6">
-        <h2 className="font-titulo font-semibold">Identidade visual</h2>
+        <h2 className="font-titulo font-semibold">{p.identidade}</h2>
         <div className="mt-4 grid gap-4 sm:grid-cols-4">
           {[
-            { nome: "Marca", cor: tema.marca },
-            { nome: "Marca suave", cor: tema.marcaSuave },
-            { nome: "Fundo", cor: tema.fundo },
-            { nome: "Texto", cor: tema.texto },
+            { nome: p.corMarca, cor: tema.marca },
+            { nome: p.corMarcaSuave, cor: tema.marcaSuave },
+            { nome: p.corFundo, cor: tema.fundo },
+            { nome: p.corTexto, cor: tema.texto },
           ].map((item) => (
             <div key={item.nome} className="rounded-xl border border-borda p-3">
               <div
@@ -62,12 +63,12 @@ export default function PaginaDaMinhaPagina() {
       </section>
 
       <section className="mt-6 rounded-2xl border border-borda bg-cartao p-6">
-        <h2 className="font-titulo font-semibold">Textos da página</h2>
+        <h2 className="font-titulo font-semibold">{p.textos}</h2>
         <dl className="mt-4 space-y-4 text-sm">
           {[
-            { termo: "Chamada", valor: confeiteira.tagline },
-            { termo: "Sobre", valor: confeiteira.bio },
-            { termo: "Aviso de pagamento", valor: confeiteira.avisoPagamento },
+            { termo: p.chamada, valor: confeiteira.tagline },
+            { termo: p.sobre, valor: confeiteira.bio },
+            { termo: p.avisoPagamento, valor: confeiteira.avisoPagamento },
           ].map((linha) => (
             <div key={linha.termo}>
               <dt className="text-xs font-medium text-suave">{linha.termo}</dt>
@@ -80,7 +81,7 @@ export default function PaginaDaMinhaPagina() {
       </section>
 
       <section className="mt-6 rounded-2xl border border-borda bg-cartao p-6">
-        <h2 className="font-titulo font-semibold">Formas de receber</h2>
+        <h2 className="font-titulo font-semibold">{p.formasReceber}</h2>
         <ul className="mt-4 space-y-3 text-sm">
           {entregas.map((entrega) => (
             <li
@@ -101,7 +102,7 @@ export default function PaginaDaMinhaPagina() {
               </span>
               <span className="shrink-0 font-medium">
                 {entrega.taxa === 0
-                  ? "grátis"
+                  ? p.gratis
                   : moeda(entrega.taxa, confeiteira.moeda)}
               </span>
             </li>
@@ -110,11 +111,11 @@ export default function PaginaDaMinhaPagina() {
       </section>
 
       <section className="mt-6 rounded-2xl border border-borda bg-cartao p-6">
-        <h2 className="font-titulo font-semibold">Pedidos personalizados</h2>
+        <h2 className="font-titulo font-semibold">{p.personalizados}</h2>
         <p className="mt-3 text-sm leading-relaxed text-suave">
           {confeiteira.aceitaPersonalizado
-            ? "Ligado. A cliente consegue pedir orçamento para o que não está no cardápio."
-            : "Desligado. A cliente só pode pedir o que está no cardápio."}
+            ? p.personalizadosLigado
+            : p.personalizadosDesligado}
         </p>
       </section>
     </div>

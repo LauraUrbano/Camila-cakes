@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { useLingua, useT } from "@/app/lingua";
 
 export type Vitrine = {
   slug: string;
@@ -22,7 +23,14 @@ export type Vitrine = {
  * exactamente o que a plataforma promete a cada pasteleira.
  */
 export default function VitrineTema({ vitrines }: { vitrines: Vitrine[] }) {
+  const t = useT();
+  const lingua = useLingua();
   const [activa, setActiva] = useState(0);
+
+  // O nome da moeda vem do próprio navegador na língua em curso: "euro",
+  // "Swiss franc", "franc suisse". Poupa cinco traduções à mão.
+  const nomeMoeda = (codigo: string) =>
+    new Intl.DisplayNames([lingua], { type: "currency" }).of(codigo) ?? codigo;
   const v = vitrines[activa];
 
   return (
@@ -107,7 +115,7 @@ export default function VitrineTema({ vitrines }: { vitrines: Vitrine[] }) {
                 {v.nome}
               </span>
               <span className="block text-xs text-suave">
-                {v.cidade} · preços em {v.moedaNome}
+                {v.cidade} · {t.home.vitrineMoeda} {nomeMoeda(v.moedaNome)}
               </span>
             </span>
           </div>
@@ -149,7 +157,7 @@ export default function VitrineTema({ vitrines }: { vitrines: Vitrine[] }) {
                     className="mt-1 text-xs transition-colors duration-700"
                     style={{ color: v.tema.marca }}
                   >
-                    desde {produto.preco}
+                    {t.loja.desde} {produto.preco}
                   </p>
                 </div>
               </div>
@@ -165,7 +173,7 @@ export default function VitrineTema({ vitrines }: { vitrines: Vitrine[] }) {
               className="rounded-full px-5 py-2.5 text-sm text-white transition-colors duration-700"
               style={{ background: v.tema.marca }}
             >
-              Abrir esta página →
+              {t.home.abrirPagina}
             </Link>
           </div>
         </div>

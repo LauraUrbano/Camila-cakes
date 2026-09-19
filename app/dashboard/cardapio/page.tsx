@@ -1,12 +1,21 @@
 import Image from "next/image";
 import { lojaPrincipal } from "@/lib/dados";
+import { dicionarioActual } from "@/lib/i18n/servidor";
 import { moeda, restam } from "@/lib/precos";
 import type { Moeda, Opcao } from "@/lib/tipos";
 
 const { confeiteira, produtos } = lojaPrincipal;
 const codigo: Moeda = confeiteira.moeda;
 
-function Opcoes({ titulo, lista }: { titulo: string; lista: Opcao[] }) {
+function Opcoes({
+  titulo,
+  lista,
+  incluido,
+}: {
+  titulo: string;
+  lista: Opcao[];
+  incluido: string;
+}) {
   return (
     <div>
       <p className="text-xs font-medium text-suave">{titulo}</p>
@@ -18,7 +27,7 @@ function Opcoes({ titulo, lista }: { titulo: string; lista: Opcao[] }) {
             </span>
             <span className="shrink-0 text-suave">
               {opcao.acrescimo === 0
-                ? "incluído"
+                ? incluido
                 : `+ ${moeda(opcao.acrescimo, codigo)}`}
             </span>
           </li>
@@ -28,14 +37,14 @@ function Opcoes({ titulo, lista }: { titulo: string; lista: Opcao[] }) {
   );
 }
 
-export default function PaginaDoCardapio() {
+export default async function PaginaDoCardapio() {
+  const c = (await dicionarioActual()).painel.cardapio;
+
   return (
     <div className="mx-auto max-w-4xl">
-      <h1 className="text-2xl font-semibold">Cardápio</h1>
+      <h1 className="text-2xl font-semibold">{c.titulo}</h1>
       <p className="mt-2 max-w-xl text-sm leading-relaxed text-suave">
-        O preço não é digitado item por item: defines o preço de cada tamanho
-        e o acréscimo de cada massa, recheio e decoração. A soma da combinação
-        que a tua cliente montar sai sozinha.
+        {c.subtitulo}
       </p>
 
       <div className="mt-8 space-y-6">
@@ -65,22 +74,22 @@ export default function PaginaDoCardapio() {
                       {produto.nome}
                     </span>
                     <span className="block text-xs text-suave">
-                      {produto.categoria} · {produto.antecedenciaDias} dias de
-                      antecedência
+                      {produto.categoria} · {produto.antecedenciaDias}{" "}
+                      {c.diasAntecedencia}
                     </span>
                   </span>
                 </div>
                 {sobrando !== null && (
                   <span className="rounded-full bg-marca-suave px-3 py-1 text-xs font-medium text-marca">
-                    limite: {produto.limite!.vendidos}/{produto.limite!.total}
+                    {c.limite}: {produto.limite!.vendidos}/
+                    {produto.limite!.total}
                   </span>
                 )}
               </div>
 
               <div className="border-b border-borda p-5">
                 <p className="text-xs font-medium text-suave">
-                  Tamanhos — cada um define o preço de partida e quantos
-                  recheios cabem
+                  {c.tamanhosNota}
                 </p>
                 <div className="mt-3 grid gap-3 sm:grid-cols-3">
                   {produto.tamanhos.map((tamanho) => (
@@ -96,8 +105,8 @@ export default function PaginaDoCardapio() {
                         {moeda(tamanho.preco, codigo)}
                       </p>
                       <p className="mt-1 text-xs text-suave">
-                        até {tamanho.maxRecheios}{" "}
-                        {tamanho.maxRecheios === 1 ? "recheio" : "recheios"}
+                        {c.ate} {tamanho.maxRecheios}{" "}
+                        {tamanho.maxRecheios === 1 ? c.recheio : c.recheios}
                       </p>
                     </div>
                   ))}
@@ -105,11 +114,20 @@ export default function PaginaDoCardapio() {
               </div>
 
               <div className="grid gap-6 p-5 sm:grid-cols-3">
-                <Opcoes titulo="Massas" lista={produto.massas} />
-                <Opcoes titulo="Recheios" lista={produto.recheios} />
                 <Opcoes
-                  titulo={`Decorações (até ${produto.maxDecoracoes})`}
+                  titulo={c.massas}
+                  lista={produto.massas}
+                  incluido={c.incluido}
+                />
+                <Opcoes
+                  titulo={c.recheiosTitulo}
+                  lista={produto.recheios}
+                  incluido={c.incluido}
+                />
+                <Opcoes
+                  titulo={`${c.decoracoes} (${c.ate} ${produto.maxDecoracoes})`}
                   lista={produto.decoracoes}
+                  incluido={c.incluido}
                 />
               </div>
             </section>

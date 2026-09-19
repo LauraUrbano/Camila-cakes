@@ -1,7 +1,9 @@
 import { lojaPrincipal, planos } from "@/lib/dados";
+import { dicionarioActual } from "@/lib/i18n/servidor";
 import PainelPlano from "./painel-plano";
 
-export default function PaginaDoPlano() {
+export default async function PaginaDoPlano() {
+  const pl = (await dicionarioActual()).painel.plano;
   const { confeiteira, produtos, colecoes, pedidos, assinatura } =
     lojaPrincipal;
 
@@ -11,9 +13,9 @@ export default function PaginaDoPlano() {
       inicial={assinatura}
       codigo={confeiteira.moeda}
       consumo={[
-        { rotulo: "Produtos", usado: produtos.length },
-        { rotulo: "Coleções", usado: colecoes.length },
-        { rotulo: "Encomendas este mês", usado: pedidos.length },
+        { rotulo: pl.produtos, usado: produtos.length },
+        { rotulo: pl.colecoes, usado: colecoes.length },
+        { rotulo: pl.encomendasMes, usado: pedidos.length },
       ]}
     />
   );

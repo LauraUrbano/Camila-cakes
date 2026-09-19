@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import { Nunito, Poppins } from "next/font/google";
 import "./globals.css";
+import { ProvedorLingua } from "./lingua";
+import { dicionarioActual, linguaActual } from "@/lib/i18n/servidor";
 
 const nunito = Nunito({
   variable: "--fonte-sans",
@@ -14,16 +16,29 @@ const poppins = Poppins({
   weight: ["300", "400", "500", "600", "700"],
 });
 
-export const metadata: Metadata = {
-  title: "Cakelyo — gestão do teu negócio de bolos",
-  description:
-    "Tudo o que o teu negócio de bolos precisa, num só lugar. Encomendas, pedidos personalizados, cardápio e relatórios.",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await dicionarioActual();
+  return { title: t.meta.titulo, description: t.meta.descricao };
+}
 
-export default function RootLayout({ children }: { children: ReactNode }) {
+export default async function RootLayout({
+  children,
+}: {
+  children: ReactNode;
+}) {
+  const lingua = await linguaActual();
+  const t = await dicionarioActual();
+
   return (
-    <html lang="pt-PT" className={`${nunito.variable} ${poppins.variable} h-full`}>
-      <body className="min-h-full font-sans antialiased">{children}</body>
+    <html
+      lang={t.meta.htmlLang}
+      className={`${nunito.variable} ${poppins.variable} h-full`}
+    >
+      <body className="min-h-full font-sans antialiased">
+        <ProvedorLingua t={t} lingua={lingua}>
+          {children}
+        </ProvedorLingua>
+      </body>
     </html>
   );
 }

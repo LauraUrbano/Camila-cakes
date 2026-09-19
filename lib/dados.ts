@@ -622,64 +622,29 @@ export const planos: Plano[] = [
   {
     id: "prova",
     nome: "Prova",
-    promessa: "Para pôr o cardápio de pé e ver se serve.",
     mensal: { EUR: 0, CHF: 0, BRL: 0 },
     anual: { EUR: 0, CHF: 0, BRL: 0 },
-    inclui: [
-      "A tua página em cakelyo.app/o-teu-nome",
-      "Pedidos ilimitados, com aceite manual",
-      "Até 5 produtos e 1 coleção",
-      "Cálculo automático do bolo",
-      "Cores e logótipo à tua escolha",
-      "Agenda de encomendas",
-    ],
-    naoInclui: [
-      "Coleções sazonais",
-      "Limites de produção",
-      "Relatórios",
-    ],
   },
   {
     id: "atelier",
     nome: "Atelier",
-    promessa: "Para quem já vive disto e tem épocas cheias.",
     mensal: { EUR: 12.9, CHF: 14, BRL: 24.9 },
     anual: { EUR: 129, CHF: 140, BRL: 249 },
     destaque: true,
-    inclui: [
-      "Tudo o do plano Prova",
-      "Produtos e coleções sem limite",
-      "Coleções sazonais com data de entrada e saída",
-      "Limites de produção por artigo",
-      "Relatórios de receita e de aceite",
-      "Histórico completo de clientes",
-    ],
-    naoInclui: ["Domínio próprio", "Equipa", "Formulários específicos"],
   },
   {
     id: "pastelaria",
     nome: "Pastelaria",
-    promessa: "Para quem tem marca própria e equipa.",
     mensal: { EUR: 29.9, CHF: 32, BRL: 49.9 },
     anual: { EUR: 299, CHF: 320, BRL: 499 },
-    inclui: [
-      "Tudo o do plano Atelier",
-      "Domínio próprio",
-      "Até 5 utilizadores na mesma conta",
-      "Formulários de cardápio por cliente",
-      "Apoio prioritário",
-    ],
   },
 ];
 
 /** A tabela comparativa, linha a linha, como aparece em /precos. */
 export const comparacao: LinhaComparacao[] = [
+  { id: "paginaPublica", valores: { prova: true, atelier: true, pastelaria: true } },
   {
-    rotulo: "Página pública",
-    valores: { prova: true, atelier: true, pastelaria: true },
-  },
-  {
-    rotulo: "Pedidos",
+    id: "pedidos",
     valores: {
       prova: "ilimitados",
       atelier: "ilimitados",
@@ -687,69 +652,31 @@ export const comparacao: LinhaComparacao[] = [
     },
   },
   {
-    rotulo: "Produtos",
-    valores: {
-      prova: "até 5",
-      atelier: "ilimitados",
-      pastelaria: "ilimitados",
-    },
+    id: "produtos",
+    valores: { prova: "ate5", atelier: "ilimitados", pastelaria: "ilimitados" },
   },
   {
-    rotulo: "Coleções",
-    valores: { prova: "1", atelier: "ilimitadas", pastelaria: "ilimitadas" },
+    id: "colecoes",
+    valores: { prova: "um", atelier: "ilimitadas", pastelaria: "ilimitadas" },
   },
+  { id: "personalizar", valores: { prova: true, atelier: true, pastelaria: true } },
+  { id: "entrega", valores: { prova: true, atelier: true, pastelaria: true } },
+  { id: "calculo", valores: { prova: true, atelier: true, pastelaria: true } },
+  { id: "agenda", valores: { prova: true, atelier: true, pastelaria: true } },
+  { id: "sazonais", valores: { prova: false, atelier: true, pastelaria: true } },
+  { id: "limites", valores: { prova: false, atelier: true, pastelaria: true } },
+  { id: "relatorios", valores: { prova: false, atelier: true, pastelaria: true } },
   {
-    rotulo: "Personalizar cores e logótipo",
-    valores: { prova: true, atelier: true, pastelaria: true },
+    id: "clientes",
+    valores: { prova: "basico", atelier: "completo", pastelaria: "completo" },
   },
+  { id: "dominio", valores: { prova: false, atelier: false, pastelaria: true } },
   {
-    rotulo: "Entrega e levantamento",
-    valores: { prova: true, atelier: true, pastelaria: true },
+    id: "equipa",
+    valores: { prova: false, atelier: false, pastelaria: "ate5Utilizadores" },
   },
-  {
-    rotulo: "Cálculo automático do bolo",
-    valores: { prova: true, atelier: true, pastelaria: true },
-  },
-  {
-    rotulo: "Agenda de encomendas",
-    valores: { prova: true, atelier: true, pastelaria: true },
-  },
-  {
-    rotulo: "Coleções sazonais",
-    valores: { prova: false, atelier: true, pastelaria: true },
-  },
-  {
-    rotulo: "Limites de produção",
-    valores: { prova: false, atelier: true, pastelaria: true },
-  },
-  {
-    rotulo: "Relatórios",
-    valores: { prova: false, atelier: true, pastelaria: true },
-  },
-  {
-    rotulo: "Clientes e histórico",
-    valores: { prova: "básico", atelier: "completo", pastelaria: "completo" },
-  },
-  {
-    rotulo: "Domínio próprio",
-    valores: { prova: false, atelier: false, pastelaria: true },
-  },
-  {
-    rotulo: "Equipa",
-    valores: {
-      prova: false,
-      atelier: false,
-      pastelaria: "até 5 utilizadores",
-    },
-  },
-  {
-    rotulo: "Formulários específicos",
-    valores: { prova: false, atelier: false, pastelaria: true },
-  },
-  {
-    rotulo: "Apoio prioritário",
-    valores: { prova: false, atelier: false, pastelaria: true },
-  },
+  { id: "formularios", valores: { prova: false, atelier: false, pastelaria: true } },
+  { id: "apoio", valores: { prova: false, atelier: false, pastelaria: true } },
 ];
 
 /**

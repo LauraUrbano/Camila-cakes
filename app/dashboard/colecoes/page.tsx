@@ -1,14 +1,16 @@
 import { lojaPrincipal, produtosDaColecao } from "@/lib/dados";
+import { dicionarioActual } from "@/lib/i18n/servidor";
 
 const { colecoes } = lojaPrincipal;
 
-export default function PaginaDeColecoes() {
+export default async function PaginaDeColecoes() {
+  const c = (await dicionarioActual()).painel.colecoes;
+
   return (
     <div className="mx-auto max-w-4xl">
-      <h1 className="text-2xl font-semibold">Coleções</h1>
+      <h1 className="text-2xl font-semibold">{c.titulo}</h1>
       <p className="mt-2 max-w-xl text-sm leading-relaxed text-suave">
-        Cardápios que entram e saem do ar por data. O mesmo bolo pode aparecer
-        em várias coleções — desligar a de Natal não apaga nada, só tira do ar.
+        {c.subtitulo}
       </p>
 
       <div className="mt-8 space-y-5">
@@ -29,7 +31,7 @@ export default function PaginaDeColecoes() {
                     </h2>
                     {colecao.destaque && (
                       <span className="rounded-full bg-marca px-2 py-0.5 text-[11px] font-medium text-white">
-                        destaque
+                        {c.destaque}
                       </span>
                     )}
                   </div>
@@ -44,7 +46,7 @@ export default function PaginaDeColecoes() {
                       : "bg-borda text-suave"
                   }`}
                 >
-                  {colecao.ativa ? "no ar" : "fora do ar"}
+                  {colecao.ativa ? c.noAr : c.foraDoAr}
                 </span>
               </div>
 

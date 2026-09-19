@@ -53,6 +53,38 @@ não renova e não gera fatura. Por isso a assinatura guarda a origem
 ⚠️ Os detalhes fiscais e as regras do Stripe por país mudam. Confirmar com o
 Stripe e com contabilista antes de ligar a cobrança a sério.
 
+## Línguas
+
+Cinco: português europeu, português do Brasil, inglês, francês e alemão. A
+língua é escolhida pelo `Accept-Language` do navegador à entrada, guardada num
+cookie e trocável no seletor do rodapé.
+
+**A língua não vai no endereço**, de propósito. A promessa do produto é um link
+limpo — `cakelyo.app/o-teu-nome` — e um prefixo daria
+`cakelyo.app/pt-PT/o-teu-nome`. O preço disso é que as páginas leem o cookie e
+passam a ser renderizadas a pedido, sem pré-geração estática. Se um dia o SEO
+por língua pesar mais do que o link curto, as páginas de marketing podem ganhar
+prefixo sem tocar nas páginas das pasteleiras.
+
+**A moeda segue a região, não a língua.** Um suíço que navegue em inglês vê
+francos; um brasileiro que navegue em inglês vê reais. São dois sinais
+diferentes e não devem andar colados.
+
+**Traduz-se a moldura, não o conteúdo.** Os botões, rótulos e textos da
+plataforma mudam de língua. O que a pasteleira escreve — a bio, os nomes dos
+bolos, o aviso de pagamento — fica como ela escreveu, porque é dela e ela sabe
+com quem fala. Por isso o motor de preços em `lib/precos.ts` devolve chaves
+("premium", "acrescimo") em vez de frases: o nome do recheio é dela, a palavra
+"acréscimo" é nossa.
+
+O português europeu é a fonte de verdade: o tipo `Dicionario` é derivado de
+`lib/i18n/pt-PT.ts`, por isso uma chave em falta noutra língua rebenta na
+compilação em vez de aparecer em branco na página.
+
+Em francês e alemão trata-se por "vous" e "Sie". O manual da marca pede
+informalidade, mas tutear uma pasteleira desconhecida nesses mercados soa
+atrevido. É uma linha por dicionário, se quiseres mudar.
+
 ## As duas regras que sustentam o produto
 
 **1. Preço por combinação.** A confeiteira não digita o preço de cada bolo

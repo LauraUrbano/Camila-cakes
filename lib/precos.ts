@@ -7,17 +7,30 @@ export type Selecao = {
   decoracaoIds: string[];
 };
 
+/**
+ * Uma linha do orçamento. Guarda chaves, não frases: o nome da opção é da
+ * confeiteira e fica como ela o escreveu, mas "massa", "incluído" ou
+ * "recheio premium" são palavras nossas e mudam com a língua de quem olha.
+ */
 export type LinhaPreco = {
-  rotulo: string;
-  detalhe: string;
+  tipo: "tamanho" | "massa" | "recheio" | "decoracao";
+  nome: string;
+  detalhe: "porcoes" | "incluido" | "inclusa" | "acrescimo" | "premium";
+  /** Só no tamanho: o texto das porções, escrito pela confeiteira. */
+  porcoes?: string;
   valor: number;
 };
+
+/** O que falta escolher, em chaves para o ecrã traduzir. */
+export type Pendencia =
+  | { tipo: "tamanho" }
+  | { tipo: "massa" }
+  | { tipo: "recheios"; faltam: number };
 
 export type Orcamento = {
   linhas: LinhaPreco[];
   total: number;
-  /** O que ainda falta escolher para o pedido ficar válido. */
-  pendencias: string[];
+  pendencias: Pendencia[];
   completo: boolean;
 };
 
@@ -54,58 +67,61 @@ function achaVarios(lista: Opcao[], ids: string[]) {
  */
 export function calcular(produto: Produto, selecao: Selecao): Orcamento {
   const linhas: LinhaPreco[] = [];
-  const pendencias: string[] = [];
+  const pendencias: Pendencia[] = [];
 
   const tamanho = acha(produto.tamanhos, selecao.tamanhoId);
   if (!tamanho) {
     return {
       linhas,
       total: 0,
-      pendencias: ["Escolha o tamanho"],
+      pendencias: [{ tipo: "tamanho" }],
       completo: false,
     };
   }
 
   linhas.push({
-    rotulo: tamanho.nome,
-    detalhe: tamanho.porcoes,
+    tipo: "tamanho",
+    nome: tamanho.nome,
+    detalhe: "porcoes",
+    porcoes: tamanho.porcoes,
     valor: tamanho.preco,
   });
 
   const massa = acha(produto.massas, selecao.massaId);
   if (massa) {
     linhas.push({
-      rotulo: `Massa ${massa.nome}`,
-      detalhe: massa.acrescimo === 0 ? "inclusa" : "acréscimo",
+      tipo: "massa",
+      nome: massa.nome,
+      detalhe: massa.acrescimo === 0 ? "inclusa" : "acrescimo",
       valor: massa.acrescimo,
     });
   } else {
-    pendencias.push("Escolha a massa");
+    pendencias.push({ tipo: "massa" });
   }
 
   const recheios = achaVarios(produto.recheios, selecao.recheioIds);
   for (const recheio of recheios) {
     linhas.push({
-      rotulo: `Recheio ${recheio.nome}`,
-      detalhe: recheio.acrescimo === 0 ? "incluso" : "recheio premium",
+      tipo: "recheio",
+      nome: recheio.nome,
+      detalhe: recheio.acrescimo === 0 ? "incluido" : "premium",
       valor: recheio.acrescimo,
     });
   }
 
   if (recheios.length < tamanho.maxRecheios) {
-    const faltam = tamanho.maxRecheios - recheios.length;
-    pendencias.push(
-      faltam === 1
-        ? "Falta escolher 1 recheio"
-        : `Faltam escolher ${faltam} recheios`,
-    );
+    pendencias.push({
+      tipo: "recheios",
+      faltam: tamanho.maxRecheios - recheios.length,
+    });
   }
 
   const decoracoes = achaVarios(produto.decoracoes, selecao.decoracaoIds);
   for (const decoracao of decoracoes) {
     linhas.push({
-      rotulo: decoracao.nome,
-      detalhe: "decoração",
+      tipo: "decoracao",
+      nome: decoracao.nome,
+      detalhe: decoracao.acrescimo === 0 ? "incluido" : "acrescimo",
       valor: decoracao.acrescimo,
     });
   }

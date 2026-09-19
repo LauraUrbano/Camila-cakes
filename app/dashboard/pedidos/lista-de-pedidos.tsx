@@ -2,18 +2,11 @@
 
 import { useMemo, useState } from "react";
 import Icone from "@/app/icones";
+import { useT } from "@/app/lingua";
 import { moeda } from "@/lib/precos";
 import type { Moeda, Pedido, StatusPedido } from "@/lib/tipos";
 
 const POR_PAGINA = 6;
-
-const rotulos: Record<StatusPedido, string> = {
-  aguardando: "aguarda aceite",
-  aceito: "aceite",
-  producao: "em produção",
-  entregue: "entregue",
-  recusado: "recusado",
-};
 
 /** A bolinha ao lado do nome dá o estado sem ocupar espaço na lista. */
 const pontos: Record<StatusPedido, string> = {
@@ -24,15 +17,6 @@ const pontos: Record<StatusPedido, string> = {
   recusado: "bg-borda",
 };
 
-const filtros: { id: StatusPedido | "todos"; rotulo: string }[] = [
-  { id: "todos", rotulo: "Todos" },
-  { id: "aguardando", rotulo: "Aguardam aceite" },
-  { id: "aceito", rotulo: "Aceites" },
-  { id: "producao", rotulo: "Em produção" },
-  { id: "entregue", rotulo: "Entregues" },
-  { id: "recusado", rotulo: "Recusados" },
-];
-
 function total(pedido: Pedido) {
   return (
     pedido.itens.reduce((soma, item) => soma + item.total, 0) +
@@ -40,8 +24,8 @@ function total(pedido: Pedido) {
   );
 }
 
-function resumo(pedido: Pedido) {
-  if (pedido.personalizado) return "Pedido personalizado";
+function resumo(pedido: Pedido, personalizado: string) {
+  if (pedido.personalizado) return personalizado;
   return pedido.itens.map((item) => item.produtoNome).join(", ");
 }
 
@@ -52,6 +36,17 @@ export default function ListaDePedidos({
   iniciais: Pedido[];
   codigo: Moeda;
 }) {
+  const t = useT();
+  const p = t.painel.pedidos;
+  const rotulos: Record<StatusPedido, string> = p.estados;
+  const filtros: { id: StatusPedido | "todos"; rotulo: string }[] = [
+    { id: "todos", rotulo: p.filtroTodos },
+    { id: "aguardando", rotulo: p.filtroAguardando },
+    { id: "aceito", rotulo: p.filtroAceite },
+    { id: "producao", rotulo: p.filtroProducao },
+    { id: "entregue", rotulo: p.filtroEntregue },
+    { id: "recusado", rotulo: p.filtroRecusado },
+  ];
   const [lista, setLista] = useState(iniciais);
   const [filtro, setFiltro] = useState<StatusPedido | "todos">("todos");
   const [busca, setBusca] = useState("");
@@ -98,16 +93,15 @@ export default function ListaDePedidos({
     <div className="mx-auto max-w-6xl">
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div>
-          <h1 className="text-2xl">Pedidos</h1>
+          <h1 className="text-2xl">{p.titulo}</h1>
           <p className="mt-2 max-w-xl text-sm leading-relaxed text-suave">
-            Um pedido enviado pelo site é só uma reserva. Entra na tua agenda
-            quando o aceitas — normalmente depois de combinar o pagamento.
+            {p.subtitulo}
           </p>
         </div>
         {aguardando.length > 0 && (
           <p className="rounded-full bg-marca-suave px-4 py-2 text-sm text-marca">
             {aguardando.length}{" "}
-            {aguardando.length === 1 ? "à espera" : "à espera de aceite"}
+            {aguardando.length === 1 ? p.aEsperaUm : p.aEsperaVarios}
           </p>
         )}
       </div>
@@ -143,7 +137,7 @@ export default function ListaDePedidos({
             setBusca(evento.target.value);
             setPagina(1);
           }}
-          placeholder="Procurar por nome ou número"
+          placeholder={p.procurar}
           className="ml-auto w-full rounded-full border border-borda bg-cartao px-4 py-2 text-sm outline-none focus:border-marca sm:w-64"
         />
       </div>
@@ -175,7 +169,7 @@ export default function ListaDePedidos({
                       </span>
                     </span>
                     <span className="mt-1.5 flex justify-between gap-2 pl-3.5 text-xs text-suave">
-                      <span className="truncate">{resumo(item)}</span>
+                      <span className="truncate">{resumo(item, p.personalizado)}</span>
                       <span className="shrink-0">{item.entregaEm}</span>
                     </span>
                   </button>
@@ -185,7 +179,7 @@ export default function ListaDePedidos({
 
             {visiveis.length === 0 && (
               <li className="px-5 py-10 text-center text-sm text-suave">
-                Nenhum pedido com esse filtro.
+                {p.semResultados}
               </li>
             )}
           </ul>
@@ -194,7 +188,7 @@ export default function ListaDePedidos({
             <div className="mt-4 flex items-center justify-between text-sm">
               <span className="text-suave">
                 {(paginaAtual - 1) * POR_PAGINA + 1}–
-                {Math.min(paginaAtual * POR_PAGINA, filtrados.length)} de{" "}
+                {Math.min(paginaAtual * POR_PAGINA, filtrados.length)} {p.de}{" "}
                 {filtrados.length}
               </span>
               <span className="flex gap-2">
@@ -225,15 +219,16 @@ export default function ListaDePedidos({
               <div>
                 <h2 className="font-titulo text-xl">{pedido.cliente}</h2>
                 <p className="mt-1.5 text-xs text-suave">
-                  {pedido.id} · pedido em {pedido.criadoEm} · {pedido.telefone}
+                  {pedido.id} · {p.pedidoEm} {pedido.criadoEm} ·{" "}
+                  {pedido.telefone}
                 </p>
               </div>
               <div className="text-right">
                 <p className="text-lg">
-                  {pedido.itens.length === 0 ? "a orçar" : fmt(total(pedido))}
+                  {pedido.itens.length === 0 ? p.aOrcar : fmt(total(pedido))}
                 </p>
                 <p className="mt-0.5 text-xs text-suave">
-                  entrega {pedido.entregaEm}
+                  {p.entrega} {pedido.entregaEm}
                 </p>
               </div>
             </header>
@@ -245,7 +240,7 @@ export default function ListaDePedidos({
               <span className="text-sm">{rotulos[pedido.status]}</span>
               {pedido.status === "aguardando" && (
                 <span className="text-xs text-suave">
-                  · a data ainda não está reservada
+                  {p.naoReservada}
                 </span>
               )}
             </div>
@@ -254,7 +249,7 @@ export default function ListaDePedidos({
               {pedido.personalizado && (
                 <p className="rounded-2xl bg-marca-suave p-5 leading-relaxed">
                   <span className="mb-1.5 block text-xs text-marca">
-                    pedido personalizado
+                    {p.personalizado}
                   </span>
                   {pedido.personalizado}
                 </p>
@@ -270,16 +265,16 @@ export default function ListaDePedidos({
                   </div>
                   <dl className="mt-3 space-y-1.5 text-xs text-suave">
                     <div className="flex gap-2">
-                      <dt className="w-20 shrink-0">Massa</dt>
+                      <dt className="w-20 shrink-0">{p.massa}</dt>
                       <dd>{item.massaNome}</dd>
                     </div>
                     <div className="flex gap-2">
-                      <dt className="w-20 shrink-0">Recheio</dt>
+                      <dt className="w-20 shrink-0">{p.recheio}</dt>
                       <dd>{item.recheiosNomes.join(", ")}</dd>
                     </div>
                     {item.decoracoesNomes.length > 0 && (
                       <div className="flex gap-2">
-                        <dt className="w-20 shrink-0">Decoração</dt>
+                        <dt className="w-20 shrink-0">{p.decoracao}</dt>
                         <dd>{item.decoracoesNomes.join(", ")}</dd>
                       </div>
                     )}
@@ -303,7 +298,7 @@ export default function ListaDePedidos({
                 />
                 {pedido.entrega.nome} ·{" "}
                 {pedido.entrega.taxa === 0
-                  ? "sem taxa"
+                  ? p.semTaxa
                   : fmt(pedido.entrega.taxa)}
               </p>
             </div>
@@ -316,17 +311,17 @@ export default function ListaDePedidos({
                     onClick={() => mudarStatus(pedido.id, "aceito")}
                     className="rounded-full bg-marca px-5 py-2.5 text-sm text-white"
                   >
-                    Aceitar pedido
+                    {p.aceitar}
                   </button>
                   <button
                     type="button"
                     onClick={() => mudarStatus(pedido.id, "recusado")}
                     className="rounded-full border border-borda bg-cartao px-5 py-2.5 text-sm"
                   >
-                    Recusar
+                    {p.recusar}
                   </button>
                   <span className="text-xs text-suave">
-                    aceitar reserva a data na tua agenda
+                    {p.aceitarNota}
                   </span>
                 </>
               )}
@@ -336,7 +331,7 @@ export default function ListaDePedidos({
                   onClick={() => mudarStatus(pedido.id, "producao")}
                   className="rounded-full border border-borda bg-cartao px-5 py-2.5 text-sm"
                 >
-                  Marcar como em produção
+                  {p.marcarProducao}
                 </button>
               )}
               {pedido.status === "producao" && (
@@ -345,17 +340,17 @@ export default function ListaDePedidos({
                   onClick={() => mudarStatus(pedido.id, "entregue")}
                   className="rounded-full border border-borda bg-cartao px-5 py-2.5 text-sm"
                 >
-                  Marcar como entregue
+                  {p.marcarEntregue}
                 </button>
               )}
               {["entregue", "recusado"].includes(pedido.status) && (
-                <span className="text-xs text-suave">Pedido encerrado.</span>
+                <span className="text-xs text-suave">{p.encerrado}</span>
               )}
             </footer>
           </article>
         ) : (
           <div className="grid h-64 place-items-center rounded-3xl border border-borda bg-cartao text-sm text-suave">
-            Escolha um pedido à esquerda.
+            {p.escolhePedido}
           </div>
         )}
       </div>

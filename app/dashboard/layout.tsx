@@ -2,19 +2,23 @@ import type { ReactNode } from "react";
 import Link from "next/link";
 import Icone, { type Nome } from "@/app/icones";
 import { Marca } from "@/app/logo";
+import { SeletorLingua } from "@/app/lingua";
+import { dicionarioActual } from "@/lib/i18n/servidor";
 import { lojaPrincipal } from "@/lib/dados";
 
 const { confeiteira } = lojaPrincipal;
 
-const menu: { href: string; rotulo: string; icone: Nome }[] = [
-  { href: "/dashboard", rotulo: "Visão geral", icone: "casa" },
-  { href: "/dashboard/pedidos", rotulo: "Pedidos", icone: "lista" },
-  { href: "/dashboard/relatorios", rotulo: "Relatórios", icone: "grafico" },
-  { href: "/dashboard/cardapio", rotulo: "Cardápio", icone: "bolo" },
-  { href: "/dashboard/colecoes", rotulo: "Coleções", icone: "calendario" },
-  { href: "/dashboard/pagina", rotulo: "A minha página", icone: "paleta" },
-  { href: "/dashboard/plano", rotulo: "Plano", icone: "cartao" },
+const menu: { href: string; chave: keyof Nav; icone: Nome }[] = [
+  { href: "/dashboard", chave: "geral", icone: "casa" },
+  { href: "/dashboard/pedidos", chave: "pedidos", icone: "lista" },
+  { href: "/dashboard/relatorios", chave: "relatorios", icone: "grafico" },
+  { href: "/dashboard/cardapio", chave: "cardapio", icone: "bolo" },
+  { href: "/dashboard/colecoes", chave: "colecoes", icone: "calendario" },
+  { href: "/dashboard/pagina", chave: "pagina", icone: "paleta" },
+  { href: "/dashboard/plano", chave: "plano", icone: "cartao" },
 ];
+
+type Nav = Awaited<ReturnType<typeof dicionarioActual>>["painel"]["nav"];
 
 function iniciais(nome: string) {
   return nome
@@ -25,7 +29,13 @@ function iniciais(nome: string) {
     .toUpperCase();
 }
 
-export default function LayoutDoPainel({ children }: { children: ReactNode }) {
+export default async function LayoutDoPainel({
+  children,
+}: {
+  children: ReactNode;
+}) {
+  const t = await dicionarioActual();
+
   return (
     <div className="min-h-full lg:grid lg:grid-cols-[15rem_1fr]">
       <aside className="border-b border-borda bg-cartao lg:border-r lg:border-b-0">
@@ -42,7 +52,7 @@ export default function LayoutDoPainel({ children }: { children: ReactNode }) {
             <span className="block text-sm font-semibold">
               {confeiteira.nome}
             </span>
-            <span className="block text-xs text-suave">painel</span>
+            <span className="block text-xs text-suave">{t.painel.painel}</span>
           </span>
         </div>
 
@@ -54,7 +64,7 @@ export default function LayoutDoPainel({ children }: { children: ReactNode }) {
               className="flex shrink-0 items-center gap-2.5 rounded-xl px-3 py-2.5 text-sm text-suave transition hover:bg-marca-suave hover:text-texto"
             >
               <Icone nome={item.icone} className="h-[18px] w-[18px]" />
-              {item.rotulo}
+              {t.painel.nav[item.chave]}
             </Link>
           ))}
         </nav>
@@ -65,14 +75,19 @@ export default function LayoutDoPainel({ children }: { children: ReactNode }) {
             className="block rounded-xl border border-borda p-4 text-xs leading-relaxed text-suave transition hover:border-marca"
           >
             <span className="block font-medium text-texto">
-              Ver a minha página
+              {t.painel.verPagina}
             </span>
             cakelyo.app/{confeiteira.slug} ↗
           </Link>
         </div>
       </aside>
 
-      <main className="px-6 py-8 lg:px-10">{children}</main>
+      <main className="px-6 py-8 lg:px-10">
+        {children}
+        <div className="mx-auto mt-16 max-w-4xl border-t border-borda pt-6">
+          <SeletorLingua />
+        </div>
+      </main>
     </div>
   );
 }

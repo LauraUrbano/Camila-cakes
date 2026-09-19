@@ -1,4 +1,5 @@
 import { lojaPrincipal } from "@/lib/dados";
+import { dicionarioActual } from "@/lib/i18n/servidor";
 import { moeda } from "@/lib/precos";
 import type { Pedido, StatusPedido } from "@/lib/tipos";
 import { Barras, Colunas, Tabela } from "./graficos";
@@ -13,15 +14,25 @@ function total(pedido: Pedido) {
   );
 }
 
-const estados: { id: StatusPedido; rotulo: string }[] = [
-  { id: "aguardando", rotulo: "Aguardam aceite" },
-  { id: "aceito", rotulo: "Aceites" },
-  { id: "producao", rotulo: "Em produção" },
-  { id: "entregue", rotulo: "Entregues" },
-  { id: "recusado", rotulo: "Recusados" },
+const ordemEstados: StatusPedido[] = [
+  "aguardando",
+  "aceito",
+  "producao",
+  "entregue",
+  "recusado",
 ];
 
-export default function Relatorios() {
+export default async function Relatorios() {
+  const d = await dicionarioActual();
+  const r = d.painel.relatorios;
+  const rotulosEstado = {
+    aguardando: d.painel.pedidos.filtroAguardando,
+    aceito: d.painel.pedidos.filtroAceite,
+    producao: d.painel.pedidos.filtroProducao,
+    entregue: d.painel.pedidos.filtroEntregue,
+    recusado: d.painel.pedidos.filtroRecusado,
+  };
+
   const fechados = pedidos.filter((pedido) =>
     ["aceito", "producao", "entregue"].includes(pedido.status),
   );
@@ -47,9 +58,10 @@ export default function Relatorios() {
     .map(([rotulo, valor]) => ({ rotulo, valor }))
     .sort((a, b) => b.valor - a.valor);
 
-  const porEstado = estados.map((estado) => ({
-    ...estado,
-    quantos: pedidos.filter((pedido) => pedido.status === estado.id).length,
+  const porEstado = ordemEstados.map((id) => ({
+    id,
+    rotulo: rotulosEstado[id],
+    quantos: pedidos.filter((pedido) => pedido.status === id).length,
   }));
   const maiorEstado = Math.max(...porEstado.map((e) => e.quantos));
 
@@ -64,37 +76,36 @@ export default function Relatorios() {
 
   return (
     <div className="mx-auto max-w-4xl">
-      <h1 className="text-2xl">Relatórios</h1>
+      <h1 className="text-2xl">{r.titulo}</h1>
       <p className="mt-2 max-w-xl text-sm leading-relaxed text-suave">
-        O que já foi aceite, o que se vende mais e como o mês está a correr.
-        Pedidos à espera de aceite não contam como receita.
+        {r.subtitulo}
       </p>
 
       <section className="mt-8 rounded-3xl border border-borda bg-cartao p-8">
-        <p className="text-sm text-suave">Receita confirmada</p>
+        <p className="text-sm text-suave">{r.receita}</p>
         <p className="mt-2 text-5xl">{fmt(receita)}</p>
         <p className="mt-3 text-sm text-suave">
-          {comValor.length} encomendas aceites ·{" "}
+          {comValor.length} {r.encomendasAceites} ·{" "}
           <span className={crescimento >= 0 ? "text-marca" : ""}>
             {crescimento >= 0 ? "+" : ""}
             {crescimento}%
           </span>{" "}
-          face ao mês anterior
+          {r.faceMesAnterior}
         </p>
       </section>
 
       <section className="mt-5 grid gap-5 sm:grid-cols-3">
         {[
-          { rotulo: "Ticket médio", valor: fmt(ticket), nota: "por encomenda" },
+          { rotulo: r.ticket, valor: fmt(ticket), nota: r.ticketNota },
           {
-            rotulo: "Taxa de aceite",
+            rotulo: r.taxaAceite,
             valor: `${taxaAceite}%`,
-            nota: `${recusados.length} recusadas`,
+            nota: `${recusados.length} ${r.recusadas}`,
           },
           {
-            rotulo: "Encomendas",
+            rotulo: r.encomendas,
             valor: String(pedidos.length),
-            nota: "desde o início",
+            nota: r.desdeInicio,
           },
         ].map((cartao) => (
           <div
@@ -109,8 +120,8 @@ export default function Relatorios() {
       </section>
 
       <section className="mt-5 rounded-3xl border border-borda bg-cartao p-8">
-        <h2 className="font-titulo text-lg">Receita por mês</h2>
-        <p className="mt-1.5 text-sm text-suave">Últimos seis meses fechados</p>
+        <h2 className="font-titulo text-lg">{r.receitaMes}</h2>
+        <p className="mt-1.5 text-sm text-suave">{r.ultimosSeis}</p>
         <div className="mt-8">
           <Colunas
             dados={historico.map((mes) => ({
@@ -121,7 +132,7 @@ export default function Relatorios() {
           />
         </div>
         <Tabela
-          cabecalhos={["Mês", "Receita", "Encomendas"]}
+          cabecalhos={[r.mes, r.receita, r.encomendas]}
           linhas={historico.map((mes) => [
             mes.mes,
             fmt(mes.receita),
@@ -132,16 +143,16 @@ export default function Relatorios() {
 
       <div className="mt-5 grid items-start gap-5 lg:grid-cols-2">
         <section className="rounded-3xl border border-borda bg-cartao p-8">
-          <h2 className="font-titulo text-lg">O que mais sai</h2>
-          <p className="mt-1.5 text-sm text-suave">Por número de encomendas</p>
+          <h2 className="font-titulo text-lg">{r.maisSai}</h2>
+          <p className="mt-1.5 text-sm text-suave">{r.porEncomendas}</p>
           <div className="mt-6">
             <Barras dados={ranking} />
           </div>
         </section>
 
         <section className="rounded-3xl border border-borda bg-cartao p-8">
-          <h2 className="font-titulo text-lg">Em que pé estão</h2>
-          <p className="mt-1.5 text-sm text-suave">Todas as encomendas</p>
+          <h2 className="font-titulo text-lg">{r.emQuePe}</h2>
+          <p className="mt-1.5 text-sm text-suave">{r.todasEncomendas}</p>
           <ul className="mt-6 space-y-4">
             {porEstado.map((estado) => (
               <li key={estado.id}>

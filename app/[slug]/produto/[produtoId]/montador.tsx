@@ -4,6 +4,7 @@ import { useMemo, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import Icone from "@/app/icones";
+import { useT } from "@/app/lingua";
 import { calcular, moeda, restam, vagasDeRecheio } from "@/lib/precos";
 import type { Selecao } from "@/lib/precos";
 import type { Confeiteira, Moeda, Opcao, Produto } from "@/lib/tipos";
@@ -14,11 +15,19 @@ type Props = {
   slug: string;
 };
 
-function Etiqueta({ opcao, codigo }: { opcao: Opcao; codigo: Moeda }) {
+function Etiqueta({
+  opcao,
+  codigo,
+  palavras,
+}: {
+  opcao: Opcao;
+  codigo: Moeda;
+  palavras: { emFalta: string; incluido: string };
+}) {
   if (!opcao.disponivel)
-    return <span className="text-xs text-suave">em falta</span>;
+    return <span className="text-xs text-suave">{palavras.emFalta}</span>;
   if (opcao.acrescimo === 0)
-    return <span className="text-xs text-suave">incluído</span>;
+    return <span className="text-xs text-suave">{palavras.incluido}</span>;
   return (
     <span className="text-xs text-marca">+ {moeda(opcao.acrescimo, codigo)}</span>
   );
@@ -29,12 +38,14 @@ function Escolha({
   marcada,
   bloqueada,
   codigo,
+  palavras,
   aoClicar,
 }: {
   opcao: Opcao;
   marcada: boolean;
   bloqueada: boolean;
   codigo: Moeda;
+  palavras: { emFalta: string; incluido: string };
   aoClicar: () => void;
 }) {
   const inativa = !opcao.disponivel || (bloqueada && !marcada);
@@ -54,12 +65,38 @@ function Escolha({
       }`}
     >
       <span className="font-medium">{opcao.nome}</span>
-      <Etiqueta opcao={opcao} codigo={codigo} />
+      <Etiqueta opcao={opcao} codigo={codigo} palavras={palavras} />
     </button>
   );
 }
 
 export default function Montador({ produto, confeiteira, slug }: Props) {
+  const d = useT().loja;
+  const t = d.montador;
+  const palavras = { emFalta: t.emFalta, incluido: t.incluido };
+
+  // O nome da opção é da confeiteira; o rótulo à frente é nosso e muda com a
+  // língua. Por isso o motor de preços devolve chaves e a junção faz-se aqui.
+  const prefixos = {
+    tamanho: "",
+    massa: `${t.massa} `,
+    recheio: `${t.prefixoRecheio} `,
+    decoracao: "",
+  } as const;
+  const detalhes = {
+    porcoes: "",
+    incluido: t.incluido,
+    inclusa: t.inclusa,
+    acrescimo: t.acrescimo,
+    premium: t.recheioPremium,
+  } as const;
+  const pendencia = (p: (typeof orcamento.pendencias)[number]) => {
+    if (p.tipo === "tamanho") return t.escolheTamanho;
+    if (p.tipo === "massa") return t.escolheMassa;
+    return p.faltam === 1
+      ? t.faltaUm
+      : `${t.faltamVarios} ${p.faltam} ${t.faltamFim}`;
+  };
   const fmt = (valor: number) => moeda(valor, confeiteira.moeda);
 
   const [selecao, setSelecao] = useState<Selecao>({
@@ -109,24 +146,22 @@ export default function Montador({ produto, confeiteira, slug }: Props) {
         <span className="mx-auto grid h-14 w-14 place-items-center rounded-full bg-marca-suave text-marca">
           <Icone nome="enviado" className="h-7 w-7" />
         </span>
-        <h1 className="mt-6 text-2xl">Pedido enviado</h1>
+        <h1 className="mt-6 text-2xl">{t.enviadoTitulo}</h1>
         <p className="mt-3 leading-relaxed text-suave">
-          {confeiteira.nome} recebeu sua reserva e vai te chamar no WhatsApp
-          para combinar o pagamento.
+          {confeiteira.nome} {t.enviadoTexto1}
         </p>
         <div className="mt-8 rounded-2xl border border-marca bg-marca-suave p-6 text-left">
-          <p className="font-titulo">A sua data ainda não está garantida</p>
+          <p className="font-titulo">{t.enviadoAviso}</p>
           <p className="mt-2 text-sm leading-relaxed">
-            O pedido só entra na agenda quando a confeiteira{" "}
-            <strong>aceitar</strong>. Você recebe um aviso assim que isso
-            acontecer — normalmente em até 24 horas.
+            {t.enviadoAvisoTexto1} <strong>{t.enviadoAvisoForte}</strong>
+            {t.enviadoAvisoTexto2}
           </p>
         </div>
         <Link
           href={`/${slug}`}
           className="mt-8 inline-block rounded-full border border-borda bg-cartao px-6 py-3 text-sm font-medium"
         >
-          Voltar ao cardápio
+          {t.voltarCardapio}
         </Link>
       </div>
     );
@@ -136,7 +171,7 @@ export default function Montador({ produto, confeiteira, slug }: Props) {
     <div className="mx-auto grid max-w-5xl gap-10 px-6 py-10 lg:grid-cols-[1fr_20rem]">
       <div>
         <Link href={`/${slug}`} className="text-sm text-suave hover:text-texto">
-          ← cardápio
+          ← {d.montador.voltarCardapio}
         </Link>
 
         <div
@@ -156,12 +191,13 @@ export default function Montador({ produto, confeiteira, slug }: Props) {
         <h1 className="mt-6 text-3xl font-semibold">{produto.nome}</h1>
         <p className="mt-3 leading-relaxed text-suave">{produto.descricao}</p>
         <p className="mt-3 text-sm text-suave">
-          Encomende com {produto.antecedenciaDias} dias de antecedência
-          {sobrando !== null && ` · restam ${sobrando} unidades`}
+          {t.encomendeCom} {produto.antecedenciaDias} {t.diasAntecedencia}
+          {sobrando !== null &&
+            ` · ${t.restamUnidades} ${sobrando} ${t.unidades}`}
         </p>
 
         <section className="mt-10">
-          <h2 className="font-titulo text-lg font-semibold">Tamanho</h2>
+          <h2 className="font-titulo text-lg font-semibold">{t.tamanho}</h2>
           <div className="mt-4 grid gap-3 sm:grid-cols-3">
             {produto.tamanhos.map((opcao) => {
               const marcada = opcao.id === selecao.tamanhoId;
@@ -185,8 +221,8 @@ export default function Montador({ produto, confeiteira, slug }: Props) {
                     {fmt(opcao.preco)}
                   </span>
                   <span className="mt-1 block text-xs text-suave">
-                    até {opcao.maxRecheios}{" "}
-                    {opcao.maxRecheios === 1 ? "recheio" : "recheios"}
+                    {t.ate} {opcao.maxRecheios}{" "}
+                    {opcao.maxRecheios === 1 ? t.recheio : t.recheios}
                   </span>
                 </button>
               );
@@ -195,7 +231,7 @@ export default function Montador({ produto, confeiteira, slug }: Props) {
         </section>
 
         <section className="mt-10">
-          <h2 className="font-titulo text-lg font-semibold">Massa</h2>
+          <h2 className="font-titulo text-lg font-semibold">{t.massa}</h2>
           <div className="mt-4 grid gap-3 sm:grid-cols-2">
             {produto.massas.map((opcao) => (
               <Escolha
@@ -204,6 +240,7 @@ export default function Montador({ produto, confeiteira, slug }: Props) {
                 marcada={selecao.massaId === opcao.id}
                 bloqueada={false}
                 codigo={confeiteira.moeda}
+                palavras={palavras}
                 aoClicar={() =>
                   setSelecao((atual) => ({ ...atual, massaId: opcao.id }))
                 }
@@ -214,11 +251,9 @@ export default function Montador({ produto, confeiteira, slug }: Props) {
 
         <section className="mt-10">
           <div className="flex items-baseline justify-between">
-            <h2 className="font-titulo text-lg font-semibold">Recheios</h2>
+            <h2 className="font-titulo text-lg font-semibold">{t.recheiosTitulo}</h2>
             <span className="text-sm text-suave">
-              {vagas === 0
-                ? "completo"
-                : `escolha mais ${vagas}`}
+              {vagas === 0 ? t.completo : `${t.escolheMais} ${vagas}`}
             </span>
           </div>
           <div className="mt-4 grid gap-3 sm:grid-cols-2">
@@ -229,6 +264,7 @@ export default function Montador({ produto, confeiteira, slug }: Props) {
                 marcada={selecao.recheioIds.includes(opcao.id)}
                 bloqueada={vagas === 0}
                 codigo={confeiteira.moeda}
+                palavras={palavras}
                 aoClicar={() =>
                   alternar("recheioIds", opcao.id, tamanho?.maxRecheios ?? 0)
                 }
@@ -239,9 +275,9 @@ export default function Montador({ produto, confeiteira, slug }: Props) {
 
         <section className="mt-10">
           <div className="flex items-baseline justify-between">
-            <h2 className="font-titulo text-lg font-semibold">Decoração</h2>
+            <h2 className="font-titulo text-lg font-semibold">{t.decoracao}</h2>
             <span className="text-sm text-suave">
-              até {produto.maxDecoracoes}
+              {t.ate} {produto.maxDecoracoes}
             </span>
           </div>
           <div className="mt-4 grid gap-3 sm:grid-cols-2">
@@ -250,6 +286,7 @@ export default function Montador({ produto, confeiteira, slug }: Props) {
                 key={opcao.id}
                 opcao={opcao}
                 codigo={confeiteira.moeda}
+                palavras={palavras}
                 marcada={selecao.decoracaoIds.includes(opcao.id)}
                 bloqueada={
                   selecao.decoracaoIds.length >= produto.maxDecoracoes
@@ -263,7 +300,7 @@ export default function Montador({ produto, confeiteira, slug }: Props) {
         </section>
 
         <section className="mt-10">
-          <h2 className="font-titulo text-lg font-semibold">Como receber</h2>
+          <h2 className="font-titulo text-lg font-semibold">{t.comoReceber}</h2>
           <div className="mt-4 grid gap-3">
             {confeiteira.entregas.map((opcao) => (
               <button
@@ -284,7 +321,7 @@ export default function Montador({ produto, confeiteira, slug }: Props) {
                   </span>
                 </span>
                 <span className="shrink-0 font-medium">
-                  {opcao.taxa === 0 ? "grátis" : fmt(opcao.taxa)}
+                  {opcao.taxa === 0 ? d.gratis : fmt(opcao.taxa)}
                 </span>
               </button>
             ))}
@@ -292,12 +329,12 @@ export default function Montador({ produto, confeiteira, slug }: Props) {
         </section>
 
         <section className="mt-10">
-          <h2 className="font-titulo text-lg font-semibold">Observações</h2>
+          <h2 className="font-titulo text-lg font-semibold">{t.observacoes}</h2>
           <textarea
             value={observacao}
             onChange={(evento) => setObservacao(evento.target.value)}
             rows={3}
-            placeholder="Tema da festa, cores, nome no topo, alguma restrição alimentar…"
+            placeholder={t.observacoesAjuda}
             className="mt-4 w-full rounded-xl border border-borda bg-cartao p-4 text-sm outline-none focus:border-marca"
           />
         </section>
@@ -305,18 +342,23 @@ export default function Montador({ produto, confeiteira, slug }: Props) {
 
       <aside className="lg:sticky lg:top-6 lg:self-start">
         <div className="rounded-3xl border border-borda bg-cartao p-6">
-          <h2 className="font-titulo font-semibold">Seu bolo</h2>
+          <h2 className="font-titulo font-semibold">{t.seuBolo}</h2>
 
           <ul className="mt-5 space-y-3 text-sm">
             {orcamento.linhas.map((linha, indice) => (
               <li
-                key={`${linha.rotulo}-${indice}`}
+                key={`${linha.tipo}-${linha.nome}-${indice}`}
                 className="flex justify-between gap-3"
               >
                 <span>
-                  <span className="block">{linha.rotulo}</span>
+                  <span className="block">
+                    {prefixos[linha.tipo]}
+                    {linha.nome}
+                  </span>
                   <span className="block text-xs text-suave">
-                    {linha.detalhe}
+                    {linha.detalhe === "porcoes"
+                      ? linha.porcoes
+                      : detalhes[linha.detalhe]}
                   </span>
                 </span>
                 <span className="shrink-0 text-suave">
@@ -327,7 +369,7 @@ export default function Montador({ produto, confeiteira, slug }: Props) {
             <li className="flex justify-between gap-3 border-t border-borda pt-3">
               <span>
                 <span className="block">{entrega.nome}</span>
-                <span className="block text-xs text-suave">entrega</span>
+                <span className="block text-xs text-suave">{t.entrega}</span>
               </span>
               <span className="shrink-0 text-suave">
                 {entrega.taxa === 0 ? "—" : fmt(entrega.taxa)}
@@ -336,7 +378,7 @@ export default function Montador({ produto, confeiteira, slug }: Props) {
           </ul>
 
           <div className="mt-5 flex items-baseline justify-between border-t border-borda pt-5">
-            <span className="text-sm text-suave">Total</span>
+            <span className="text-sm text-suave">{t.total}</span>
             <span className="text-2xl font-semibold">
               {fmt(totalComEntrega)}
             </span>
@@ -344,8 +386,8 @@ export default function Montador({ produto, confeiteira, slug }: Props) {
 
           {orcamento.pendencias.length > 0 && (
             <ul className="mt-5 space-y-1 rounded-xl bg-marca-suave p-4 text-xs text-marca">
-              {orcamento.pendencias.map((pendencia) => (
-                <li key={pendencia}>• {pendencia}</li>
+              {orcamento.pendencias.map((item) => (
+                <li key={item.tipo}>• {pendencia(item)}</li>
               ))}
             </ul>
           )}
@@ -356,13 +398,13 @@ export default function Montador({ produto, confeiteira, slug }: Props) {
             onClick={() => setEnviado(true)}
             className="mt-5 w-full rounded-full bg-marca py-3 text-sm font-medium text-white disabled:cursor-not-allowed disabled:opacity-40"
           >
-            Enviar pedido
+            {t.enviarPedido}
           </button>
 
           <p className="mt-4 text-xs leading-relaxed text-suave">
-            Enviar não reserva a data. {confeiteira.nome} precisa{" "}
-            <strong className="text-texto">aceitar o pedido</strong> para a
-            encomenda valer.
+            {t.enviarNota1} {confeiteira.nome} {t.enviarNota2}{" "}
+            <strong className="text-texto">{t.enviarNota3}</strong>{" "}
+            {t.enviarNota4}
           </p>
         </div>
       </aside>

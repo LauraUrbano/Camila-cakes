@@ -134,16 +134,13 @@ export type Pedido = {
  * separados por moeda e por período.
  */
 export type Plano = {
-  id: string;
+  /** Também é a chave do texto no dicionário. */
+  id: "prova" | "atelier" | "pastelaria";
   nome: string;
-  promessa: string;
   /** Preço mensal por moeda. 0 = plano gratuito. */
   mensal: Record<Moeda, number>;
   /** Preço anual por moeda, já com o desconto aplicado. */
   anual: Record<Moeda, number>;
-  inclui: string[];
-  /** O que este plano ainda não desbloqueia, dito sem rodeios. */
-  naoInclui?: string[];
   destaque?: boolean;
 };
 
@@ -153,7 +150,9 @@ export type Plano = {
  * ("até 5", "básico").
  */
 export type LinhaComparacao = {
-  rotulo: string;
+  /** Chave do rótulo no dicionário. */
+  id: string;
+  /** Por plano: true/false, ou a chave de um valor escrito ("ate5"). */
   valores: Record<string, boolean | string>;
 };
 

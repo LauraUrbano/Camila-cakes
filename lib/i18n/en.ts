@@ -1,0 +1,538 @@
+import type { Dicionario } from "./pt-PT";
+
+/**
+ * English. The chrome is translated; whatever the baker writes about her own
+ * shop stays in the language she wrote it in.
+ */
+export const en: Dicionario = {
+  meta: {
+    htmlLang: "en",
+    nome: "English",
+    titulo: "Cakelyo — run your cake business in one place",
+    descricao:
+      "Everything your cake business needs, in one place. Orders, custom requests, menu and reports.",
+  },
+
+  comum: {
+    painel: "Dashboard",
+    precos: "Pricing",
+    verExemplo: "See an example",
+    cardapio: "menu",
+    lingua: "Language",
+    prototipo: "clickable prototype with sample data",
+    assinatura: "run your cake business in one place",
+  },
+
+  home: {
+    aviso: "Visual prototype — no database yet",
+    titulo: "Everything your cake business needs,",
+    tituloDestaque: "in one place.",
+    subtitulo:
+      "Your customer picks the sponge, the filling and the finish, sees the price straight away and sends the order ready. All you do is accept it — or not.",
+    verPagina: "See a real shop page",
+    entrarPainel: "Open the dashboard",
+    resumoBolo: "Large cake · 3 fillings",
+    total: "Total",
+    passos: [
+      {
+        titulo: "Build your menu",
+        texto:
+          "Sizes, sponges, fillings and finishes, each with its own price. Once, and you're done.",
+      },
+      {
+        titulo: "Share the link",
+        texto:
+          "Your page is ready. Put it in your bio, in a story, in a chat — instead of twenty loose photos.",
+      },
+      {
+        titulo: "Accept what you want",
+        texto:
+          "The order arrives built and priced. You agree the payment and accept.",
+      },
+    ],
+    camadasRotulo: "What Cakelyo does",
+    camadasTitulo: "Everything an order needs, without a spreadsheet or a notebook.",
+    camadasAjuda: "Five layers. Open the one you care about.",
+    aceiteTitulo: "No date goes into your diary until you say yes.",
+    aceiteTexto:
+      "An order placed on the site is a request, not a commitment. You agree the payment the way you always have — bank transfer, instant payment, cash — and only then accept. It says so on your customer's screen, so there is no misunderstanding.",
+    aceitarPedido: "Accept order",
+    recusar: "Decline",
+    aceiteNota: "accepting holds the date in your diary",
+    vitrineRotulo: "The page is hers",
+    vitrineTitulo: "The same shop window, wearing someone else's face.",
+    vitrineTexto:
+      "Tap a name and watch the address, the colours, the prices and the currency change. It is the same page — it just belongs to someone else.",
+    vitrineMoeda: "prices in",
+    abrirPagina: "Open this page →",
+    chamadaTitulo: "Your cake business deserves more than a photo album.",
+    chamadaBotao: "See Cakelyo working",
+  },
+
+  areas: [
+    {
+      titulo: "Priced by combination",
+      resumo: "The size drives both the price and the number of fillings",
+      texto:
+        "The size sets the starting price and how many fillings fit. Sponge, filling and finish come in as add-ons and the total works itself out — no price list to keep up to date.",
+      accao: "Build a cake",
+    },
+    {
+      titulo: "Seasonal collections",
+      resumo: "Christmas, Easter, Mother's Day — in and out on the date",
+      texto:
+        "You build the season's menu once and say when it goes live and when it comes down. The same cake can live in several collections, and switching off Christmas deletes nothing — it just takes it off the page.",
+      accao: "See the menu",
+    },
+    {
+      titulo: "Production limits",
+      resumo: "Say how many you can make and the site stops on its own",
+      texto:
+        "You say how many you can make in the period. The site counts for you and, when they run out, the item comes off the page — nobody orders what you can no longer bake.",
+      accao: "See it in the dashboard",
+    },
+    {
+      titulo: "Delivery your way",
+      resumo: "Collection, delivery by area, a fee per region",
+      texto:
+        "You set the ways to receive and what you charge for each. Your customer picks one when ordering and the fee goes into the total, with no messaging back and forth.",
+      accao: "Set up delivery",
+    },
+    {
+      titulo: "Reports",
+      resumo: "Confirmed revenue, average order and what sells most",
+      texto:
+        "Confirmed revenue, average order value, acceptance rate and the product ranking. Orders waiting to be accepted stay out of the count — only what you have already said yes to.",
+      accao: "Open reports",
+    },
+  ],
+
+  precos: {
+    rotulo: "Plans",
+    titulo: "A flat price per month. No commission on what you sell.",
+    subtitulo:
+      "Start without paying anything. When the menu grows and the busy seasons hit, move up a plan — or don't.",
+    mensal: "Monthly",
+    anual: "Yearly",
+    doisMeses: "two months free",
+    porMes: "month",
+    porAno: "year",
+    gratis: "Free",
+    porMesCobrado: "per month, billed once a year",
+    maisEscolhido: "most popular",
+    comecarSemPagar: "Start for free",
+    escolher: "Choose",
+    planoAPlano: "Plan by plan",
+    planoAPlanoAjuda: "What changes from one to the next, no small print.",
+    tabelaLegenda: "Plan comparison",
+    incluido: "included",
+    naoIncluido: "not included",
+    brasilTitulo: "Paying from Brazil:",
+    brasilTexto:
+      "Cakelyo invoices from Portugal, so your card treats this as an international purchase — your bank adds IOF tax and an exchange spread, around 7% on top of the price above.",
+    brasilSaidaAntes: "To avoid that,",
+    brasilSaidaForte: "choose the yearly plan and pay by Pix",
+    brasilSaidaDepois:
+      ": a local payment in reais, no IOF and no exchange rate. It goes out once a year at exactly the price on the table.",
+    codigoTitulo: "Got a lifetime access code?",
+    codigoTexto: "Redeem it in",
+    codigoLink: "Plan and billing",
+    codigoFim: "and the plan is yours for good, with no payment and no card.",
+    prototipoTitulo: "This is a prototype.",
+    prototipoTexto:
+      "No payment is processed — the Stripe connection lands once there are accounts and a database.",
+    duvidasTitulo: "Before you ask",
+    duvidas: [
+      {
+        pergunta: "Do you take a commission on orders?",
+        resposta:
+          "No. Payment for the order is agreed directly between you and your customer — bank transfer, instant payment, cash. Cakelyo is not part of that transaction and takes nothing from it.",
+      },
+      {
+        pergunta: "Can I change plan or leave?",
+        resposta:
+          "Any time, from the dashboard. Moving up, you pay only the difference for the rest of the period. Leaving, your page stays live until the end of the period you already paid for and then drops to the Prova plan — you don't lose your menu.",
+      },
+      {
+        pergunta: "Do the prices include VAT?",
+        resposta:
+          "The prices above are before tax. VAT is added at the end depending on the country and, if you have an EU business VAT number, the reverse charge applies. The invoice comes from Portugal, wherever you pay from.",
+      },
+      {
+        pergunta: "Which payment methods do you take?",
+        resposta:
+          "Card, through Stripe, in every country. In Brazil we also take Pix on the yearly plan. Card details never touch our servers.",
+      },
+      {
+        pergunta: "Why is my Brazilian statement a different amount?",
+        resposta:
+          "Because Cakelyo invoices from Portugal and your bank treats the charge as an international purchase: it adds IOF tax and an exchange spread, around 7% above the table price. Paying the yearly plan by Pix avoids that — it is a local payment in reais.",
+      },
+    ],
+  },
+
+  painel: {
+    nav: {
+      geral: "Overview",
+      pedidos: "Orders",
+      relatorios: "Reports",
+      cardapio: "Menu",
+      colecoes: "Collections",
+      pagina: "My page",
+      plano: "Plan",
+    },
+    painel: "dashboard",
+    verPagina: "See my page",
+    geral: {
+      titulo: "Overview",
+      saudacao: "Good morning",
+      aEspera: "waiting for you to accept",
+      aEsperaUm: "order waiting for you to accept",
+      aEsperaVarios: "orders waiting for you to accept",
+      aEsperaTexto:
+        "None of them is in your diary yet. Agree the payment with the customer and accept to hold the date. →",
+      naAgenda: "In the diary",
+      naAgendaNota: "accepted orders",
+      aReceber: "Due in",
+      aReceberNota: "open orders",
+      colecoesAtivas: "Live collections",
+      colecoesNota: "on the page now",
+      proximas: "Next deliveries",
+      pedidoPersonalizado: "custom order",
+      emProducao: "in production",
+      aceite: "accepted",
+      producaoAcabar: "Running low",
+      vendidosDe: "of",
+      vendidos: "sold",
+      esgotouSaiu: "sold out — off the menu",
+      restamNota: "comes off the page on its own when it hits zero",
+      restam: "left",
+    },
+    pedidos: {
+      titulo: "Orders",
+      subtitulo:
+        "An order sent through the site is only a request. It enters your diary when you accept it — usually after agreeing the payment.",
+      aEsperaUm: "waiting",
+      aEsperaVarios: "waiting to be accepted",
+      filtroTodos: "All",
+      filtroAguardando: "Awaiting acceptance",
+      filtroAceite: "Accepted",
+      filtroProducao: "In production",
+      filtroEntregue: "Delivered",
+      filtroRecusado: "Declined",
+      procurar: "Search by name or number",
+      semResultados: "No orders match that filter.",
+      de: "of",
+      escolhePedido: "Pick an order on the left.",
+      aOrcar: "to be quoted",
+      pedidoEm: "ordered on",
+      entrega: "delivery",
+      naoReservada: "· the date is not held yet",
+      personalizado: "custom order",
+      massa: "Sponge",
+      recheio: "Filling",
+      decoracao: "Finish",
+      semTaxa: "no fee",
+      aceitar: "Accept order",
+      recusar: "Decline",
+      aceitarNota: "accepting holds the date in your diary",
+      marcarProducao: "Mark as in production",
+      marcarEntregue: "Mark as delivered",
+      encerrado: "Order closed.",
+      estados: {
+        aguardando: "awaiting acceptance",
+        aceito: "accepted",
+        producao: "in production",
+        entregue: "delivered",
+        recusado: "declined",
+      },
+    },
+    cardapio: {
+      titulo: "Menu",
+      subtitulo:
+        "Prices are not typed in item by item: you set the price of each size and the add-on for each sponge, filling and finish. The total for whatever your customer builds works itself out.",
+      diasAntecedencia: "days' notice",
+      limite: "limit",
+      tamanhosNota:
+        "Sizes — each one sets the starting price and how many fillings fit",
+      ate: "up to",
+      recheio: "filling",
+      recheios: "fillings",
+      massas: "Sponges",
+      recheiosTitulo: "Fillings",
+      decoracoes: "Finishes",
+      incluido: "included",
+    },
+    colecoes: {
+      titulo: "Collections",
+      subtitulo:
+        "Menus that go live and come down by date. The same cake can appear in several collections — switching off Christmas deletes nothing, it just takes it off the page.",
+      destaque: "featured",
+      noAr: "live",
+      foraDoAr: "off the page",
+    },
+    pagina: {
+      titulo: "My page",
+      subtitulo:
+        "Everything your customer sees is yours: address, colours, words and the ways to receive.",
+      endereco: "Address",
+      sempreActivo: "always live",
+      dominioProprio: "own domain",
+      dominioNota:
+        "Already have a domain? Point it here and your page answers on both addresses.",
+      identidade: "Visual identity",
+      corMarca: "Brand",
+      corMarcaSuave: "Brand tint",
+      corFundo: "Background",
+      corTexto: "Text",
+      textos: "Page copy",
+      chamada: "Headline",
+      sobre: "About",
+      avisoPagamento: "Payment note",
+      formasReceber: "Ways to receive",
+      gratis: "free",
+      personalizados: "Custom orders",
+      personalizadosLigado:
+        "On. Your customer can ask for a quote on anything that isn't on the menu.",
+      personalizadosDesligado:
+        "Off. Your customer can only order what is on the menu.",
+    },
+    relatorios: {
+      titulo: "Reports",
+      subtitulo:
+        "What has been accepted, what sells most and how the month is going. Orders waiting to be accepted do not count as revenue.",
+      receita: "Confirmed revenue",
+      encomendasAceites: "accepted orders",
+      faceMesAnterior: "against last month",
+      ticket: "Average order",
+      ticketNota: "per order",
+      taxaAceite: "Acceptance rate",
+      recusadas: "declined",
+      encomendas: "Orders",
+      desdeInicio: "since the start",
+      receitaMes: "Revenue by month",
+      ultimosSeis: "Last six closed months",
+      mes: "Month",
+      verTabela: "See as a table",
+      esconderTabela: "Hide the table",
+      maisSai: "What sells most",
+      porEncomendas: "By number of orders",
+      emQuePe: "Where they stand",
+      todasEncomendas: "All orders",
+    },
+    plano: {
+      titulo: "Plan and billing",
+      subtitulo:
+        "What you pay for the platform. Not to be confused with what you take from your customers — that money never passes through here.",
+      plano: "Plan",
+      semCusto: "No charge",
+      paraSempre: "for good",
+      porSemIva: "before VAT",
+      por: "per",
+      vitaliciaAntes: "You have the",
+      vitaliciaForte: "for good",
+      vitaliciaDepois: "through the code",
+      vitaliciaNota:
+        "There is no renewal, no card and you will never be charged anything.",
+      proximaCobranca: "Next charge",
+      cartao: "Card",
+      nenhum: "none",
+      cobranca: "Billing",
+      gerirStripe: "Manage in Stripe",
+      verPlanos: "See the plans",
+      temCodigo: "I have a code",
+      temCodigoTexto:
+        "If you were given a lifetime access code, type it here. The plan is yours for good, with nothing to pay and no card.",
+      codigoCampo: "Your code",
+      resgatar: "Redeem",
+      aVerificar: "Checking…",
+      estasAUsar: "What you're using",
+      produtos: "Products",
+      colecoes: "Collections",
+      encomendasMes: "Orders this month",
+      semLimite: "· no limit on this plan",
+      faturas: "Invoices",
+      semFaturas: "No invoices yet — the Prova plan charges nothing.",
+      paga: "paid",
+      porPagar: "unpaid",
+      mudarPlano: "Change plan",
+      eOTeuPlano: "your current plan",
+      trocarPara: "switch to this",
+      mudarNota:
+        "Moving up, you pay only the difference for the rest of the period. Moving down or cancelling, your page stays live until the end of the period you already paid for.",
+      prototipoForte: "Nothing here actually charges.",
+      prototipoTexto:
+        "It's a prototype: the buttons don't talk to Stripe and the invoices are samples. Code redemption already validates on the server, but nothing is saved yet.",
+      estados: {
+        teste: "on trial",
+        activa: "active",
+        vitalicia: "lifetime",
+        pagamento_falhou: "payment failed",
+        cancelada: "cancelled",
+      },
+      erros: {
+        vazio: "Type the code.",
+        desconhecido: "I don't know that code.",
+        esgotado: "That code has already been used the maximum number of times.",
+      },
+    },
+  },
+
+  loja: {
+    falarComigo: "Message me",
+    feitaNo: "Page made with Cakelyo ·",
+    criaATua: "make yours",
+    desde: "from",
+    diasAntes: "days ahead",
+    esgotado: "sold out",
+    restam: "left",
+    porTempoLimitado: "for a limited time",
+    naoEncontrou: "Didn't find what you wanted?",
+    naoEncontrouTexto:
+      "Wedding cake, a specific theme, a dietary restriction. Tell me the idea and I'll quote it.",
+    pedirOrcamento: "Ask for a quote",
+    comoRecebe: "How you get it",
+    comoPaga: "How you pay",
+    gratis: "free",
+    reservaAntes: "An order placed on this site is a",
+    reservaForte: "request to book",
+    reservaDepois: ". It only enters the diary once I've confirmed with you and accepted.",
+    montador: {
+      encomendeCom: "Order with",
+      diasAntecedencia: "days' notice",
+      restamUnidades: "only",
+      unidades: "left",
+      tamanho: "Size",
+      ate: "up to",
+      recheio: "filling",
+      recheios: "fillings",
+      massa: "Sponge",
+      recheiosTitulo: "Fillings",
+      /** Prefixo da linha do orçamento: "Filling Nutella". */
+      prefixoRecheio: "Filling",
+      completo: "complete",
+      escolheMais: "choose",
+      decoracao: "Finish",
+      comoReceber: "How to receive it",
+      observacoes: "Anything else",
+      observacoesAjuda:
+        "Party theme, colours, a name on top, any dietary restriction…",
+      seuBolo: "Your cake",
+      entrega: "delivery",
+      total: "Total",
+      enviarPedido: "Send order",
+      enviarNota1: "Sending does not hold the date.",
+      enviarNota2: "has to",
+      enviarNota3: "accept the order",
+      enviarNota4: "for the booking to count.",
+      incluido: "included",
+      inclusa: "included",
+      emFalta: "unavailable",
+      acrescimo: "add-on",
+      recheioPremium: "premium filling",
+      faltaUm: "One more filling to choose",
+      faltamVarios: "Still to choose:",
+      faltamFim: "fillings",
+      escolheTamanho: "Choose the size",
+      escolheMassa: "Choose the sponge",
+      enviadoTitulo: "Order sent",
+      enviadoTexto1:
+        "has your request and will get in touch to agree the payment.",
+      enviadoAviso: "Your date isn't held yet",
+      enviadoAvisoTexto1: "The order only enters the diary once the baker",
+      enviadoAvisoForte: "accepts",
+      enviadoAvisoTexto2:
+        " it. You'll get a message as soon as that happens — usually within 24 hours.",
+      voltarCardapio: "Back to the menu",
+    },
+    personalizado: {
+      titulo: "Custom order",
+      subtitulo:
+        "For what doesn't fit the ready-made menu. Describe the idea in as much detail as you can — the more I know, the closer the quote.",
+      nome: "Your name",
+      whatsapp: "WhatsApp",
+      data: "Date of the party",
+      pessoas: "How many people",
+      ideia: "The idea",
+      ideiaAjuda:
+        "Theme, colours, flavours you like, references you've seen, dietary restrictions…",
+      avisoAntes: "A custom order starts as a",
+      avisoForte: "quote",
+      avisoDepois: ". The date is only held once",
+      avisoFim: "accepts the order.",
+      botao: "Ask for a quote",
+      enviadoTitulo: "Quote requested",
+      enviadoTexto:
+        "will come back with a price and, if you approve it, accepts the order and the date is held.",
+    },
+  },
+
+  planos: {
+    prova: {
+      promessa: "To get the menu standing and see if it suits you.",
+      inclui: [
+        "Your page at cakelyo.app/your-name",
+        "Unlimited orders, accepted by hand",
+        "Up to 5 products and 1 collection",
+        "Automatic cake pricing",
+        "Your own colours and logo",
+        "Order diary",
+      ],
+      naoInclui: ["Seasonal collections", "Production limits", "Reports"],
+    },
+    atelier: {
+      promessa: "For those who already live off this and have busy seasons.",
+      inclui: [
+        "Everything in Prova",
+        "Unlimited products and collections",
+        "Seasonal collections with start and end dates",
+        "Production limits per item",
+        "Revenue and acceptance reports",
+        "Full customer history",
+      ],
+      naoInclui: ["Own domain", "Team", "Per-customer forms"],
+    },
+    pastelaria: {
+      promessa: "For those with their own brand and a team.",
+      inclui: [
+        "Everything in Atelier",
+        "Own domain",
+        "Up to 5 users on the same account",
+        "Per-customer menu forms",
+        "Priority support",
+      ],
+      naoInclui: [],
+    },
+  },
+
+  comparacao: {
+    linhas: {
+      paginaPublica: "Public page",
+      pedidos: "Orders",
+      produtos: "Products",
+      colecoes: "Collections",
+      personalizar: "Custom colours and logo",
+      entrega: "Delivery and collection",
+      calculo: "Automatic cake pricing",
+      agenda: "Order diary",
+      sazonais: "Seasonal collections",
+      limites: "Production limits",
+      relatorios: "Reports",
+      clientes: "Customers and history",
+      dominio: "Own domain",
+      equipa: "Team",
+      formularios: "Per-customer forms",
+      apoio: "Priority support",
+    },
+    valores: {
+      ilimitados: "unlimited",
+      ilimitadas: "unlimited",
+      ate5: "up to 5",
+      um: "1",
+      basico: "basic",
+      completo: "full",
+      ate5Utilizadores: "up to 5 users",
+    },
+  },
+
+};

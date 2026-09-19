@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { lojaPorSlug, produtosDaColecao } from "@/lib/dados";
+import { dicionarioActual } from "@/lib/i18n/servidor";
 import { moeda, precoAPartirDe, restam } from "@/lib/precos";
 import type { Moeda, Produto } from "@/lib/tipos";
 
@@ -9,10 +10,12 @@ function CardProduto({
   produto,
   slug,
   codigo,
+  t,
 }: {
   produto: Produto;
   slug: string;
   codigo: Moeda;
+  t: Awaited<ReturnType<typeof dicionarioActual>>["loja"];
 }) {
   const sobrando = restam(produto);
   const esgotado = sobrando === 0;
@@ -46,7 +49,7 @@ function CardProduto({
                 esgotado ? "bg-borda text-suave" : "bg-marca-suave text-marca"
               }`}
             >
-              {esgotado ? "esgotado" : `restam ${sobrando}`}
+              {esgotado ? t.esgotado : `${t.restam} ${sobrando}`}
             </span>
           )}
         </div>
@@ -55,13 +58,13 @@ function CardProduto({
         </p>
         <div className="mt-5 flex items-baseline justify-between">
           <span className="text-sm text-suave">
-            desde{" "}
+            {t.desde}{" "}
             <strong className="font-medium text-texto">
               {moeda(precoAPartirDe(produto), codigo)}
             </strong>
           </span>
           <span className="text-xs text-suave">
-            {produto.antecedenciaDias} dias antes
+            {produto.antecedenciaDias} {t.diasAntes}
           </span>
         </div>
       </div>
@@ -75,6 +78,7 @@ export default async function PaginaDaConfeiteira({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
+  const t = (await dicionarioActual()).loja;
   const loja = lojaPorSlug(slug);
   if (!loja) notFound();
 
@@ -103,7 +107,7 @@ export default async function PaginaDaConfeiteira({
                   <h2 className="font-titulo text-xl">{colecao.nome}</h2>
                   {colecao.destaque && (
                     <span className="rounded-full bg-marca-suave px-2.5 py-1 text-[11px] text-marca">
-                      por tempo limitado
+                      {t.porTempoLimitado}
                     </span>
                   )}
                 </div>
@@ -118,6 +122,7 @@ export default async function PaginaDaConfeiteira({
                   produto={produto}
                   slug={slug}
                   codigo={codigo}
+                  t={t}
                 />
               ))}
             </div>
@@ -127,23 +132,22 @@ export default async function PaginaDaConfeiteira({
 
       {confeiteira.aceitaPersonalizado && (
         <section className="mb-16 rounded-3xl bg-marca-suave p-9">
-          <h2 className="font-titulo text-xl">Não encontrou o que queria?</h2>
+          <h2 className="font-titulo text-xl">{t.naoEncontrou}</h2>
           <p className="mt-2.5 max-w-md text-sm leading-relaxed text-suave">
-            Bolo de casamento, tema específico, restrição alimentar. Conte-me a
-            ideia que eu faço um orçamento.
+            {t.naoEncontrouTexto}
           </p>
           <Link
             href={`/${slug}/personalizado`}
             className="mt-6 inline-block rounded-full bg-marca px-5 py-2.5 text-sm text-white"
           >
-            Pedir orçamento
+            {t.pedirOrcamento}
           </Link>
         </section>
       )}
 
       <section className="grid gap-6 sm:grid-cols-2">
         <div className="rounded-3xl border border-borda bg-cartao p-7">
-          <h3 className="font-titulo">Como recebe</h3>
+          <h3 className="font-titulo">{t.comoRecebe}</h3>
           <ul className="mt-5 space-y-3.5 text-sm">
             {confeiteira.entregas.map((entrega) => (
               <li key={entrega.id} className="flex justify-between gap-4">
@@ -154,20 +158,22 @@ export default async function PaginaDaConfeiteira({
                   </span>
                 </span>
                 <span className="shrink-0">
-                  {entrega.taxa === 0 ? "grátis" : moeda(entrega.taxa, codigo)}
+                  {entrega.taxa === 0
+                    ? t.gratis
+                    : moeda(entrega.taxa, codigo)}
                 </span>
               </li>
             ))}
           </ul>
         </div>
         <div className="rounded-3xl border border-borda bg-cartao p-7">
-          <h3 className="font-titulo">Como paga</h3>
+          <h3 className="font-titulo">{t.comoPaga}</h3>
           <p className="mt-5 text-sm leading-relaxed text-suave">
             {confeiteira.avisoPagamento}
           </p>
           <p className="mt-5 rounded-2xl bg-marca-suave p-5 text-sm leading-relaxed">
-            O pedido feito pelo site é um <strong>pedido de reserva</strong>.
-            Só entra na agenda depois de eu confirmar consigo e aceitar.
+            {t.reservaAntes} <strong>{t.reservaForte}</strong>
+            {t.reservaDepois}
           </p>
         </div>
       </section>

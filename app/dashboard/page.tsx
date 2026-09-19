@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { lojaPrincipal } from "@/lib/dados";
+import { dicionarioActual } from "@/lib/i18n/servidor";
 import { moeda, restam } from "@/lib/precos";
 
 function totalDoPedido(itens: { total: number }[], taxa: number) {
@@ -8,7 +9,9 @@ function totalDoPedido(itens: { total: number }[], taxa: number) {
 
 const { confeiteira, colecoes, pedidos, produtos } = lojaPrincipal;
 
-export default function VisaoGeral() {
+export default async function VisaoGeral() {
+  const g = (await dicionarioActual()).painel.geral;
+
   const aguardando = pedidos.filter((pedido) => pedido.status === "aguardando");
   const naAgenda = pedidos.filter((pedido) =>
     ["aceito", "producao"].includes(pedido.status),
@@ -27,8 +30,10 @@ export default function VisaoGeral() {
 
   return (
     <div className="mx-auto max-w-4xl">
-      <h1 className="text-2xl font-semibold">Visão geral</h1>
-      <p className="mt-2 text-sm text-suave">Bom dia, Camila 👋</p>
+      <h1 className="text-2xl font-semibold">{g.titulo}</h1>
+      <p className="mt-2 text-sm text-suave">
+        {g.saudacao}, {lojaPrincipal.confeiteira.nome.split(" ")[0]}
+      </p>
 
       {aguardando.length > 0 && (
         <Link
@@ -37,25 +42,30 @@ export default function VisaoGeral() {
         >
           <p className="font-titulo text-lg font-semibold">
             {aguardando.length}{" "}
-            {aguardando.length === 1
-              ? "pedido à espera do teu aceite"
-              : "pedidos à espera do teu aceite"}
+            {aguardando.length === 1 ? g.aEsperaUm : g.aEsperaVarios}
           </p>
           <p className="mt-2 text-sm leading-relaxed">
-            Nenhum deles está na tua agenda ainda. Combina o pagamento com a
-            cliente e aceita para reservar a data. →
+            {g.aEsperaTexto}
           </p>
         </Link>
       )}
 
       <div className="mt-6 grid gap-5 sm:grid-cols-3">
         {[
-          { rotulo: "Na agenda", valor: String(naAgenda.length), nota: "pedidos aceitos" },
-          { rotulo: "A receber", valor: moeda(aReceber, confeiteira.moeda), nota: "pedidos em aberto" },
           {
-            rotulo: "Coleções ativas",
+            rotulo: g.naAgenda,
+            valor: String(naAgenda.length),
+            nota: g.naAgendaNota,
+          },
+          {
+            rotulo: g.aReceber,
+            valor: moeda(aReceber, confeiteira.moeda),
+            nota: g.aReceberNota,
+          },
+          {
+            rotulo: g.colecoesAtivas,
             valor: String(colecoes.filter((colecao) => colecao.ativa).length),
-            nota: "no ar agora",
+            nota: g.colecoesNota,
           },
         ].map((cartao) => (
           <div
@@ -70,7 +80,7 @@ export default function VisaoGeral() {
       </div>
 
       <section className="mt-10">
-        <h2 className="font-titulo text-lg font-semibold">Próximas entregas</h2>
+        <h2 className="font-titulo text-lg font-semibold">{g.proximas}</h2>
         <ul className="mt-4 divide-y divide-borda overflow-hidden rounded-3xl border border-borda bg-cartao">
           {naAgenda.map((pedido) => (
             <li key={pedido.id} className="flex items-center justify-between gap-4 p-5">
@@ -78,7 +88,7 @@ export default function VisaoGeral() {
                 <span className="block font-medium">{pedido.cliente}</span>
                 <span className="block text-xs text-suave">
                   {pedido.personalizado
-                    ? "pedido personalizado"
+                    ? g.pedidoPersonalizado
                     : pedido.itens.map((item) => item.produtoNome).join(", ")}{" "}
                   · {pedido.entrega.nome}
                 </span>
@@ -88,7 +98,7 @@ export default function VisaoGeral() {
                   {pedido.entregaEm}
                 </span>
                 <span className="block text-xs text-suave">
-                  {pedido.status === "producao" ? "em produção" : "aceito"}
+                  {pedido.status === "producao" ? g.emProducao : g.aceite}
                 </span>
               </span>
             </li>
@@ -99,7 +109,7 @@ export default function VisaoGeral() {
       {acabando.length > 0 && (
         <section className="mt-10">
           <h2 className="font-titulo text-lg font-semibold">
-            Produção acabando
+            {g.producaoAcabar}
           </h2>
           <ul className="mt-4 space-y-3">
             {acabando.map((produto) => {
@@ -114,7 +124,7 @@ export default function VisaoGeral() {
                   <div className="flex justify-between text-sm">
                     <span className="font-medium">{produto.nome}</span>
                     <span className="text-suave">
-                      {feitos} de {total} vendidos
+                      {feitos} {g.vendidosDe} {total} {g.vendidos}
                     </span>
                   </div>
                   <div className="mt-3 h-2 overflow-hidden rounded-full bg-borda">
@@ -125,8 +135,8 @@ export default function VisaoGeral() {
                   </div>
                   <p className="mt-2 text-xs text-suave">
                     {sobrando === 0
-                      ? "esgotado — saiu do cardápio"
-                      : `restam ${sobrando} · sai do ar sozinho ao zerar`}
+                      ? g.esgotouSaiu
+                      : `${g.restam} ${sobrando} · ${g.restamNota}`}
                   </p>
                 </li>
               );
