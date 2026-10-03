@@ -1,20 +1,21 @@
 import Image from "next/image";
-import { lojaPrincipal } from "@/lib/dados";
+import { lojaDoPainel } from "@/lib/fonte";
 import { dicionarioActual } from "@/lib/i18n/servidor";
 import { moeda, restam } from "@/lib/precos";
 import type { Moeda, Opcao } from "@/lib/tipos";
 
-const { confeiteira, produtos } = lojaPrincipal;
-const codigo: Moeda = confeiteira.moeda;
+
 
 function Opcoes({
   titulo,
   lista,
   incluido,
+  codigo,
 }: {
   titulo: string;
   lista: Opcao[];
   incluido: string;
+  codigo: Moeda;
 }) {
   return (
     <div>
@@ -39,6 +40,8 @@ function Opcoes({
 
 export default async function PaginaDoCardapio() {
   const c = (await dicionarioActual()).painel.cardapio;
+  const { confeiteira, produtos } = await lojaDoPainel();
+  const codigo: Moeda = confeiteira.moeda;
 
   return (
     <div className="mx-auto max-w-4xl">
@@ -118,16 +121,19 @@ export default async function PaginaDoCardapio() {
                   titulo={c.massas}
                   lista={produto.massas}
                   incluido={c.incluido}
+                  codigo={codigo}
                 />
                 <Opcoes
                   titulo={c.recheiosTitulo}
                   lista={produto.recheios}
                   incluido={c.incluido}
+                  codigo={codigo}
                 />
                 <Opcoes
                   titulo={`${c.decoracoes} (${c.ate} ${produto.maxDecoracoes})`}
                   lista={produto.decoracoes}
                   incluido={c.incluido}
+                  codigo={codigo}
                 />
               </div>
             </section>

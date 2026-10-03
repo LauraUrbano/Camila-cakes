@@ -5,7 +5,7 @@ import Logo from "@/app/logo";
 import Camadas, { type Camada } from "@/app/camadas";
 import VitrineTema, { type Vitrine } from "@/app/vitrine-tema";
 import { SeletorLingua } from "@/app/lingua";
-import { lojas } from "@/lib/dados";
+import { todasAsLojas } from "@/lib/fonte";
 import { moeda, precoAPartirDe } from "@/lib/precos";
 import { dicionarioActual } from "@/lib/i18n/servidor";
 
@@ -57,6 +57,7 @@ const areasFixas: { icone: Nome; href: string; foto: string; cor: string }[] = [
 
 export default async function Home() {
   const t = await dicionarioActual();
+  const lojas = await todasAsLojas();
 
   const areas: Camada[] = t.areas.map((area, i) => ({
     id: String(i),

@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "bd:migrar": "bash bd/migrar.sh",
+    "bd:migrar": "tsx bd/migrar.mts",
     "bd:semear": "tsx bd/semear.mts",
     "bd:testar": "tsx bd/testes/integracao.mts"
   },

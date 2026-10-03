@@ -1,11 +1,13 @@
-import { lojaPrincipal } from "@/lib/dados";
+import { lojaDoPainel } from "@/lib/fonte";
 import ListaDePedidos from "./lista-de-pedidos";
 
-export default function PaginaDePedidos() {
+export default async function PaginaDePedidos() {
+  const loja = await lojaDoPainel();
+
   return (
     <ListaDePedidos
-      iniciais={lojaPrincipal.pedidos}
-      codigo={lojaPrincipal.confeiteira.moeda}
+      iniciais={loja.pedidos}
+      codigo={loja.confeiteira.moeda}
     />
   );
 }

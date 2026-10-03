@@ -1,11 +1,12 @@
-import { lojaPrincipal, planos } from "@/lib/dados";
+import { planos } from "@/lib/dados";
+import { lojaDoPainel } from "@/lib/fonte";
 import { dicionarioActual } from "@/lib/i18n/servidor";
 import PainelPlano from "./painel-plano";
 
 export default async function PaginaDoPlano() {
   const pl = (await dicionarioActual()).painel.plano;
   const { confeiteira, produtos, colecoes, pedidos, assinatura } =
-    lojaPrincipal;
+    await lojaDoPainel();
 
   return (
     <PainelPlano

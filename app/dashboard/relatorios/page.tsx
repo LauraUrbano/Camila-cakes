@@ -1,11 +1,8 @@
-import { lojaPrincipal } from "@/lib/dados";
+import { lojaDoPainel } from "@/lib/fonte";
 import { dicionarioActual } from "@/lib/i18n/servidor";
 import { moeda } from "@/lib/precos";
 import type { Pedido, StatusPedido } from "@/lib/tipos";
 import { Barras, Colunas, Tabela } from "./graficos";
-
-const { confeiteira, pedidos, historico } = lojaPrincipal;
-const fmt = (valor: number) => moeda(valor, confeiteira.moeda);
 
 function total(pedido: Pedido) {
   return (
@@ -24,6 +21,8 @@ const ordemEstados: StatusPedido[] = [
 
 export default async function Relatorios() {
   const d = await dicionarioActual();
+  const { confeiteira, pedidos, historico } = await lojaDoPainel();
+  const fmt = (valor: number) => moeda(valor, confeiteira.moeda);
   const r = d.painel.relatorios;
   const rotulosEstado = {
     aguardando: d.painel.pedidos.filtroAguardando,

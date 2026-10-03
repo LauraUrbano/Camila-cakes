@@ -1,6 +1,8 @@
 "use server";
 
 import { codigoPorTexto } from "@/lib/dados";
+import { executorNeon, temBaseDeDados } from "@/lib/bd/cliente";
+import { resgatarNaBase } from "@/lib/bd/consultas";
 
 export type ErroResgate = "vazio" | "desconhecido" | "esgotado";
 
@@ -28,6 +30,17 @@ export async function resgatarCodigo(
   const texto = String(dados.get("codigo") ?? "");
   if (texto.trim() === "") {
     return { estado: "erro", erro: "vazio" };
+  }
+
+  const limpo = texto.trim().toUpperCase().replace(/[\s-]/g, "");
+
+  if (temBaseDeDados()) {
+    // Uma só instrução, com o tecto verificado lá dentro: ler primeiro e
+    // escrever depois deixaria dois resgates simultâneos passarem do limite.
+    const resgate = await resgatarNaBase(executorNeon(), limpo);
+    return resgate
+      ? { estado: "ok", planoId: resgate.planoId, codigo: limpo }
+      : { estado: "erro", erro: "desconhecido" };
   }
 
   const codigo = codigoPorTexto(texto);

@@ -1,7 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { lojaPorSlug, produtosDaColecao } from "@/lib/dados";
+import { produtosDaColecao } from "@/lib/dados";
+import { lojaDoSlug } from "@/lib/fonte";
 import { dicionarioActual } from "@/lib/i18n/servidor";
 import { moeda, precoAPartirDe, restam } from "@/lib/precos";
 import type { Moeda, Produto } from "@/lib/tipos";
@@ -79,7 +80,7 @@ export default async function PaginaDaConfeiteira({
 }) {
   const { slug } = await params;
   const t = (await dicionarioActual()).loja;
-  const loja = lojaPorSlug(slug);
+  const loja = await lojaDoSlug(slug);
   if (!loja) notFound();
 
   const { confeiteira } = loja;

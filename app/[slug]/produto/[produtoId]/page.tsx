@@ -1,15 +1,7 @@
 import { notFound } from "next/navigation";
-import { lojaPorSlug, lojas, produtoPorId } from "@/lib/dados";
+import { produtoPorId } from "@/lib/dados";
+import { lojaDoSlug } from "@/lib/fonte";
 import Montador from "./montador";
-
-export function generateStaticParams() {
-  return lojas.flatMap((loja) =>
-    loja.produtos.map((produto) => ({
-      slug: loja.confeiteira.slug,
-      produtoId: produto.id,
-    })),
-  );
-}
 
 export default async function PaginaDoProduto({
   params,
@@ -17,7 +9,7 @@ export default async function PaginaDoProduto({
   params: Promise<{ slug: string; produtoId: string }>;
 }) {
   const { slug, produtoId } = await params;
-  const loja = lojaPorSlug(slug);
+  const loja = await lojaDoSlug(slug);
   const produto = loja && produtoPorId(loja, produtoId);
   if (!loja || !produto) notFound();
 

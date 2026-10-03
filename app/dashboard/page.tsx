@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { lojaPrincipal } from "@/lib/dados";
+import { lojaDoPainel } from "@/lib/fonte";
 import { dicionarioActual } from "@/lib/i18n/servidor";
 import { moeda, restam } from "@/lib/precos";
 
@@ -7,10 +7,9 @@ function totalDoPedido(itens: { total: number }[], taxa: number) {
   return itens.reduce((soma, item) => soma + item.total, 0) + taxa;
 }
 
-const { confeiteira, colecoes, pedidos, produtos } = lojaPrincipal;
-
 export default async function VisaoGeral() {
   const g = (await dicionarioActual()).painel.geral;
+  const { confeiteira, colecoes, pedidos, produtos } = await lojaDoPainel();
 
   const aguardando = pedidos.filter((pedido) => pedido.status === "aguardando");
   const naAgenda = pedidos.filter((pedido) =>
@@ -32,7 +31,7 @@ export default async function VisaoGeral() {
     <div className="mx-auto max-w-4xl">
       <h1 className="text-2xl font-semibold">{g.titulo}</h1>
       <p className="mt-2 text-sm text-suave">
-        {g.saudacao}, {lojaPrincipal.confeiteira.nome.split(" ")[0]}
+        {g.saudacao}, {confeiteira.nome.split(" ")[0]}
       </p>
 
       {aguardando.length > 0 && (

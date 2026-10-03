@@ -4,9 +4,7 @@ import Icone, { type Nome } from "@/app/icones";
 import { Marca } from "@/app/logo";
 import { SeletorLingua } from "@/app/lingua";
 import { dicionarioActual } from "@/lib/i18n/servidor";
-import { lojaPrincipal } from "@/lib/dados";
-
-const { confeiteira } = lojaPrincipal;
+import { lojaDoPainel } from "@/lib/fonte";
 
 const menu: { href: string; chave: keyof Nav; icone: Nome }[] = [
   { href: "/dashboard", chave: "geral", icone: "casa" },
@@ -35,6 +33,7 @@ export default async function LayoutDoPainel({
   children: ReactNode;
 }) {
   const t = await dicionarioActual();
+  const { confeiteira } = await lojaDoPainel();
 
   return (
     <div className="min-h-full lg:grid lg:grid-cols-[15rem_1fr]">

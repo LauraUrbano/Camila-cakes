@@ -1,7 +1,7 @@
 import type { ReactNode, CSSProperties } from "react";
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { lojaPorSlug, lojas } from "@/lib/dados";
+import { lojaDoSlug } from "@/lib/fonte";
 import { dicionarioActual } from "@/lib/i18n/servidor";
 import { SeletorLingua } from "@/app/lingua";
 
@@ -15,10 +15,6 @@ function iniciais(nome: string) {
     .toUpperCase();
 }
 
-export function generateStaticParams() {
-  return lojas.map((loja) => ({ slug: loja.confeiteira.slug }));
-}
-
 export default async function LayoutDaConfeiteira({
   children,
   params,
@@ -28,7 +24,7 @@ export default async function LayoutDaConfeiteira({
 }) {
   const { slug } = await params;
   const t = (await dicionarioActual()).loja;
-  const loja = lojaPorSlug(slug);
+  const loja = await lojaDoSlug(slug);
   if (!loja) notFound();
 
   const { confeiteira } = loja;

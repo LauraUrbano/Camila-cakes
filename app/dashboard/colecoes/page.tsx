@@ -1,10 +1,12 @@
-import { lojaPrincipal, produtosDaColecao } from "@/lib/dados";
+import { produtosDaColecao } from "@/lib/dados";
+import { lojaDoPainel } from "@/lib/fonte";
 import { dicionarioActual } from "@/lib/i18n/servidor";
 
-const { colecoes } = lojaPrincipal;
 
 export default async function PaginaDeColecoes() {
   const c = (await dicionarioActual()).painel.colecoes;
+  const loja = await lojaDoPainel();
+  const { colecoes } = loja;
 
   return (
     <div className="mx-auto max-w-4xl">
@@ -15,7 +17,7 @@ export default async function PaginaDeColecoes() {
 
       <div className="mt-8 space-y-5">
         {colecoes.map((colecao) => {
-          const itens = produtosDaColecao(lojaPrincipal, colecao);
+          const itens = produtosDaColecao(loja, colecao);
           return (
             <section
               key={colecao.id}
