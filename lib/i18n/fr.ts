@@ -242,6 +242,7 @@ export const fr: Dicionario = {
       aceitarNota: "accepter réserve la date dans votre agenda",
       marcarProducao: "Marquer en production",
       marcarEntregue: "Marquer comme livrée",
+      naoGravou: "Je n'ai pas pu enregistrer. Réessayez.",
       encerrado: "Commande close.",
       estados: {
         aguardando: "en attente d'accord",
@@ -426,6 +427,9 @@ export const fr: Dicionario = {
       entrega: "livraison",
       total: "Total",
       enviarPedido: "Envoyer la commande",
+      aEnviar: "Envoi…",
+      faltamDados: "Indiquez votre nom et votre contact.",
+      naoEnviou: "Je n'ai pas pu envoyer. Réessayez.",
       enviarNota1: "Envoyer ne réserve pas la date.",
       enviarNota2: "doit",
       enviarNota3: "accepter la commande",

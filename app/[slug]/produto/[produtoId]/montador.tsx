@@ -1,10 +1,11 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useState, useTransition } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import Icone from "@/app/icones";
 import { useT } from "@/app/lingua";
+import { enviarPedido } from "@/app/[slug]/accoes";
 import { calcular, moeda, restam, vagasDeRecheio } from "@/lib/precos";
 import type { Selecao } from "@/lib/precos";
 import type { Confeiteira, Moeda, Opcao, Produto } from "@/lib/tipos";
@@ -107,7 +108,14 @@ export default function Montador({ produto, confeiteira, slug }: Props) {
   });
   const [entregaId, setEntregaId] = useState(confeiteira.entregas[0].id);
   const [observacao, setObservacao] = useState("");
-  const [enviado, setEnviado] = useState(false);
+  // Sem nome e contacto não há encomenda que se grave — nem forma de a
+  // confeiteira responder a quem a fez.
+  const [nome, setNome] = useState("");
+  const [telefone, setTelefone] = useState("");
+  const [dataFesta, setDataFesta] = useState("");
+  const [enviado, setEnviado] = useState<string | null>(null);
+  const [erro, setErro] = useState<string | null>(null);
+  const [aEnviar, enviar] = useTransition();
 
   const tamanho = produto.tamanhos.find((t) => t.id === selecao.tamanhoId);
   const entrega = confeiteira.entregas.find((e) => e.id === entregaId)!;
@@ -140,6 +148,39 @@ export default function Montador({ produto, confeiteira, slug }: Props) {
     });
   }
 
+  function submeter() {
+    const massa = produto.massas.find((m) => m.id === selecao.massaId);
+    setErro(null);
+    enviar(async () => {
+      const r = await enviarPedido({
+        slug,
+        cliente: nome,
+        telefone,
+        entregaEm: dataFesta || undefined,
+        entregaNome: entrega.nome,
+        entregaTipo: entrega.tipo,
+        entregaTaxa: entrega.taxa,
+        itens: [
+          {
+            produtoNome: produto.nome,
+            tamanhoNome: tamanho?.nome ?? "",
+            massaNome: massa?.nome ?? "",
+            recheiosNomes: selecao.recheioIds
+              .map((id) => produto.recheios.find((o) => o.id === id)?.nome)
+              .filter((n): n is string => Boolean(n)),
+            decoracoesNomes: selecao.decoracaoIds
+              .map((id) => produto.decoracoes.find((o) => o.id === id)?.nome)
+              .filter((n): n is string => Boolean(n)),
+            observacao: observacao.trim() || undefined,
+            total: orcamento.total,
+          },
+        ],
+      });
+      if (r.estado === "ok") setEnviado(r.referencia);
+      else setErro(r.estado === "erro" ? r.erro : "falhou");
+    });
+  }
+
   if (enviado) {
     return (
       <div className="mx-auto max-w-lg px-6 py-20 text-center">
@@ -147,6 +188,7 @@ export default function Montador({ produto, confeiteira, slug }: Props) {
           <Icone nome="enviado" className="h-7 w-7" />
         </span>
         <h1 className="mt-6 text-2xl">{t.enviadoTitulo}</h1>
+        <p className="mt-2 font-mono text-sm text-marca">{enviado}</p>
         <p className="mt-3 leading-relaxed text-suave">
           {confeiteira.nome} {t.enviadoTexto1}
         </p>
@@ -392,14 +434,51 @@ export default function Montador({ produto, confeiteira, slug }: Props) {
             </ul>
           )}
 
+          <div className="mt-5 space-y-3 border-t border-borda pt-5">
+            <label className="block text-xs">
+              <span className="text-suave">{d.personalizado.nome}</span>
+              <input
+                value={nome}
+                onChange={(e) => setNome(e.target.value)}
+                autoComplete="name"
+                className="mt-1 w-full rounded-xl border border-borda bg-cartao px-3 py-2 text-sm outline-none focus:border-marca"
+              />
+            </label>
+            <label className="block text-xs">
+              <span className="text-suave">{d.personalizado.whatsapp}</span>
+              <input
+                value={telefone}
+                onChange={(e) => setTelefone(e.target.value)}
+                autoComplete="tel"
+                inputMode="tel"
+                className="mt-1 w-full rounded-xl border border-borda bg-cartao px-3 py-2 text-sm outline-none focus:border-marca"
+              />
+            </label>
+            <label className="block text-xs">
+              <span className="text-suave">{d.personalizado.data}</span>
+              <input
+                type="date"
+                value={dataFesta}
+                onChange={(e) => setDataFesta(e.target.value)}
+                className="mt-1 w-full rounded-xl border border-borda bg-cartao px-3 py-2 text-sm outline-none focus:border-marca"
+              />
+            </label>
+          </div>
+
           <button
             type="button"
-            disabled={!orcamento.completo}
-            onClick={() => setEnviado(true)}
-            className="mt-5 w-full rounded-full bg-marca py-3 text-sm font-medium text-white disabled:cursor-not-allowed disabled:opacity-40"
+            disabled={!orcamento.completo || aEnviar}
+            onClick={submeter}
+            className="mt-4 w-full rounded-full bg-marca py-3 text-sm font-medium text-white disabled:cursor-not-allowed disabled:opacity-40"
           >
-            {t.enviarPedido}
+            {aEnviar ? t.aEnviar : t.enviarPedido}
           </button>
+
+          {erro && (
+            <p className="mt-3 text-xs text-marca">
+              {erro === "campos" ? t.faltamDados : t.naoEnviou}
+            </p>
+          )}
 
           <p className="mt-4 text-xs leading-relaxed text-suave">
             {t.enviarNota1} {confeiteira.nome} {t.enviarNota2}{" "}

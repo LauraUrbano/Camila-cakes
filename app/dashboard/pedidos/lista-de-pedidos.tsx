@@ -1,8 +1,9 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useState, useTransition } from "react";
 import Icone from "@/app/icones";
 import { useT } from "@/app/lingua";
+import { mudarEstado } from "./accoes";
 import { moeda } from "@/lib/precos";
 import type { Moeda, Pedido, StatusPedido } from "@/lib/tipos";
 
@@ -52,6 +53,8 @@ export default function ListaDePedidos({
   const [busca, setBusca] = useState("");
   const [pagina, setPagina] = useState(1);
   const [aberto, setAberto] = useState(iniciais[0]?.id ?? "");
+  const [erro, setErro] = useState<string | null>(null);
+  const [aGuardar, aGravar] = useTransition();
 
   const fmt = (valor: number) => moeda(valor, codigo);
 
@@ -78,10 +81,28 @@ export default function ListaDePedidos({
   const pedido = lista.find((item) => item.id === aberto) ?? visiveis[0];
   const aguardando = lista.filter((item) => item.status === "aguardando");
 
+  /**
+   * Muda o estado na lista e grava. O ecrã avança já — a confeiteira não tem
+   * de esperar pela rede para ver que carregou — mas, se a gravação falhar,
+   * volta atrás em vez de mentir sobre o que ficou guardado.
+   */
   function mudarStatus(id: string, status: StatusPedido) {
+    const anterior = lista.find((item) => item.id === id)?.status;
     setLista((atual) =>
       atual.map((item) => (item.id === id ? { ...item, status } : item)),
     );
+    setErro(null);
+    aGravar(async () => {
+      const { ok } = await mudarEstado(id, status);
+      if (!ok && anterior) {
+        setLista((atual) =>
+          atual.map((item) =>
+            item.id === id ? { ...item, status: anterior } : item,
+          ),
+        );
+        setErro(id);
+      }
+    });
   }
 
   function trocarFiltro(id: StatusPedido | "todos") {
@@ -309,14 +330,16 @@ export default function ListaDePedidos({
                   <button
                     type="button"
                     onClick={() => mudarStatus(pedido.id, "aceito")}
-                    className="rounded-full bg-marca px-5 py-2.5 text-sm text-white"
+                    disabled={aGuardar}
+                    className="rounded-full bg-marca px-5 py-2.5 text-sm text-white disabled:opacity-50"
                   >
                     {p.aceitar}
                   </button>
                   <button
                     type="button"
                     onClick={() => mudarStatus(pedido.id, "recusado")}
-                    className="rounded-full border border-borda bg-cartao px-5 py-2.5 text-sm"
+                    disabled={aGuardar}
+                    className="rounded-full border border-borda bg-cartao px-5 py-2.5 text-sm disabled:opacity-50"
                   >
                     {p.recusar}
                   </button>
@@ -345,6 +368,9 @@ export default function ListaDePedidos({
               )}
               {["entregue", "recusado"].includes(pedido.status) && (
                 <span className="text-xs text-suave">{p.encerrado}</span>
+              )}
+              {erro === pedido.id && (
+                <span className="text-xs text-marca">{p.naoGravou}</span>
               )}
             </footer>
           </article>

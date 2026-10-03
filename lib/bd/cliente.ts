@@ -40,7 +40,11 @@ export function executorNeon(url = urlDaAplicacao()): Executor {
       "Falta DATABASE_URL. Sem ela a aplicação corre com os dados de exemplo.",
     );
   }
-  const sql = neon(url);
+  // `no-store` não é um detalhe: o driver do Neon fala por fetch, e o Next.js
+  // guarda respostas de fetch em cache. Sem isto, aceitar uma encomenda
+  // gravava na base e o ecrã recarregado continuava a mostrar o estado
+  // antigo — o pior tipo de erro, porque parece que o botão não funcionou.
+  const sql = neon(url, { fetchOptions: { cache: "no-store" } });
   return (async (texto, valores = []) =>
     sql.query(texto, valores)) as Executor;
 }

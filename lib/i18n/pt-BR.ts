@@ -239,6 +239,7 @@ export const ptBR: Dicionario = {
       aceitarNota: "aceitar reserva a data na sua agenda",
       marcarProducao: "Marcar como em produção",
       marcarEntregue: "Marcar como entregue",
+      naoGravou: "Não consegui salvar. Tente de novo.",
       encerrado: "Pedido encerrado.",
       estados: {
         aguardando: "esperando aceite",
@@ -422,6 +423,9 @@ export const ptBR: Dicionario = {
       entrega: "entrega",
       total: "Total",
       enviarPedido: "Enviar pedido",
+      aEnviar: "Enviando…",
+      faltamDados: "Escreva seu nome e o contato.",
+      naoEnviou: "Não consegui enviar. Tente de novo.",
       enviarNota1: "Enviar não reserva a data.",
       enviarNota2: "precisa",
       enviarNota3: "aceitar o pedido",

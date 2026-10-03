@@ -242,6 +242,7 @@ export const ptPT = {
       aceitarNota: "aceitar reserva a data na tua agenda",
       marcarProducao: "Marcar como em produção",
       marcarEntregue: "Marcar como entregue",
+      naoGravou: "Não consegui gravar. Tenta outra vez.",
       encerrado: "Pedido encerrado.",
       estados: {
         aguardando: "aguarda aceite",
@@ -426,6 +427,9 @@ export const ptPT = {
       entrega: "entrega",
       total: "Total",
       enviarPedido: "Enviar pedido",
+      aEnviar: "A enviar…",
+      faltamDados: "Escreve o teu nome e o contacto.",
+      naoEnviou: "Não consegui enviar. Tenta outra vez.",
       enviarNota1: "Enviar não reserva a data.",
       enviarNota2: "precisa de",
       enviarNota3: "aceitar o pedido",

@@ -238,6 +238,7 @@ export const en: Dicionario = {
       aceitarNota: "accepting holds the date in your diary",
       marcarProducao: "Mark as in production",
       marcarEntregue: "Mark as delivered",
+      naoGravou: "I couldn't save that. Try again.",
       encerrado: "Order closed.",
       estados: {
         aguardando: "awaiting acceptance",
@@ -421,6 +422,9 @@ export const en: Dicionario = {
       entrega: "delivery",
       total: "Total",
       enviarPedido: "Send order",
+      aEnviar: "Sending…",
+      faltamDados: "Please add your name and contact.",
+      naoEnviou: "I couldn't send that. Try again.",
       enviarNota1: "Sending does not hold the date.",
       enviarNota2: "has to",
       enviarNota3: "accept the order",
