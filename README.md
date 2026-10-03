@@ -53,6 +53,45 @@ não renova e não gera fatura. Por isso a assinatura guarda a origem
 ⚠️ Os detalhes fiscais e as regras do Stripe por país mudam. Confirmar com o
 Stripe e com contabilista antes de ligar a cobrança a sério.
 
+## Base de dados
+
+Neon (Postgres). O esquema está em `bd/0001_esquema.sql` e a camada de leitura
+em `lib/bd/`.
+
+```bash
+npm run bd:testar    # esquema + semente + consultas, contra Postgres em memória
+npm run bd:migrar    # aplica as migrações (precisa de DATABASE_URL_UNPOOLED)
+npm run bd:semear    # carrega os dados de exemplo (precisa de DATABASE_URL)
+```
+
+`npm run bd:testar` não precisa de ligação nenhuma: corre contra um Postgres
+em memória (PGlite) e verifica o circuito fechado — semeia, volta a ler e
+compara com os dados de exemplo.
+
+**São precisas duas ligações, e trocá-las dá avarias difíceis de diagnosticar.**
+`DATABASE_URL` passa pelo agrupador e é a da aplicação: cada invocação sem
+servidor abre uma ligação nova e, sem agrupador, esgota-se o limite do Neon
+assim que houver carga. `DATABASE_URL_UNPOOLED` é directa e serve às migrações,
+que precisam de sessão estável — pelo agrupador falham de forma intermitente.
+
+Sem `DATABASE_URL` a aplicação corre com os dados de exemplo de `lib/dados.ts`.
+É o mesmo formato, vindo de outro sítio, por isso quem clona o repositório
+consegue abrir o protótipo sem ter base nenhuma.
+
+### Três decisões do esquema
+
+**Dinheiro é `numeric(10,2)`, nunca vírgula flutuante.** 0,1 + 0,2 em float não
+dá 0,3, e numa fatura isso é inaceitável.
+
+**Os itens do pedido guardam o nome e o preço copiados no momento da
+encomenda.** Se apontassem para o produto, renomear um bolo ou subir um preço
+reescrevia encomendas antigas — e o que a cliente aceitou deixava de ser o que
+está registado.
+
+**O resgate de código vitalício é uma só instrução.** O `usos < max_usos` vive
+dentro do `UPDATE`, não num `SELECT` antes: ler primeiro e escrever depois
+deixaria dois resgates simultâneos passarem do tecto. O teste verifica isso.
+
 ## Línguas
 
 Cinco: português europeu, português do Brasil, inglês, francês e alemão. A
