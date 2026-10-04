@@ -39,12 +39,20 @@ export default function TabelaContas({ lista }: { lista: ContaResumo[] }) {
             que era quando quiseres.
           </p>
         </div>
-        <input
-          value={busca}
-          onChange={(e) => setBusca(e.target.value)}
-          placeholder="Procurar"
-          className="rounded-full border border-borda bg-cartao px-4 py-2 text-sm outline-none focus:border-marca"
-        />
+        <div className="flex items-center gap-3">
+          <input
+            value={busca}
+            onChange={(e) => setBusca(e.target.value)}
+            placeholder="Procurar"
+            className="rounded-full border border-borda bg-cartao px-4 py-2 text-sm outline-none focus:border-marca"
+          />
+          <Link
+            href="/admin/contas/nova"
+            className="rounded-full bg-marca px-5 py-2.5 text-sm text-white"
+          >
+            Criar conta
+          </Link>
+        </div>
       </div>
 
       <div className="mt-8 space-y-4">

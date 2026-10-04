@@ -280,3 +280,225 @@ export async function mudarPlano(
     [slug, planoId],
   );
 }
+
+// ----------------------------------------------------------- criar conta
+
+export type ContaNova = {
+  slug: string;
+  nome: string;
+  cidade: string;
+  pais: "PT" | "CH" | "BR";
+  moeda: Moeda;
+  planoId: string;
+  /** Sem cobrança: a conta fica vitalícia e nunca passa pelo Stripe. */
+  semCobranca: boolean;
+  nota: string;
+};
+
+const TEMA_INICIAL = {
+  marca: "#5A6E55",
+  marcaSuave: "#EDF2E9",
+  fundo: "#FCFAF6",
+  texto: "#38332E",
+};
+
+/**
+ * Cria a conta de uma confeitaria já pronta a usar.
+ *
+ * Uma conta sem cobrança não é uma assinatura do Stripe com preço zero: é uma
+ * concessão nossa, com origem "codigo", para nunca irmos procurar lá um
+ * contrato que não existe. O código é gerado e fica registado, para a conta
+ * ter história.
+ *
+ * Entra com três formas de entrega e uma coleção vazia, para a confeiteira
+ * encontrar a página de pé e não um formulário em branco.
+ */
+export async function criarConta(
+  exec: Executor,
+  dados: ContaNova,
+): Promise<{ slug: string } | { erro: "slugOcupado" }> {
+  const [existe] = await exec<{ id: string }>(
+    `select id from confeiteiras where slug = $1`,
+    [dados.slug],
+  );
+  if (existe) return { erro: "slugOcupado" };
+
+  const [conta] = await exec<{ id: string }>(
+    `insert into confeiteiras
+       (slug, nome, cidade, pais, moeda, tema, tagline, bio, aviso_pagamento)
+     values ($1,$2,$3,$4,$5,$6,'','','')
+     returning id`,
+    [
+      dados.slug,
+      dados.nome,
+      dados.cidade,
+      dados.pais,
+      dados.moeda,
+      JSON.stringify(TEMA_INICIAL),
+    ],
+  );
+
+  const entregas = [
+    ["levantamento", "retirada", "Levantamento", 0],
+    ["entrega-local", "entrega", "Entrega na cidade", 0],
+    ["entrega-fora", "entrega", "Entrega fora da cidade", 0],
+  ] as const;
+  for (const [i, [chave, tipo, nome, taxa]] of entregas.entries()) {
+    await exec(
+      `insert into entregas (confeiteira_id, chave, tipo, nome, taxa, ordem)
+       values ($1,$2,$3,$4,$5,$6)`,
+      [conta.id, chave, tipo, nome, taxa, i],
+    );
+  }
+
+  await exec(
+    `insert into colecoes (confeiteira_id, chave, nome, descricao, periodo, ativa)
+     values ($1,'sempre','Cardápio de sempre','','sem data de fim',true)`,
+    [conta.id],
+  );
+
+  let codigo: string | null = null;
+  if (dados.semCobranca) {
+    codigo = `INTERNA-${dados.slug.toUpperCase().replace(/[^A-Z0-9]/g, "").slice(0, 10)}`;
+    await exec(
+      `insert into codigos_vitalicios (codigo, plano_id, max_usos, usos, nota)
+       values ($1,$2,1,1,$3)
+       on conflict (codigo) do update set usos = codigos_vitalicios.usos`,
+      [codigo, dados.planoId, dados.nota || "Conta criada internamente."],
+    );
+    await exec(
+      `insert into resgates (codigo, confeiteira_id) values ($1,$2)
+       on conflict do nothing`,
+      [codigo, conta.id],
+    );
+  }
+
+  await exec(
+    `insert into assinaturas
+       (confeiteira_id, plano_id, estado, origem, periodo, codigo)
+     values ($1,$2,$3,$4,'mensal',$5)`,
+    [
+      conta.id,
+      dados.planoId,
+      dados.semCobranca ? "vitalicia" : "teste",
+      dados.semCobranca ? "codigo" : "stripe",
+      codigo,
+    ],
+  );
+
+  return { slug: dados.slug };
+}
+
+// ------------------------------------------------------------- faturação
+
+export type FaturaResumo = {
+  id: string;
+  confeiteira: string;
+  slug: string;
+  referencia: string;
+  emitidaEm: string;
+  valor: number;
+  moeda: Moeda;
+  paga: boolean;
+};
+
+export async function faturas(exec: Executor): Promise<FaturaResumo[]> {
+  const linhas = await exec<Record<string, unknown>>(
+    `select f.id, f.referencia, f.emitida_em, f.valor, f.moeda, f.paga,
+            c.nome as confeiteira, c.slug
+     from faturas f
+     join confeiteiras c on c.id = f.confeiteira_id
+     order by f.emitida_em desc, f.referencia desc`,
+  );
+  return linhas.map((l) => ({
+    id: String(l.id),
+    confeiteira: String(l.confeiteira),
+    slug: String(l.slug),
+    referencia: String(l.referencia),
+    emitidaEm: String(l.emitida_em),
+    valor: numero(l.valor),
+    moeda: l.moeda as Moeda,
+    paga: Boolean(l.paga),
+  }));
+}
+
+export async function marcarFatura(
+  exec: Executor,
+  id: string,
+  paga: boolean,
+): Promise<void> {
+  await exec(`update faturas set paga = $2 where id = $1`, [id, paga]);
+}
+
+export type FaturaNova = {
+  slug: string;
+  valor: number;
+  moeda: Moeda;
+  /** Dia em que a fatura foi emitida, em ISO (aaaa-mm-dd). */
+  emitidaEm: string;
+  paga: boolean;
+};
+
+/**
+ * Lança uma fatura à mão.
+ *
+ * Enquanto o Stripe não estiver ligado, as faturas entram por aqui: é melhor
+ * ter o registo do que foi cobrado do que não ter nada. Quando o Stripe
+ * entrar, as faturas dele trazem `stripe_invoice_id` e estas continuam a
+ * valer — a referência é nossa e é única por confeiteira.
+ *
+ * A referência segue o ano da emissão, FT-2026-0001, e é contada por
+ * confeiteira. Duas pessoas a emitir ao mesmo tempo podiam calcular o mesmo
+ * número, por isso a colisão da chave única é apanhada e tentada de novo.
+ */
+export async function emitirFatura(
+  exec: Executor,
+  dados: FaturaNova,
+): Promise<{ referencia: string } | { erro: "semConta" }> {
+  const [conta] = await exec<{ id: string }>(
+    `select id from confeiteiras where slug = $1`,
+    [dados.slug],
+  );
+  if (!conta) return { erro: "semConta" };
+
+  const ano = dados.emitidaEm.slice(0, 4);
+
+  for (let tentativa = 0; tentativa < 3; tentativa += 1) {
+    const [{ proxima }] = await exec<{ proxima: string }>(
+      `select coalesce(
+                max(substring(referencia from '[0-9]+$')::int), 0
+              ) + 1 as proxima
+       from faturas
+       where confeiteira_id = $1 and referencia like $2`,
+      [conta.id, `FT-${ano}-%`],
+    );
+    const referencia = `FT-${ano}-${String(Number(proxima)).padStart(4, "0")}`;
+
+    try {
+      await exec(
+        `insert into faturas
+           (confeiteira_id, referencia, emitida_em, valor, moeda, paga)
+         values ($1,$2,$3,$4,$5,$6)`,
+        [
+          conta.id,
+          referencia,
+          dados.emitidaEm,
+          dados.valor,
+          dados.moeda,
+          dados.paga,
+        ],
+      );
+      return { referencia };
+    } catch (erro) {
+      const texto = erro instanceof Error ? erro.message : String(erro);
+      if (!texto.includes("faturas_confeiteira_id_referencia_key")) throw erro;
+    }
+  }
+
+  throw new Error("Não foi possível numerar a fatura.");
+}
+
+/** Apagar uma fatura é para corrigir um lançamento errado, não para esconder. */
+export async function apagarFatura(exec: Executor, id: string): Promise<void> {
+  await exec(`delete from faturas where id = $1`, [id]);
+}
