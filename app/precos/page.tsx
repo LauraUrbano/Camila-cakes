@@ -7,8 +7,9 @@ import TabelaPrecos from "./tabela-precos";
 
 export default async function Precos() {
   const t = await dicionarioActual();
-  // A moeda de partida vem da região de quem chega, não da língua.
-  const moedaInicial = await moedaActual();
+  // A moeda vem da região de quem chega, não da língua: quem abre a página
+  // em Zurique vê francos sem ter de os escolher.
+  const moedaLocal = await moedaActual();
 
   return (
     <div>
@@ -49,7 +50,7 @@ export default async function Precos() {
           <TabelaPrecos
             planos={planos}
             comparacao={comparacao}
-            moedaInicial={moedaInicial}
+            moedaLocal={moedaLocal}
           />
         </div>
 

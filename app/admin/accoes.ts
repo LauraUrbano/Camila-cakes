@@ -21,6 +21,11 @@ import {
   suspenderConta,
 } from "@/lib/bd/admin";
 import type { Moeda } from "@/lib/tipos";
+import {
+  inscricaoAtendida,
+  mudarEstadoInscricao,
+  type EstadoInscricao,
+} from "@/lib/bd/inscricoes";
 import { paraSlug } from "@/lib/slug";
 
 /** Todas as acções daqui exigem sessão; nenhuma confia no que vem do ecrã. */
@@ -134,7 +139,13 @@ export async function novaConta(
     return { erro: `Já existe uma conta em /${slug}.` };
   }
 
+  // Quando a conta nasce de um pedido de acesso, o pedido fecha-se aqui: de
+  // outro modo ficava na caixa de entrada depois de já estar atendido.
+  const email = String(dados.get("email") ?? "").trim();
+  if (email) await inscricaoAtendida(exec, email, criada.slug);
+
   revalidatePath("/admin/contas");
+  revalidatePath("/admin/inscricoes");
   revalidatePath("/admin");
   return { ok: `Conta criada em /${criada.slug}.`, slug: criada.slug };
 }
@@ -177,4 +188,10 @@ export async function novaFatura(
   return "erro" in lancada
     ? { erro: "Essa conta já não existe." }
     : { ok: `Fatura ${lancada.referencia} lançada.` };
+}
+
+export async function mudarInscricao(id: string, estado: EstadoInscricao) {
+  const exec = await exigirSessao();
+  await mudarEstadoInscricao(exec, id, estado);
+  revalidatePath("/admin/inscricoes");
 }

@@ -131,6 +131,9 @@ export const de: Dicionario = {
     tabelaLegenda: "Vergleich der Pakete",
     incluido: "enthalten",
     naoIncluido: "nicht enthalten",
+    precosEm: "Preise in",
+    verEm: "ansehen in",
+    naRegiao: "die Währung deiner Region",
     brasilTitulo: "Wenn Sie aus Brasilien zahlen:",
     brasilTexto:
       "Cakelyo rechnet aus Portugal ab, Ihre Karte behandelt das also als Auslandskauf — Ihre Bank schlägt die IOF-Steuer und einen Wechselkursaufschlag drauf, rund 7% über dem gezeigten Preis.",
@@ -173,6 +176,38 @@ export const de: Dicionario = {
           "Weil Cakelyo aus Portugal abrechnet und Ihre Bank die Belastung als Auslandskauf behandelt: Sie schlägt IOF-Steuer und Wechselkursaufschlag drauf, rund 7% über dem Tabellenpreis. Wer das Jahrespaket per Pix zahlt, hat diese Kosten nicht — das ist eine lokale Zahlung in Real.",
       },
     ],
+  },
+
+  assinar: {
+    rotulo: "Zugang anfragen",
+    titulo: "Lass uns deine Seite aufsetzen.",
+    subtitulo:
+      "Hinterlass deine Daten und wir richten das Konto für dich ein, mit deiner Adresse und deiner Währung. Wir antworten innerhalb von 24 Stunden.",
+    planoEscolhido: "Gewählter Tarif",
+    mudar: "Tarife ansehen",
+    nome: "Name der Konditorei",
+    email: "E-Mail",
+    telefone: "Telefon oder WhatsApp (optional)",
+    cidade: "Stadt",
+    pais: "Land",
+    moeda: "Währung deiner Preise",
+    moedaAjuda:
+      "Das ist die Währung, in der deine Kundinnen die Preise sehen — nicht zwingend die, in der du uns bezahlst.",
+    endereco: "Gewünschte Adresse",
+    mensagem: "Möchtest du uns noch etwas sagen?",
+    enviar: "Zugang anfragen",
+    aEnviar: "Wird gesendet…",
+    semCartao:
+      "Wir fragen jetzt nicht nach einer Karte. Die Zahlung wird besprochen, sobald das Konto offen ist und du es laufen gesehen hast.",
+    prontoTitulo: "Anfrage angekommen.",
+    prontoTexto:
+      "Wir antworten auf die hinterlassene E-Mail — mit der Adresse deiner Seite und dem, was noch fehlt, um sie online zu stellen.",
+    prontoVoltar: "Zurück zum Anfang",
+    erroNome: "Der Name der Konditorei fehlt.",
+    erroEmail: "Diese E-Mail sieht nicht richtig aus.",
+    erroCidade: "Die Stadt fehlt.",
+    erroGuardar:
+      "Wir konnten die Anfrage nicht speichern. Versuch es gleich noch einmal.",
   },
 
   painel: {

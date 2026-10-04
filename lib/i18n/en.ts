@@ -127,6 +127,9 @@ export const en: Dicionario = {
     tabelaLegenda: "Plan comparison",
     incluido: "included",
     naoIncluido: "not included",
+    precosEm: "Prices in",
+    verEm: "see in",
+    naRegiao: "your region's currency",
     brasilTitulo: "Paying from Brazil:",
     brasilTexto:
       "Cakelyo invoices from Portugal, so your card treats this as an international purchase — your bank adds IOF tax and an exchange spread, around 7% on top of the price above.",
@@ -169,6 +172,38 @@ export const en: Dicionario = {
           "Because Cakelyo invoices from Portugal and your bank treats the charge as an international purchase: it adds IOF tax and an exchange spread, around 7% above the table price. Paying the yearly plan by Pix avoids that — it is a local payment in reais.",
       },
     ],
+  },
+
+  assinar: {
+    rotulo: "Request access",
+    titulo: "Let's get your page open.",
+    subtitulo:
+      "Leave your details and we'll open the account for you, with your address and your currency. We answer within 24 hours.",
+    planoEscolhido: "Chosen plan",
+    mudar: "see the plans",
+    nome: "Bakery name",
+    email: "Email",
+    telefone: "Phone or WhatsApp (optional)",
+    cidade: "City",
+    pais: "Country",
+    moeda: "Currency for your prices",
+    moedaAjuda:
+      "This is the currency your customers see on your cakes — it doesn't have to be the one you pay us in.",
+    endereco: "Address you'd like",
+    mensagem: "Anything else you'd like to tell us?",
+    enviar: "Request access",
+    aEnviar: "Sending…",
+    semCartao:
+      "We're not asking for a card now. Payment is arranged once the account is open and you've seen it working.",
+    prontoTitulo: "Request received.",
+    prontoTexto:
+      "We'll reply to the email you left with your page address and what's left to get it live.",
+    prontoVoltar: "Back to the start",
+    erroNome: "The bakery name is missing.",
+    erroEmail: "That email doesn't look right.",
+    erroCidade: "The city is missing.",
+    erroGuardar:
+      "We couldn't save your request. Please try again in a moment.",
   },
 
   painel: {

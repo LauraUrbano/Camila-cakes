@@ -7,6 +7,12 @@ import { useLingua, useT } from "@/app/lingua";
 import { moeda } from "@/lib/precos";
 import type { LinhaComparacao, Moeda, Plano } from "@/lib/tipos";
 
+const moedas: [Moeda, string][] = [
+  ["EUR", "€"],
+  ["CHF", "CHF"],
+  ["BRL", "R$"],
+];
+
 /** Um valor da tabela: incluído, ausente, ou um limite escrito. */
 function Valor({
   valor,
@@ -39,11 +45,12 @@ function Valor({
 export default function TabelaPrecos({
   planos,
   comparacao,
-  moedaInicial,
+  moedaLocal,
 }: {
   planos: Plano[];
   comparacao: LinhaComparacao[];
-  moedaInicial: Moeda;
+  /** A moeda da região de quem chega. É com ela que a página abre. */
+  moedaLocal: Moeda;
 }) {
   const t = useT();
   const lingua = useLingua();
@@ -59,7 +66,7 @@ export default function TabelaPrecos({
   const nomeMoeda = (codigo: Moeda) =>
     new Intl.DisplayNames([lingua], { type: "currency" }).of(codigo) ?? codigo;
   const [periodo, setPeriodo] = useState<"mensal" | "anual">("mensal");
-  const [codigo, setCodigo] = useState<Moeda>(moedaInicial);
+  const [codigo, setCodigo] = useState<Moeda>(moedaLocal);
 
   return (
     <div>
@@ -80,34 +87,36 @@ export default function TabelaPrecos({
           ))}
         </div>
 
-        <div className="flex rounded-full border border-borda bg-cartao p-1">
-          {(
-            [
-              ["EUR", "€"],
-              ["CHF", "CHF"],
-              ["BRL", "R$"],
-            ] as const
-          ).map(([opcao, simbolo]) => (
-            <button
-              key={opcao}
-              type="button"
-              onClick={() => setCodigo(opcao)}
-              aria-pressed={codigo === opcao}
-              className={`rounded-full px-4 py-2 text-sm transition ${
-                codigo === opcao ? "bg-marca text-white" : "text-suave"
-              }`}
-            >
-              {simbolo} {nomeMoeda(opcao)}
-            </button>
-          ))}
-        </div>
-
         {periodo === "anual" && (
           <span className="entra-texto rounded-full bg-marca-suave px-3.5 py-1.5 text-xs text-marca">
             {t.precos.doisMeses}
           </span>
         )}
       </div>
+
+      {/* A moeda não é uma pergunta: quem chega vê a da sua região, já
+          escolhida. As outras duas ficam ao lado, em texto pequeno, para
+          quem paga de outro país ou só quer comparar. */}
+      <p className="mt-4 text-xs text-suave">
+        {t.precos.precosEm}{" "}
+        <strong className="font-normal text-texto">{nomeMoeda(codigo)}</strong>
+        {codigo === moedaLocal && <> · {t.precos.naRegiao}</>} ·{" "}
+        {t.precos.verEm}{" "}
+        {moedas
+          .filter(([opcao]) => opcao !== codigo)
+          .map(([opcao, simbolo], i) => (
+            <span key={opcao}>
+              {i > 0 && " · "}
+              <button
+                type="button"
+                onClick={() => setCodigo(opcao)}
+                className="underline underline-offset-2 hover:text-texto"
+              >
+                {simbolo} {nomeMoeda(opcao)}
+              </button>
+            </span>
+          ))}
+      </p>
 
       {/* O Cakelyo fatura de Portugal. Para quem paga do Brasil com cartão
           isso é uma compra internacional, com IOF e spread por cima — e o
@@ -189,7 +198,7 @@ export default function TabelaPrecos({
               </ul>
 
               <Link
-                href="/dashboard/plano"
+                href={`/assinar?plano=${plano.id}&periodo=${periodo}`}
                 className={`mt-8 rounded-full px-6 py-3 text-center text-sm ${
                   plano.destaque
                     ? "bg-marca text-white"

@@ -128,6 +128,9 @@ export const ptBR: Dicionario = {
     tabelaLegenda: "Comparação dos planos",
     incluido: "incluído",
     naoIncluido: "não incluído",
+    precosEm: "Preços em",
+    verEm: "ver em",
+    naRegiao: "a moeda da sua região",
     brasilTitulo: "Se você paga do Brasil:",
     brasilTexto:
       "o Cakelyo fatura de Portugal, então o cartão trata isso como compra internacional — seu banco soma IOF e spread cambial, cerca de 7% a mais que o valor acima.",
@@ -170,6 +173,38 @@ export const ptBR: Dicionario = {
           "Porque o Cakelyo fatura de Portugal e seu banco trata a cobrança como compra internacional: soma IOF e spread cambial, cerca de 7% acima do preço da tabela. Quem paga o plano anual por Pix não tem esse custo — é um pagamento local em reais.",
       },
     ],
+  },
+
+  assinar: {
+    rotulo: "Pedir acesso",
+    titulo: "Vamos abrir a sua página.",
+    subtitulo:
+      "Deixe o contato e abrimos a conta para você, com o seu endereço e a sua moeda. Respondemos em 24 horas.",
+    planoEscolhido: "Plano escolhido",
+    mudar: "ver os planos",
+    nome: "Nome da confeitaria",
+    email: "E-mail",
+    telefone: "Telefone ou WhatsApp (opcional)",
+    cidade: "Cidade",
+    pais: "País",
+    moeda: "Moeda dos seus preços",
+    moedaAjuda:
+      "É a moeda em que você mostra os preços dos bolos para as suas clientes — não precisa ser a mesma em que paga a gente.",
+    endereco: "Endereço que você quer",
+    mensagem: "Quer contar mais alguma coisa?",
+    enviar: "Pedir acesso",
+    aEnviar: "Enviando…",
+    semCartao:
+      "Não pedimos cartão agora. O pagamento é combinado depois de a conta estar aberta e de você ver tudo funcionando.",
+    prontoTitulo: "Pedido recebido.",
+    prontoTexto:
+      "Respondemos no e-mail que você deixou, com o endereço da sua página e o que falta para colocá-la no ar.",
+    prontoVoltar: "Voltar ao início",
+    erroNome: "Falta o nome da confeitaria.",
+    erroEmail: "Esse e-mail não parece certo.",
+    erroCidade: "Falta a cidade.",
+    erroGuardar:
+      "Não conseguimos salvar o pedido. Tente de novo em um instante.",
   },
 
   painel: {

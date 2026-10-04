@@ -229,10 +229,10 @@ export async function semear(exec: Executor): Promise<void> {
       const criado = data(pedido.criadoEm);
       const [{ id: pedidoId }] = await exec<{ id: string }>(
         `insert into pedidos
-           (confeiteira_id, referencia, cliente_nome, telefone, criado_em,
-            entrega_em, entrega_nome, entrega_tipo, entrega_taxa, status,
-            aceite_em, personalizado)
-         values ($1,$2,$3,$4,coalesce($5::timestamptz, now()),$6,$7,$8,$9,$10,$11,$12)
+           (confeiteira_id, referencia, numero, cliente_nome, telefone,
+            criado_em, entrega_em, entrega_nome, entrega_tipo, entrega_taxa,
+            status, aceite_em, personalizado)
+         values ($1,$2,$3,$4,$5,coalesce($6::timestamptz, now()),$7,$8,$9,$10,$11,$12,$13)
          on conflict (confeiteira_id, referencia) do update set
            criado_em = excluded.criado_em, entrega_em = excluded.entrega_em,
            status = excluded.status, aceite_em = excluded.aceite_em
@@ -240,6 +240,10 @@ export async function semear(exec: Executor): Promise<void> {
         [
           confeiteiraId,
           pedido.id,
+          // O número vem da referência ("ENC-104" → 104): é dele que sai o
+          // próximo da casa, e a semente tem de o deixar coerente com o que
+          // a aplicação depois conta.
+          Number(pedido.id.replace(/\D/g, "")),
           pedido.cliente,
           pedido.telefone,
           criado,

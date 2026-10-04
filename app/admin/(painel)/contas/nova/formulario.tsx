@@ -4,7 +4,7 @@ import { useActionState, useState } from "react";
 import Link from "next/link";
 import { novaConta } from "@/app/admin/accoes";
 import { paraSlug } from "@/lib/slug";
-import type { Moeda } from "@/lib/tipos";
+import type { Moeda, Pais } from "@/lib/tipos";
 
 /** A moeda que se espera em cada país — mudável, porque há excepções. */
 const moedaDoPais: Record<string, Moeda> = {
@@ -13,12 +13,27 @@ const moedaDoPais: Record<string, Moeda> = {
   BR: "BRL",
 };
 
-export default function FormularioConta() {
+export type ContaInicial = {
+  nome: string;
+  slug: string;
+  cidade: string;
+  pais: Pais;
+  moeda: Moeda;
+  planoId: string;
+  /** Email do pedido de acesso, quando a conta nasce de um. */
+  email: string;
+};
+
+export default function FormularioConta({
+  inicial,
+}: {
+  inicial: ContaInicial;
+}) {
   const [estado, accao, aCriar] = useActionState(novaConta, {});
-  const [nome, setNome] = useState("");
-  const [slug, setSlug] = useState("");
-  const [pais, setPais] = useState("PT");
-  const [moeda, setMoeda] = useState<Moeda>("EUR");
+  const [nome, setNome] = useState(inicial.nome);
+  const [slug, setSlug] = useState(inicial.slug);
+  const [pais, setPais] = useState<string>(inicial.pais);
+  const [moeda, setMoeda] = useState<Moeda>(inicial.moeda);
   const [semCobranca, setSemCobranca] = useState(true);
 
   const endereco = paraSlug(slug || nome);
@@ -51,6 +66,8 @@ export default function FormularioConta() {
 
   return (
     <form action={accao} className="mt-8 max-w-2xl space-y-8">
+      {/* Fecha o pedido de acesso de onde esta conta veio. */}
+      <input type="hidden" name="email" value={inicial.email} />
       <section className="rounded-3xl border border-borda bg-cartao p-8">
         <h2 className="font-titulo text-lg">A confeitaria</h2>
 
@@ -85,6 +102,7 @@ export default function FormularioConta() {
             <span className="text-suave">Cidade</span>
             <input
               name="cidade"
+              defaultValue={inicial.cidade}
               placeholder="Genebra"
               className="mt-1 w-full rounded-xl border border-borda px-3 py-2 text-sm outline-none focus:border-marca"
             />
@@ -154,7 +172,7 @@ export default function FormularioConta() {
           <span className="text-suave">Plano</span>
           <select
             name="planoId"
-            defaultValue="pastelaria"
+            defaultValue={inicial.planoId}
             className="mt-1 w-full max-w-xs rounded-xl border border-borda bg-cartao px-3 py-2 text-sm outline-none focus:border-marca"
           >
             <option value="prova">Prova</option>
@@ -167,6 +185,9 @@ export default function FormularioConta() {
           <span className="text-suave">Nota (para te lembrares porquê)</span>
           <input
             name="nota"
+            defaultValue={
+              inicial.email ? `Pedido de acesso de ${inicial.email}.` : ""
+            }
             placeholder="Primeira cliente — conta oferecida."
             className="mt-1 w-full rounded-xl border border-borda px-3 py-2 text-sm outline-none focus:border-marca"
           />

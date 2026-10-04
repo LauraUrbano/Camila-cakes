@@ -130,6 +130,9 @@ export const ptPT = {
     tabelaLegenda: "Comparação dos planos",
     incluido: "incluído",
     naoIncluido: "não incluído",
+    precosEm: "Preços em",
+    verEm: "ver em",
+    naRegiao: "a moeda da tua região",
     brasilTitulo: "Se pagas do Brasil:",
     brasilTexto:
       "o Cakelyo fatura de Portugal, por isso o cartão trata isto como compra internacional — o teu banco soma IOF e spread cambial, à volta de 7% a mais do que o valor acima.",
@@ -173,6 +176,38 @@ export const ptPT = {
           "Porque o Cakelyo fatura de Portugal e o teu banco trata a cobrança como compra internacional: soma IOF e spread cambial, cerca de 7% acima do preço da tabela. Quem paga o plano anual por Pix não tem esse custo — é um pagamento local em reais.",
       },
     ],
+  },
+
+  assinar: {
+    rotulo: "Pedir acesso",
+    titulo: "Vamos abrir a tua página.",
+    subtitulo:
+      "Deixa o contacto e abrimos a conta por ti, com o teu endereço e a tua moeda. Respondemos em 24 horas.",
+    planoEscolhido: "Plano escolhido",
+    mudar: "ver os planos",
+    nome: "Nome da confeitaria",
+    email: "Email",
+    telefone: "Telefone ou WhatsApp (opcional)",
+    cidade: "Cidade",
+    pais: "País",
+    moeda: "Moeda dos teus preços",
+    moedaAjuda:
+      "É a moeda em que mostras os preços dos bolos às tuas clientes — não tem de ser a mesma em que nos pagas.",
+    endereco: "Endereço que queres",
+    mensagem: "Queres contar-nos mais alguma coisa?",
+    enviar: "Pedir acesso",
+    aEnviar: "A enviar…",
+    semCartao:
+      "Não pedimos cartão agora. O pagamento combina-se depois de a conta estar aberta e de a vires a funcionar.",
+    prontoTitulo: "Pedido recebido.",
+    prontoTexto:
+      "Respondemos ao email que deixaste com o endereço da tua página e com o que falta para a pôr no ar.",
+    prontoVoltar: "Voltar ao início",
+    erroNome: "Falta o nome da confeitaria.",
+    erroEmail: "Esse email não parece certo.",
+    erroCidade: "Falta a cidade.",
+    erroGuardar:
+      "Não conseguimos guardar o pedido. Tenta outra vez dentro de um instante.",
   },
 
   painel: {

@@ -131,6 +131,9 @@ export const fr: Dicionario = {
     tabelaLegenda: "Comparaison des formules",
     incluido: "inclus",
     naoIncluido: "non inclus",
+    precosEm: "Prix en",
+    verEm: "voir en",
+    naRegiao: "la monnaie de votre région",
     brasilTitulo: "Si vous payez depuis le Brésil :",
     brasilTexto:
       "Cakelyo facture depuis le Portugal, votre carte traite donc l'opération comme un achat international — votre banque ajoute la taxe IOF et une marge de change, environ 7% au-dessus du prix affiché.",
@@ -173,6 +176,38 @@ export const fr: Dicionario = {
           "Parce que Cakelyo facture depuis le Portugal et que la banque traite le prélèvement comme un achat international : elle ajoute la taxe IOF et une marge de change, environ 7% au-dessus du prix affiché. Payer la formule annuelle par Pix évite ce coût — c'est un paiement local en reais.",
       },
     ],
+  },
+
+  assinar: {
+    rotulo: "Demander un accès",
+    titulo: "Ouvrons votre page.",
+    subtitulo:
+      "Laissez-nous vos coordonnées et nous ouvrons le compte pour vous, avec votre adresse et votre monnaie. Nous répondons sous 24 heures.",
+    planoEscolhido: "Formule choisie",
+    mudar: "voir les formules",
+    nome: "Nom de la pâtisserie",
+    email: "E-mail",
+    telefone: "Téléphone ou WhatsApp (facultatif)",
+    cidade: "Ville",
+    pais: "Pays",
+    moeda: "Monnaie de vos prix",
+    moedaAjuda:
+      "C'est la monnaie dans laquelle vos clientes voient le prix des gâteaux — ce n'est pas forcément celle dans laquelle vous nous payez.",
+    endereco: "Adresse souhaitée",
+    mensagem: "Vous voulez nous dire autre chose ?",
+    enviar: "Demander un accès",
+    aEnviar: "Envoi…",
+    semCartao:
+      "Nous ne demandons pas de carte maintenant. Le paiement se règle une fois le compte ouvert et que vous l'avez vu fonctionner.",
+    prontoTitulo: "Demande reçue.",
+    prontoTexto:
+      "Nous répondons à l'adresse que vous avez laissée, avec l'adresse de votre page et ce qu'il reste à faire pour la mettre en ligne.",
+    prontoVoltar: "Retour à l'accueil",
+    erroNome: "Il manque le nom de la pâtisserie.",
+    erroEmail: "Cet e-mail ne semble pas correct.",
+    erroCidade: "Il manque la ville.",
+    erroGuardar:
+      "Nous n'avons pas pu enregistrer la demande. Réessayez dans un instant.",
   },
 
   painel: {
