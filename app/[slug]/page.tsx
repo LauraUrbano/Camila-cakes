@@ -1,4 +1,4 @@
-import Image from "next/image";
+import FotoProduto from "@/app/foto-produto";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { produtosDaColecao } from "@/lib/dados";
@@ -29,18 +29,13 @@ function CardProduto({
         esgotado ? "cursor-not-allowed opacity-55" : "hover:border-marca"
       }`}
     >
-      <div
-        className="relative h-44 overflow-hidden"
-        style={{ background: produto.cor }}
-      >
-        <Image
-          src={produto.foto}
-          alt={produto.nome}
-          fill
-          sizes="(min-width: 1024px) 20rem, (min-width: 640px) 50vw, 100vw"
-          className="object-cover transition duration-500 group-hover:scale-[1.03]"
-        />
-      </div>
+      <FotoProduto
+        foto={produto.foto}
+        nome={produto.nome}
+        cor={produto.cor}
+        className="h-44"
+        sizes="(min-width: 1024px) 20rem, (min-width: 640px) 50vw, 100vw"
+      />
       <div className="p-6">
         <div className="flex items-start justify-between gap-3">
           <h3 className="font-titulo text-lg">{produto.nome}</h3>

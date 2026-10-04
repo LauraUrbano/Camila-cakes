@@ -29,6 +29,12 @@ export default async function LayoutDaConfeiteira({
 
   const { confeiteira } = loja;
 
+  // O wa.me só aceita dígitos, e uma conta acabada de abrir ainda não tem
+  // contactos nenhuns: sem isto, o botão levava a uma conversa com ninguém e
+  // o rodapé mostrava um "·" sozinho.
+  const whatsapp = confeiteira.whatsapp.replace(/\D/g, "");
+  const contactos = [confeiteira.instagram, confeiteira.whatsapp].filter(Boolean);
+
   // É aqui que a personalização visual entra: o tema da confeiteira vira
   // variável CSS e todo o resto da página se pinta sozinho.
   const tema = {
@@ -55,12 +61,14 @@ export default async function LayoutDaConfeiteira({
               </span>
             </span>
           </Link>
-          <a
-            href="https://wa.me/"
-            className="rounded-full border border-borda px-4 py-2 text-sm"
-          >
-            {t.falarComigo}
-          </a>
+          {whatsapp && (
+            <a
+              href={`https://wa.me/${whatsapp}`}
+              className="rounded-full border border-borda px-4 py-2 text-sm"
+            >
+              {t.falarComigo}
+            </a>
+          )}
         </div>
       </header>
 
@@ -69,9 +77,9 @@ export default async function LayoutDaConfeiteira({
       <footer className="mt-24 border-t border-borda bg-cartao">
         <div className="mx-auto max-w-4xl px-6 py-10 text-sm text-suave">
           <p className="font-titulo text-texto">{confeiteira.nome}</p>
-          <p className="mt-1">
-            {confeiteira.instagram} · {confeiteira.whatsapp}
-          </p>
+          {contactos.length > 0 && (
+            <p className="mt-1">{contactos.join(" · ")}</p>
+          )}
           <div className="mt-6">
             <SeletorLingua />
           </div>

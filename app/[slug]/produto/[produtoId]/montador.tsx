@@ -1,7 +1,7 @@
 "use client";
 
+import FotoProduto from "@/app/foto-produto";
 import { useMemo, useState, useTransition } from "react";
-import Image from "next/image";
 import Link from "next/link";
 import Icone from "@/app/icones";
 import { useT } from "@/app/lingua";
@@ -216,19 +216,14 @@ export default function Montador({ produto, confeiteira, slug }: Props) {
           ← {d.montador.voltarCardapio}
         </Link>
 
-        <div
-          className="relative mt-5 h-64 overflow-hidden rounded-3xl sm:h-80"
-          style={{ background: produto.cor }}
-        >
-          <Image
-            src={produto.foto}
-            alt={produto.nome}
-            fill
-            priority
-            sizes="(min-width: 1024px) 40rem, 100vw"
-            className="object-cover"
-          />
-        </div>
+        <FotoProduto
+          foto={produto.foto}
+          nome={produto.nome}
+          cor={produto.cor}
+          className="mt-5 h-64 rounded-3xl sm:h-80"
+          sizes="(min-width: 1024px) 40rem, 100vw"
+          priority
+        />
 
         <h1 className="mt-6 text-3xl font-semibold">{produto.nome}</h1>
         <p className="mt-3 leading-relaxed text-suave">{produto.descricao}</p>

@@ -1,4 +1,4 @@
-import Image from "next/image";
+import FotoProduto from "@/app/foto-produto";
 import { lojaDoPainel } from "@/lib/fonte";
 import { dicionarioActual } from "@/lib/i18n/servidor";
 import { moeda, restam } from "@/lib/precos";
@@ -60,18 +60,13 @@ export default async function PaginaDoCardapio() {
             >
               <div className="flex flex-wrap items-center justify-between gap-4 border-b border-borda p-5">
                 <div className="flex items-center gap-4">
-                  <span
-                    className="relative h-14 w-14 shrink-0 overflow-hidden rounded-xl"
-                    style={{ background: produto.cor }}
-                  >
-                    <Image
-                      src={produto.foto}
-                      alt=""
-                      fill
-                      sizes="56px"
-                      className="object-cover"
-                    />
-                  </span>
+                  <FotoProduto
+                    foto={produto.foto}
+                    nome={produto.nome}
+                    cor={produto.cor}
+                    className="h-14 w-14 shrink-0 rounded-xl"
+                    sizes="56px"
+                  />
                   <span>
                     <span className="block font-titulo font-semibold">
                       {produto.nome}
