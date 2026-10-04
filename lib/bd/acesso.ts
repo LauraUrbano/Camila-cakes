@@ -85,3 +85,29 @@ export async function acessoDasContas(
     ]),
   );
 }
+
+/**
+ * Troca da senha pela própria confeiteira.
+ *
+ * Exige a senha actual: sem isso, quem apanhasse uma sessão aberta num
+ * computador emprestado mudava a senha e ficava com a conta.
+ */
+export async function trocarSenha(
+  exec: Executor,
+  slug: string,
+  actual: string,
+  nova: string,
+): Promise<{ ok: true } | { erro: "actualErrada" }> {
+  const [conta] = await exec<{ senha_hash: string | null }>(
+    `select senha_hash from confeiteiras where slug = $1`,
+    [slug],
+  );
+  if (!conta || !senhaBate(actual, conta.senha_hash)) {
+    return { erro: "actualErrada" };
+  }
+  await exec(`update confeiteiras set senha_hash = $2 where slug = $1`, [
+    slug,
+    guardarSenha(nova),
+  ]);
+  return { ok: true };
+}

@@ -15,6 +15,8 @@ export type PedidoNovo = {
   slug: string;
   cliente: string;
   telefone: string;
+  /** Opcional: sem ele a cliente não recebe aviso do aceite. */
+  email?: string;
   /** ISO (AAAA-MM-DD). Vazio quando a cliente não escolheu data. */
   entregaEm?: string;
   entregaNome: string;
@@ -49,21 +51,22 @@ export async function criarPedido(
       if (!confeiteira) return null;
 
       const [cliente] = await exec<{ id: string }>(
-        `insert into clientes (confeiteira_id, nome, telefone)
-         values ($1,$2,$3)
+        `insert into clientes (confeiteira_id, nome, telefone, email)
+         values ($1,$2,$3,$4)
          on conflict (confeiteira_id, telefone)
-           do update set nome = excluded.nome
+           do update set nome = excluded.nome,
+                         email = coalesce(nullif(excluded.email, ''), clientes.email)
          returning id`,
-        [confeiteira.id, pedido.cliente, pedido.telefone],
+        [confeiteira.id, pedido.cliente, pedido.telefone, pedido.email ?? ""],
       );
 
       const [criado] = await exec<{ referencia: string; id: string }>(
         `insert into pedidos
            (confeiteira_id, numero, referencia, cliente_id, cliente_nome,
-            telefone, entrega_em, entrega_nome, entrega_tipo, entrega_taxa,
-            status, personalizado)
-         select $1, proximo, 'ENC-' || proximo, $2, $3, $4, $5, $6, $7, $8,
-                'aguardando', $9
+            telefone, email, entrega_em, entrega_nome, entrega_tipo,
+            entrega_taxa, status, personalizado)
+         select $1, proximo, 'ENC-' || proximo, $2, $3, $4, $5, $6, $7, $8, $9,
+                'aguardando', $10
          from (
            select coalesce(max(numero), 100) + 1 as proximo
            from pedidos where confeiteira_id = $1
@@ -74,6 +77,7 @@ export async function criarPedido(
           cliente.id,
           pedido.cliente,
           pedido.telefone,
+          pedido.email ?? "",
           pedido.entregaEm || null,
           pedido.entregaNome,
           pedido.entregaTipo,

@@ -16,6 +16,7 @@ const menu: { href: string; chave: keyof Nav; icone: Nome }[] = [
   { href: "/dashboard/colecoes", chave: "colecoes", icone: "calendario" },
   { href: "/dashboard/pagina", chave: "pagina", icone: "paleta" },
   { href: "/dashboard/plano", chave: "plano", icone: "cartao" },
+  { href: "/dashboard/conta", chave: "conta", icone: "confirmado" },
 ];
 
 type Nav = Awaited<ReturnType<typeof dicionarioActual>>["painel"]["nav"];

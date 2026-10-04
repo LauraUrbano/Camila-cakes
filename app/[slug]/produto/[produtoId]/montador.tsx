@@ -112,6 +112,7 @@ export default function Montador({ produto, confeiteira, slug }: Props) {
   // confeiteira responder a quem a fez.
   const [nome, setNome] = useState("");
   const [telefone, setTelefone] = useState("");
+  const [email, setEmail] = useState("");
   const [dataFesta, setDataFesta] = useState("");
   const [enviado, setEnviado] = useState<string | null>(null);
   const [erro, setErro] = useState<string | null>(null);
@@ -156,6 +157,7 @@ export default function Montador({ produto, confeiteira, slug }: Props) {
         slug,
         cliente: nome,
         telefone,
+        email,
         entregaEm: dataFesta || undefined,
         entregaNome: entrega.nome,
         entregaTipo: entrega.tipo,
@@ -448,6 +450,19 @@ export default function Montador({ produto, confeiteira, slug }: Props) {
                 inputMode="tel"
                 className="mt-1 w-full rounded-xl border border-borda bg-cartao px-3 py-2 text-sm outline-none focus:border-marca"
               />
+            </label>
+            <label className="block text-xs">
+              <span className="text-suave">{d.personalizado.email}</span>
+              <input
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                type="email"
+                autoComplete="email"
+                className="mt-1 w-full rounded-xl border border-borda bg-cartao px-3 py-2 text-sm outline-none focus:border-marca"
+              />
+              <span className="mt-1 block text-suave">
+                {d.personalizado.emailAjuda}
+              </span>
             </label>
             <label className="block text-xs">
               <span className="text-suave">{d.personalizado.data}</span>

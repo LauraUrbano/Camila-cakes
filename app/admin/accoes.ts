@@ -28,6 +28,8 @@ import {
 } from "@/lib/bd/inscricoes";
 import { paraSlug } from "@/lib/slug";
 import { definirAcesso } from "@/lib/bd/acesso";
+import { emailDeBoasVindas } from "@/lib/email/mensagens";
+import { emailConfigurado } from "@/lib/email/enviar";
 
 /** Todas as acções daqui exigem sessão; nenhuma confia no que vem do ecrã. */
 async function exigirSessao() {
@@ -224,10 +226,19 @@ export async function darAcesso(
 
   const guardado = await definirAcesso(exec, slug, email, senha);
   revalidatePath("/admin/contas");
+  if ("erro" in guardado) return { erro: "Esse email já está noutra conta." };
 
-  return "erro" in guardado
-    ? { erro: "Esse email já está noutra conta." }
-    : { ok: `Entrada aberta para ${email}.` };
+  const [conta] = await exec<{ nome: string }>(
+    `select nome from confeiteiras where slug = $1`,
+    [slug],
+  );
+  emailDeBoasVindas({ para: email, nome: conta?.nome ?? slug, slug, senha });
+
+  return {
+    ok: emailConfigurado()
+      ? `Entrada aberta e email enviado para ${email}.`
+      : `Entrada aberta para ${email}. O email de boas-vindas não saiu — falta ligar o envio.`,
+  };
 }
 
 /**
