@@ -1,139 +1,108 @@
+import Link from "next/link";
 import FotoProduto from "@/app/foto-produto";
+import { executorNeon, temBaseDeDados } from "@/lib/bd/cliente";
+import { cardapioParaEditar } from "@/lib/bd/cardapio";
 import { exigirLoja } from "@/lib/fonte";
 import { dicionarioActual } from "@/lib/i18n/servidor";
-import { moeda, restam } from "@/lib/precos";
-import type { Moeda, Opcao } from "@/lib/tipos";
-
-
-
-function Opcoes({
-  titulo,
-  lista,
-  incluido,
-  codigo,
-}: {
-  titulo: string;
-  lista: Opcao[];
-  incluido: string;
-  codigo: Moeda;
-}) {
-  return (
-    <div>
-      <p className="text-xs font-medium text-suave">{titulo}</p>
-      <ul className="mt-2 space-y-1.5 text-sm">
-        {lista.map((opcao) => (
-          <li key={opcao.id} className="flex justify-between gap-3">
-            <span className={opcao.disponivel ? "" : "text-suave line-through"}>
-              {opcao.nome}
-            </span>
-            <span className="shrink-0 text-suave">
-              {opcao.acrescimo === 0
-                ? incluido
-                : `+ ${moeda(opcao.acrescimo, codigo)}`}
-            </span>
-          </li>
-        ))}
-      </ul>
-    </div>
-  );
-}
+import { moeda } from "@/lib/precos";
+import NovoProduto from "./novo";
+import Ordenar from "./ordenar";
 
 export default async function PaginaDoCardapio() {
-  const c = (await dicionarioActual()).painel.cardapio;
-  const { confeiteira, produtos } = await exigirLoja();
-  const codigo: Moeda = confeiteira.moeda;
+  const t = await dicionarioActual();
+  const c = t.painel.cardapio;
+  const e = t.painel.editor;
+  const { confeiteira } = await exigirLoja();
+
+  const produtos = temBaseDeDados()
+    ? await cardapioParaEditar(executorNeon(), confeiteira.slug)
+    : [];
 
   return (
     <div className="mx-auto max-w-4xl">
-      <h1 className="text-2xl font-semibold">{c.titulo}</h1>
-      <p className="mt-2 max-w-xl text-sm leading-relaxed text-suave">
-        {c.subtitulo}
-      </p>
+      <div className="flex flex-wrap items-start justify-between gap-4">
+        <div>
+          <h1 className="text-2xl">{c.titulo}</h1>
+          <p className="mt-2 max-w-xl text-sm leading-relaxed text-suave">
+            {c.subtitulo}
+          </p>
+        </div>
+        <NovoProduto />
+      </div>
 
-      <div className="mt-8 space-y-6">
-        {produtos.map((produto) => {
-          const sobrando = restam(produto);
+      <div className="mt-8 space-y-3">
+        {produtos.map((produto, i) => {
+          const desde = produto.tamanhos.length
+            ? Math.min(...produto.tamanhos.map((t) => t.preco))
+            : null;
+          const esgotado =
+            produto.limiteTotal !== null &&
+            produto.limiteVendidos >= produto.limiteTotal;
+
           return (
-            <section
-              key={produto.id}
-              className="overflow-hidden rounded-2xl border border-borda bg-cartao"
+            <article
+              key={produto.chave}
+              className={`flex flex-wrap items-center gap-4 rounded-2xl border bg-cartao p-4 ${
+                produto.activo ? "border-borda" : "border-dashed border-borda"
+              }`}
             >
-              <div className="flex flex-wrap items-center justify-between gap-4 border-b border-borda p-5">
-                <div className="flex items-center gap-4">
-                  <FotoProduto
-                    foto={produto.foto}
-                    nome={produto.nome}
-                    cor={produto.cor}
-                    className="h-14 w-14 shrink-0 rounded-xl"
-                    sizes="56px"
-                  />
-                  <span>
-                    <span className="block font-titulo font-semibold">
-                      {produto.nome}
-                    </span>
-                    <span className="block text-xs text-suave">
-                      {produto.categoria} · {produto.antecedenciaDias}{" "}
-                      {c.diasAntecedencia}
-                    </span>
-                  </span>
-                </div>
-                {sobrando !== null && (
-                  <span className="rounded-full bg-marca-suave px-3 py-1 text-xs font-medium text-marca">
-                    {c.limite}: {produto.limite!.vendidos}/
-                    {produto.limite!.total}
-                  </span>
-                )}
-              </div>
+              <FotoProduto
+                foto={produto.foto}
+                nome={produto.nome}
+                cor={produto.cor}
+                className="h-16 w-16 shrink-0 rounded-xl"
+                sizes="64px"
+              />
 
-              <div className="border-b border-borda p-5">
-                <p className="text-xs font-medium text-suave">
-                  {c.tamanhosNota}
+              <div className="min-w-0 grow">
+                <div className="flex flex-wrap items-center gap-2">
+                  <h2 className="font-titulo">{produto.nome}</h2>
+                  {desde !== null && (
+                    <span className="text-xs text-suave">
+                      {moeda(desde, confeiteira.moeda)}
+                    </span>
+                  )}
+                  {!produto.activo && (
+                    <span className="rounded-full border border-borda px-2.5 py-1 text-[11px] text-suave">
+                      {e.rascunho}
+                    </span>
+                  )}
+                  {esgotado && (
+                    <span className="rounded-full bg-borda px-2.5 py-1 text-[11px] text-suave">
+                      {e.esgotado}
+                    </span>
+                  )}
+                </div>
+                <p className="mt-1 truncate text-xs text-suave">
+                  {produto.categoria}
+                  {produto.categoria && produto.descricao && " · "}
+                  {produto.descricao}
                 </p>
-                <div className="mt-3 grid gap-3 sm:grid-cols-3">
-                  {produto.tamanhos.map((tamanho) => (
-                    <div
-                      key={tamanho.id}
-                      className="rounded-xl border border-borda p-4"
-                    >
-                      <p className="text-sm font-medium">{tamanho.nome}</p>
-                      <p className="mt-0.5 text-xs text-suave">
-                        {tamanho.porcoes}
-                      </p>
-                      <p className="mt-2 font-semibold">
-                        {moeda(tamanho.preco, codigo)}
-                      </p>
-                      <p className="mt-1 text-xs text-suave">
-                        {c.ate} {tamanho.maxRecheios}{" "}
-                        {tamanho.maxRecheios === 1 ? c.recheio : c.recheios}
-                      </p>
-                    </div>
-                  ))}
-                </div>
               </div>
 
-              <div className="grid gap-6 p-5 sm:grid-cols-3">
-                <Opcoes
-                  titulo={c.massas}
-                  lista={produto.massas}
-                  incluido={c.incluido}
-                  codigo={codigo}
+              <div className="flex items-center gap-2">
+                <Ordenar
+                  chave={produto.chave}
+                  indice={i}
+                  total={produtos.length}
+                  rotulos={{ subir: e.subir, descer: e.descer }}
                 />
-                <Opcoes
-                  titulo={c.recheiosTitulo}
-                  lista={produto.recheios}
-                  incluido={c.incluido}
-                  codigo={codigo}
-                />
-                <Opcoes
-                  titulo={`${c.decoracoes} (${c.ate} ${produto.maxDecoracoes})`}
-                  lista={produto.decoracoes}
-                  incluido={c.incluido}
-                  codigo={codigo}
-                />
+                <Link
+                  href={`/dashboard/cardapio/${produto.chave}`}
+                  className="rounded-full border border-borda px-4 py-2 text-xs transition hover:border-marca"
+                >
+                  {e.editar}
+                </Link>
               </div>
-            </section>
+            </article>
           );
         })}
+
+        {produtos.length === 0 && (
+          <p className="rounded-3xl border border-borda bg-cartao p-10 text-center text-sm leading-relaxed text-suave">
+            {e.semProdutos}
+          </p>
+        )}
       </div>
     </div>
   );

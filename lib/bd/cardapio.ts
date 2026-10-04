@@ -81,7 +81,49 @@ export async function criarProduto(
     [produto.id],
   );
 
+  // E entra numa coleção, senão não aparece em lado nenhum: a página pública
+  // mostra coleções, não produtos soltos. Um produto guardado que não se vê
+  // é o pior resultado possível para quem acabou de o criar.
+  await ligarAColecaoPrincipal(exec, lojaId, produto.id);
+
   return { chave };
+}
+
+/**
+ * Põe o produto na coleção de sempre, criando-a se a loja ainda não tiver
+ * nenhuma. Quem quiser organizar por épocas mexe nas coleções depois.
+ */
+async function ligarAColecaoPrincipal(
+  exec: Executor,
+  lojaId: string,
+  produtoId: string,
+): Promise<void> {
+  let [colecao] = await exec<{ id: string }>(
+    `select id from colecoes where confeiteira_id = $1 order by ordem, nome limit 1`,
+    [lojaId],
+  );
+
+  if (!colecao) {
+    [colecao] = await exec<{ id: string }>(
+      `insert into colecoes (confeiteira_id, chave, nome, descricao, periodo, ativa)
+       values ($1,'sempre','Cardápio de sempre','','sem data de fim',true)
+       returning id`,
+      [lojaId],
+    );
+  }
+
+  const [{ ordem }] = await exec<{ ordem: number }>(
+    `select coalesce(max(ordem), -1) + 1 as ordem
+     from colecao_produtos where colecao_id = $1`,
+    [colecao.id],
+  );
+
+  await exec(
+    `insert into colecao_produtos (colecao_id, produto_id, ordem)
+     values ($1,$2,$3)
+     on conflict (colecao_id, produto_id) do nothing`,
+    [colecao.id, produtoId, ordem],
+  );
 }
 
 export async function guardarProduto(
@@ -94,7 +136,11 @@ export async function guardarProduto(
     `update produtos p set
        nome = $3, descricao = $4, categoria = $5, cor = $6,
        max_decoracoes = $7, antecedencia_dias = $8,
-       limite_total = $9, limite_vendidos = least($10, coalesce($9, $10)),
+       -- Os moldes precisam de tipo explícito: o mesmo $9 aparece duas vezes,
+       -- uma delas dentro de coalesce, e sem a marca o Postgres não consegue
+       -- deduzir o tipo e recusa a instrução inteira.
+       limite_total = $9::integer,
+       limite_vendidos = least($10::integer, coalesce($9::integer, $10::integer)),
        activo = $11
      from confeiteiras c
      where c.id = p.confeiteira_id and c.slug = $1 and p.chave = $2`,
@@ -183,7 +229,9 @@ export async function guardarFotoDoProduto(
        foto_bytes = $3,
        foto_tipo = 'image/jpeg',
        foto_versao = p.foto_versao + 1,
-       foto = '/' || c.slug || '/foto/' || p.chave || '?v=' || (p.foto_versao + 1)
+       -- A versão entra no caminho e não numa interrogação: o next/image
+       -- recusa endereços locais com query string.
+       foto = '/' || c.slug || '/foto/' || p.chave || '/' || (p.foto_versao + 1)
      from confeiteiras c
      where c.id = p.confeiteira_id and c.slug = $1 and p.chave = $2`,
     [slug, chave, reduzida],
@@ -350,4 +398,95 @@ export async function guardarOpcoes(
       where produto_id = $1 and grupo = $2 and not (id = any($3::uuid[]))`,
     [produto.id, grupo, guardados],
   );
+}
+
+// --------------------------------------------------------- para o editor
+
+export type LinhaDeTamanho = TamanhoEditavel & { id: string };
+export type LinhaDeOpcao = OpcaoEditavel & { id: string };
+
+export type ProdutoParaEditar = ProdutoEditavel & {
+  chave: string;
+  foto: string;
+  tamanhos: LinhaDeTamanho[];
+  massas: LinhaDeOpcao[];
+  recheios: LinhaDeOpcao[];
+  decoracoes: LinhaDeOpcao[];
+};
+
+/**
+ * O cardápio como ela o vê para editar.
+ *
+ * Diferente do que vai para a página pública em duas coisas: traz também os
+ * produtos desligados, que são os rascunhos dela, e traz os identificadores
+ * das linhas, para o formulário saber o que actualizar e o que criar.
+ */
+export async function cardapioParaEditar(
+  exec: Executor,
+  slug: string,
+): Promise<ProdutoParaEditar[]> {
+  const lojaId = await idDaLoja(exec, slug);
+  if (!lojaId) return [];
+
+  const linhas = await exec<Record<string, unknown>>(
+    `select * from produtos where confeiteira_id = $1 order by ordem, nome`,
+    [lojaId],
+  );
+
+  const produtos: ProdutoParaEditar[] = [];
+  for (const p of linhas) {
+    const tamanhos = await exec<Record<string, unknown>>(
+      `select id, nome, porcoes, preco, max_recheios from tamanhos
+       where produto_id = $1 order by ordem, preco`,
+      [p.id],
+    );
+    const opcoes = await exec<Record<string, unknown>>(
+      `select id, grupo, nome, acrescimo, disponivel from opcoes
+       where produto_id = $1 order by ordem, nome`,
+      [p.id],
+    );
+    const doGrupo = (grupo: string): LinhaDeOpcao[] =>
+      opcoes
+        .filter((o) => o.grupo === grupo)
+        .map((o) => ({
+          id: String(o.id),
+          nome: String(o.nome),
+          acrescimo: Number(o.acrescimo ?? 0),
+          disponivel: Boolean(o.disponivel),
+        }));
+
+    produtos.push({
+      chave: String(p.chave),
+      nome: String(p.nome),
+      descricao: String(p.descricao ?? ""),
+      categoria: String(p.categoria ?? ""),
+      foto: p.foto ? String(p.foto) : "",
+      cor: String(p.cor ?? "#F3E3D7"),
+      maxDecoracoes: Number(p.max_decoracoes ?? 0),
+      antecedenciaDias: Number(p.antecedencia_dias ?? 0),
+      limiteTotal: p.limite_total === null ? null : Number(p.limite_total),
+      limiteVendidos: Number(p.limite_vendidos ?? 0),
+      activo: Boolean(p.activo),
+      tamanhos: tamanhos.map((t) => ({
+        id: String(t.id),
+        nome: String(t.nome),
+        porcoes: String(t.porcoes ?? ""),
+        preco: Number(t.preco ?? 0),
+        maxRecheios: Number(t.max_recheios ?? 0),
+      })),
+      massas: doGrupo("massa"),
+      recheios: doGrupo("recheio"),
+      decoracoes: doGrupo("decoracao"),
+    });
+  }
+  return produtos;
+}
+
+export async function produtoParaEditar(
+  exec: Executor,
+  slug: string,
+  chave: string,
+): Promise<ProdutoParaEditar | undefined> {
+  const todos = await cardapioParaEditar(exec, slug);
+  return todos.find((p) => p.chave === chave);
 }
