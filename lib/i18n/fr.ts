@@ -23,7 +23,7 @@ export const fr: Dicionario = {
     verExemplo: "Voir un exemple",
     cardapio: "carte",
     lingua: "Langue",
-    prototipo: "prototype navigable avec des données d'exemple",
+    prototipo: "votre page de commandes",
     assinatura: "gérez votre activité pâtissière en un seul endroit",
     entrar: "Se connecter",
     criarConta: "Créer un compte",
@@ -33,7 +33,7 @@ export const fr: Dicionario = {
   },
 
   home: {
-    aviso: "Prototype visuel — pas encore de base de données",
+    aviso: "Sans commission · Sans carte · Vous arrêtez quand vous voulez",
     titulo: "Tout ce dont votre activité pâtissière a besoin,",
     tituloDestaque: "en un seul endroit.",
     subtitulo:
@@ -153,9 +153,9 @@ export const fr: Dicionario = {
     codigoTexto: "Utilisez-le dans",
     codigoLink: "Formule et facturation",
     codigoFim: "et la formule est à vous pour toujours, sans paiement ni carte.",
-    prototipoTitulo: "Ceci est un prototype.",
+    prototipoTitulo: "Le premier mois est offert.",
     prototipoTexto:
-      "Aucun paiement n'est traité — la connexion à Stripe arrivera avec les comptes et la base de données.",
+      "Vous commencez sans carte. À la fin du mois, vous décidez si vous continuez — et ce que vos clientes vous paient pour les gâteaux ne passe jamais par ici.",
     duvidasTitulo: "Avant que vous ne demandiez",
     duvidas: [
       {

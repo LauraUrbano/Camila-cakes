@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import Logo from "@/app/logo";
 import { SeletorLingua } from "@/app/lingua";
@@ -5,6 +6,13 @@ import { dicionarioActual } from "@/lib/i18n/servidor";
 import { lojaDoPainel } from "@/lib/fonte";
 import { redirect } from "next/navigation";
 import FormularioEntrar from "./formulario";
+
+/** A entrada não se indexa: um resultado de busca que dê num ecrã de senha
+ *  só gasta o tempo de quem lá vai parar. */
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await dicionarioActual();
+  return { title: t.entrar.titulo, robots: { index: false, follow: false } };
+}
 
 export default async function Entrar() {
   // Quem já entrou não precisa de voltar a entrar.

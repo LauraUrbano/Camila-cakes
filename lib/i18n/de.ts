@@ -23,7 +23,7 @@ export const de: Dicionario = {
     verExemplo: "Beispiel ansehen",
     cardapio: "Sortiment",
     lingua: "Sprache",
-    prototipo: "klickbarer Prototyp mit Beispieldaten",
+    prototipo: "deine Bestellseite",
     assinatura: "Ihr Tortengeschäft an einem Ort",
     entrar: "Anmelden",
     criarConta: "Konto erstellen",
@@ -33,7 +33,7 @@ export const de: Dicionario = {
   },
 
   home: {
-    aviso: "Visueller Prototyp — noch ohne Datenbank",
+    aviso: "Keine Provision · Keine Karte · Jederzeit kündbar",
     titulo: "Alles, was Ihr Tortengeschäft braucht,",
     tituloDestaque: "an einem Ort.",
     subtitulo:
@@ -153,9 +153,9 @@ export const de: Dicionario = {
     codigoTexto: "Lösen Sie ihn ein unter",
     codigoLink: "Paket und Abrechnung",
     codigoFim: "und das Paket gehört Ihnen dauerhaft, ohne Zahlung und ohne Karte.",
-    prototipoTitulo: "Das hier ist ein Prototyp.",
+    prototipoTitulo: "Der erste Monat ist gratis.",
     prototipoTexto:
-      "Es wird keine Zahlung verarbeitet — die Anbindung an Stripe kommt, sobald es Konten und eine Datenbank gibt.",
+      "Du startest ohne Karte. Am Monatsende entscheidest du, ob du weitermachst — und was deine Kundinnen für die Torten zahlen, läuft nie über uns.",
     duvidasTitulo: "Bevor Sie fragen",
     duvidas: [
       {

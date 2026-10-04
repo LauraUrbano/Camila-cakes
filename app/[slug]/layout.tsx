@@ -1,8 +1,10 @@
 import type { ReactNode, CSSProperties } from "react";
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { lojaDoSlug } from "@/lib/fonte";
 import { dicionarioActual } from "@/lib/i18n/servidor";
+import { url } from "@/lib/seo";
 import { SeletorLingua } from "@/app/lingua";
 
 /** Duas iniciais servem de marca enquanto a confeiteira não carrega um logótipo. */
@@ -13,6 +15,51 @@ function iniciais(nome: string) {
     .map((palavra) => palavra[0])
     .join("")
     .toUpperCase();
+}
+
+/**
+ * Cada confeitaria tem a sua ficha nos motores de busca e nas redes.
+ *
+ * É a página dela que é partilhada no Instagram e no WhatsApp, não a nossa:
+ * o título, o texto e a imagem têm de ser os dela. A foto do primeiro
+ * produto serve de imagem de partilha enquanto ela não escolher outra —
+ * melhor um bolo verdadeiro do que o nosso cartão genérico.
+ */
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
+  const { slug } = await params;
+  const loja = await lojaDoSlug(slug);
+  if (!loja) return {};
+
+  const { confeiteira } = loja;
+  const titulo = `${confeiteira.nome} — bolos por encomenda em ${confeiteira.cidade}`;
+  const descricao =
+    confeiteira.tagline ||
+    confeiteira.bio ||
+    `Encomenda bolos a ${confeiteira.nome}, em ${confeiteira.cidade}.`;
+  const foto = loja.produtos.find((p) => p.foto)?.foto;
+
+  return {
+    title: titulo,
+    description: descricao,
+    alternates: { canonical: `/${slug}` },
+    openGraph: {
+      type: "website",
+      title: titulo,
+      description: descricao,
+      url: url(`/${slug}`),
+      images: foto ? [{ url: foto }] : undefined,
+    },
+    twitter: {
+      card: foto ? "summary_large_image" : "summary",
+      title: titulo,
+      description: descricao,
+      images: foto ? [foto] : undefined,
+    },
+  };
 }
 
 export default async function LayoutDaConfeiteira({

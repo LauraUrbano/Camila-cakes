@@ -21,7 +21,7 @@ export const ptPT = {
     verExemplo: "Ver exemplo",
     cardapio: "cardápio",
     lingua: "Língua",
-    prototipo: "protótipo navegável com dados de exemplo",
+    prototipo: "a tua página de encomendas",
     assinatura: "gestão do teu negócio de bolos",
     entrar: "Entrar",
     criarConta: "Criar conta",
@@ -31,7 +31,7 @@ export const ptPT = {
   },
 
   home: {
-    aviso: "Protótipo de visualização — ainda sem base de dados",
+    aviso: "Sem comissões · Sem cartão · Cancelas quando quiseres",
     titulo: "Tudo o que o teu negócio de bolos precisa,",
     tituloDestaque: "num só lugar.",
     subtitulo:
@@ -153,9 +153,9 @@ export const ptPT = {
     codigoLink: "Plano e faturação",
     codigoFim:
       "e ficas com o plano para sempre, sem pagar e sem cartão.",
-    prototipoTitulo: "Isto é um protótipo.",
+    prototipoTitulo: "O primeiro mês é grátis.",
     prototipoTexto:
-      "Nenhum pagamento é processado — a ligação ao Stripe entra quando houver contas e base de dados.",
+      "Começas sem cartão. Ao fim do mês decides se continuas — e o que a tua cliente te paga pelos bolos nunca passa por aqui.",
     duvidasTitulo: "Antes que perguntes",
     duvidas: [
       {

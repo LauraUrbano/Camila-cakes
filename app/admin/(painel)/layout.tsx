@@ -23,6 +23,11 @@ const menu = [
  * num ciclo. O grupo deixa a página de entrada fora do portão sem lhe mudar
  * o endereço.
  */
+export const metadata = {
+  title: "Plataforma",
+  robots: { index: false, follow: false },
+};
+
 export default async function LayoutAdmin({
   children,
 }: {

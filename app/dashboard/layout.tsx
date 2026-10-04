@@ -28,6 +28,11 @@ function iniciais(nome: string) {
     .toUpperCase();
 }
 
+export const metadata = {
+  title: "Painel",
+  robots: { index: false, follow: false },
+};
+
 export default async function LayoutDoPainel({
   children,
 }: {

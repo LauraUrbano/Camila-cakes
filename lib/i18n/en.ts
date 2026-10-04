@@ -19,7 +19,7 @@ export const en: Dicionario = {
     verExemplo: "See an example",
     cardapio: "menu",
     lingua: "Language",
-    prototipo: "clickable prototype with sample data",
+    prototipo: "your orders page",
     assinatura: "run your cake business in one place",
     entrar: "Sign in",
     criarConta: "Create account",
@@ -29,7 +29,7 @@ export const en: Dicionario = {
   },
 
   home: {
-    aviso: "Visual prototype — no database yet",
+    aviso: "No commission · No card · Cancel whenever you like",
     titulo: "Everything your cake business needs,",
     tituloDestaque: "in one place.",
     subtitulo:
@@ -149,9 +149,9 @@ export const en: Dicionario = {
     codigoTexto: "Redeem it in",
     codigoLink: "Plan and billing",
     codigoFim: "and the plan is yours for good, with no payment and no card.",
-    prototipoTitulo: "This is a prototype.",
+    prototipoTitulo: "The first month is free.",
     prototipoTexto:
-      "No payment is processed — the Stripe connection lands once there are accounts and a database.",
+      "You start without a card. At the end of the month you decide whether to carry on — and what your customers pay you for the cakes never passes through here.",
     duvidasTitulo: "Before you ask",
     duvidas: [
       {

@@ -5,6 +5,7 @@ import { produtosDaColecao } from "@/lib/dados";
 import { lojaDoSlug } from "@/lib/fonte";
 import { dicionarioActual } from "@/lib/i18n/servidor";
 import { moeda, precoAPartirDe, restam } from "@/lib/precos";
+import { url } from "@/lib/seo";
 import type { Moeda, Produto } from "@/lib/tipos";
 
 function CardProduto({
@@ -82,8 +83,38 @@ export default async function PaginaDaConfeiteira({
   const codigo = confeiteira.moeda;
   const ativas = loja.colecoes.filter((colecao) => colecao.ativa);
 
+  /**
+   * Dados estruturados: é assim que o Google percebe que isto é uma
+   * confeitaria de uma cidade e não um artigo, e o que lhe permite mostrar
+   * a morada e os produtos no resultado da busca.
+   */
+  const dados = {
+    "@context": "https://schema.org",
+    "@type": "Bakery",
+    name: confeiteira.nome,
+    description: confeiteira.bio || confeiteira.tagline,
+    url: url(`/${slug}`),
+    address: {
+      "@type": "PostalAddress",
+      addressLocality: confeiteira.cidade,
+      addressCountry: confeiteira.pais,
+    },
+    currenciesAccepted: confeiteira.moeda,
+    makesOffer: loja.produtos.slice(0, 20).map((produto) => ({
+      "@type": "Offer",
+      name: produto.nome,
+      price: precoAPartirDe(produto),
+      priceCurrency: confeiteira.moeda,
+      url: url(`/${slug}/produto/${produto.id}`),
+    })),
+  };
+
   return (
     <main className="mx-auto max-w-4xl px-6">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(dados) }}
+      />
       <section className="py-16">
         <h1 className="max-w-lg text-3xl leading-snug sm:text-[2.6rem]">
           {confeiteira.tagline}

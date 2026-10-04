@@ -1,9 +1,25 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import Logo from "@/app/logo";
 import { SeletorLingua } from "@/app/lingua";
 import { comparacao, planos } from "@/lib/dados";
 import { dicionarioActual, moedaActual } from "@/lib/i18n/servidor";
+import { url } from "@/lib/seo";
 import TabelaPrecos from "./tabela-precos";
+
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await dicionarioActual();
+  return {
+    title: t.precos.titulo,
+    description: t.precos.subtitulo,
+    alternates: { canonical: "/precos" },
+    openGraph: {
+      title: t.precos.titulo,
+      description: t.precos.subtitulo,
+      url: url("/precos"),
+    },
+  };
+}
 
 export default async function Precos() {
   const t = await dicionarioActual();

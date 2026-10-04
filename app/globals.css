@@ -88,3 +88,26 @@ h3 {
     animation: none;
   }
 }
+
+/* Entrada dos blocos ao chegar a eles. Contida de propósito: a página deve
+   parecer viva ao passar, não chamar a atenção para a animação. */
+.revela {
+  opacity: 0;
+  transform: translateY(18px);
+  transition:
+    opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.revela-dentro {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .revela {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}

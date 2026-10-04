@@ -20,7 +20,7 @@ export const ptBR: Dicionario = {
     verExemplo: "Ver exemplo",
     cardapio: "cardápio",
     lingua: "Idioma",
-    prototipo: "protótipo navegável com dados de exemplo",
+    prototipo: "a sua página de pedidos",
     assinatura: "gestão do seu negócio de bolos",
     entrar: "Entrar",
     criarConta: "Criar conta",
@@ -30,7 +30,7 @@ export const ptBR: Dicionario = {
   },
 
   home: {
-    aviso: "Protótipo de visualização — ainda sem banco de dados",
+    aviso: "Sem comissões · Sem cartão · Cancela quando quiser",
     titulo: "Tudo o que o seu negócio de bolos precisa,",
     tituloDestaque: "num só lugar.",
     subtitulo:
@@ -150,9 +150,9 @@ export const ptBR: Dicionario = {
     codigoTexto: "Resgate em",
     codigoLink: "Plano e faturamento",
     codigoFim: "e fica com o plano para sempre, sem pagar e sem cartão.",
-    prototipoTitulo: "Isto é um protótipo.",
+    prototipoTitulo: "O primeiro mês é grátis.",
     prototipoTexto:
-      "Nenhum pagamento é processado — a ligação ao Stripe entra quando houver contas e banco de dados.",
+      "Você começa sem cartão. No fim do mês decide se continua — e o que a sua cliente paga pelos bolos nunca passa por aqui.",
     duvidasTitulo: "Antes que você pergunte",
     duvidas: [
       {

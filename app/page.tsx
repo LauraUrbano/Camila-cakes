@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import Icone, { type Nome } from "@/app/icones";
 import Logo from "@/app/logo";
+import Revelar from "@/app/revelar";
 import Camadas, { type Camada } from "@/app/camadas";
 import VitrineTema, { type Vitrine } from "@/app/vitrine-tema";
 import { SeletorLingua } from "@/app/lingua";
@@ -148,6 +149,7 @@ export default async function Home() {
                 {t.home.verPagina}
               </Link>
             </div>
+            <p className="mt-6 text-sm text-suave">{t.home.aviso}</p>
           </div>
 
           <div className="relative mx-auto aspect-square w-full max-w-md">
@@ -198,7 +200,7 @@ export default async function Home() {
         <section id="como-funciona" className="scroll-mt-4 border-y border-borda bg-cartao">
           <div className="mx-auto grid max-w-6xl gap-10 px-6 py-16 sm:grid-cols-3">
             {t.home.passos.map((passo, i) => (
-              <div key={passo.titulo}>
+              <Revelar key={passo.titulo} atraso={i * 0.12}>
                 <span className="font-titulo text-3xl text-marca/40">
                   {String(i + 1).padStart(2, "0")}
                 </span>
@@ -206,13 +208,13 @@ export default async function Home() {
                 <p className="mt-2.5 text-sm leading-relaxed text-suave">
                   {passo.texto}
                 </p>
-              </div>
+              </Revelar>
             ))}
           </div>
         </section>
 
         <section className="py-20">
-          <div className="mx-auto max-w-5xl px-6">
+          <Revelar className="mx-auto max-w-5xl px-6">
             <div className="flex items-center gap-4">
               <span className="h-px w-12 bg-marca" />
               <span className="text-xs tracking-[0.18em] text-suave uppercase">
@@ -229,11 +231,11 @@ export default async function Home() {
             <div className="mt-12">
               <Camadas camadas={areas} />
             </div>
-          </div>
+          </Revelar>
         </section>
 
         <section className="mx-auto max-w-6xl px-6 pb-20">
-          <div className="grid items-center gap-10 rounded-[2.5rem] bg-marca-suave p-10 sm:p-14 lg:grid-cols-2">
+          <Revelar className="grid items-center gap-10 rounded-[2.5rem] bg-marca-suave p-10 sm:p-14 lg:grid-cols-2">
             <div>
               <h2 className="font-titulo text-3xl leading-snug">
                 {t.home.aceiteTitulo}
@@ -261,10 +263,11 @@ export default async function Home() {
                 {t.home.aceiteNota}
               </p>
             </div>
-          </div>
+          </Revelar>
         </section>
 
         <section className="mx-auto max-w-5xl px-6 pb-24">
+          <Revelar>
           <div className="flex items-center gap-4">
             <span className="h-px w-12 bg-marca" />
             <span className="text-xs tracking-[0.18em] text-suave uppercase">
@@ -281,10 +284,11 @@ export default async function Home() {
           <div className="mt-10">
             <VitrineTema vitrines={vitrines} />
           </div>
+          </Revelar>
         </section>
 
         <section className="border-t border-borda bg-cartao">
-          <div className="mx-auto max-w-6xl px-6 py-20 text-center">
+          <Revelar className="mx-auto max-w-6xl px-6 py-20 text-center">
             <h2 className="mx-auto max-w-lg font-titulo text-3xl leading-snug">
               {t.home.chamadaTitulo}
             </h2>
@@ -303,7 +307,7 @@ export default async function Home() {
               </Link>
             </div>
             <p className="mt-5 text-sm text-suave">{t.home.chamadaAjuda}</p>
-          </div>
+          </Revelar>
         </section>
       </main>
 

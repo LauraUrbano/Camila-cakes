@@ -1,8 +1,10 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import Logo from "@/app/logo";
 import { SeletorLingua } from "@/app/lingua";
 import { planos } from "@/lib/dados";
 import { dicionarioActual, moedaActual } from "@/lib/i18n/servidor";
+import { url } from "@/lib/seo";
 import FormularioAcesso from "./formulario";
 
 /**
@@ -13,6 +15,20 @@ import FormularioAcesso from "./formulario";
  * nós. Pedir cartão numa página que não cobra nada seria pior do que não ter
  * destino nenhum.
  */
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await dicionarioActual();
+  return {
+    title: t.assinar.titulo,
+    description: t.assinar.subtitulo,
+    alternates: { canonical: "/assinar" },
+    openGraph: {
+      title: t.assinar.titulo,
+      description: t.assinar.subtitulo,
+      url: url("/assinar"),
+    },
+  };
+}
+
 export default async function Assinar({
   searchParams,
 }: {
