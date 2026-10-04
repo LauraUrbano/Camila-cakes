@@ -29,6 +29,12 @@ export const ptPT = {
     produto: "Produto",
     conta: "Conta",
     menu: "Menu",
+    legal: "Legal",
+    termos: "Termos de serviço",
+    privacidade: "Privacidade",
+    informacoes: "Informações legais",
+    reclamacoes: "Livro de reclamações",
+    naoVendemos: "O Cakelyo dá a ferramenta. A encomenda é com %s, e é com ela o pagamento e qualquer reclamação.",
   },
 
   home: {
@@ -450,6 +456,7 @@ export const ptPT = {
     falarComigo: "Falar comigo",
     feitaNo: "Página feita no Cakelyo ·",
     criaATua: "cria a tua",
+    naoVendemos: "O Cakelyo dá a ferramenta. A encomenda é com %s, e é com ela o pagamento e qualquer reclamação.",
     desde: "desde",
     diasAntes: "dias antes",
     esgotado: "esgotado",

@@ -111,3 +111,55 @@ h3 {
     transition: none;
   }
 }
+
+/* Páginas legais: texto corrido, com respiração entre secções e sem
+   decoração nenhuma. O que se quer aqui é que se leia, não que impressione. */
+.legal h1 {
+  font-size: 2rem;
+  line-height: 1.2;
+}
+
+.legal h2 {
+  margin-top: 2.75rem;
+  margin-bottom: 0.75rem;
+  font-size: 1.15rem;
+  font-weight: 600;
+}
+
+.legal h3 {
+  margin-top: 1.75rem;
+  margin-bottom: 0.4rem;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.legal p,
+.legal li {
+  line-height: 1.75;
+  color: var(--suave);
+}
+
+.legal p {
+  margin-top: 0.9rem;
+}
+
+.legal ul {
+  margin-top: 0.9rem;
+  list-style: disc;
+  padding-left: 1.2rem;
+}
+
+.legal li {
+  margin-top: 0.4rem;
+}
+
+.legal strong {
+  color: var(--texto);
+  font-weight: 600;
+}
+
+.legal a {
+  color: var(--marca);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}

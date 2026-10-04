@@ -27,6 +27,12 @@ export const en: Dicionario = {
     produto: "Product",
     conta: "Account",
     menu: "Menu",
+    legal: "Legal",
+    termos: "Terms of service",
+    privacidade: "Privacy",
+    informacoes: "Legal information",
+    reclamacoes: "Complaints book",
+    naoVendemos: "Cakelyo provides the tool. The order is with %s, and so is payment and any complaint.",
   },
 
   home: {
@@ -446,6 +452,7 @@ export const en: Dicionario = {
     falarComigo: "Message me",
     feitaNo: "Page made with Cakelyo ·",
     criaATua: "make yours",
+    naoVendemos: "Cakelyo provides the tool. The order is with %s, and so is payment and any complaint.",
     desde: "from",
     diasAntes: "days ahead",
     esgotado: "sold out",

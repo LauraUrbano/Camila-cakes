@@ -127,6 +127,13 @@ export default async function LayoutDaConfeiteira({
           {contactos.length > 0 && (
             <p className="mt-1">{contactos.join(" · ")}</p>
           )}
+          {/* Quem chega aqui tem de perceber com quem está a tratar. A
+              encomenda, o pagamento e a reclamação são com a confeitaria;
+              nós damos a ferramenta e mais nada. */}
+          <p className="mt-6 max-w-lg text-xs leading-relaxed">
+            {t.naoVendemos.replace("%s", confeiteira.nome)}
+          </p>
+
           <div className="mt-6">
             <SeletorLingua />
           </div>

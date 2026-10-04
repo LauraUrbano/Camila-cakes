@@ -31,6 +31,12 @@ export const fr: Dicionario = {
     produto: "Produit",
     conta: "Compte",
     menu: "Menu",
+    legal: "Mentions légales",
+    termos: "Conditions de service",
+    privacidade: "Confidentialité",
+    informacoes: "Informations légales",
+    reclamacoes: "Livre de réclamations",
+    naoVendemos: "Cakelyo fournit l'outil. La commande est avec %s, ainsi que le paiement et toute réclamation.",
   },
 
   home: {
@@ -450,6 +456,7 @@ export const fr: Dicionario = {
     falarComigo: "M'écrire",
     feitaNo: "Page réalisée avec Cakelyo ·",
     criaATua: "créez la vôtre",
+    naoVendemos: "Cakelyo fournit l'outil. La commande est avec %s, ainsi que le paiement et toute réclamation.",
     desde: "à partir de",
     diasAntes: "jours à l'avance",
     esgotado: "épuisé",

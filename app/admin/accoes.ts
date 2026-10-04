@@ -229,3 +229,17 @@ export async function darAcesso(
     ? { erro: "Esse email já está noutra conta." }
     : { ok: `Entrada aberta para ${email}.` };
 }
+
+/**
+ * Guarda um dado da empresa que aparece nas páginas legais.
+ *
+ * Revalida as três páginas: a morada e o contacto estão escritos nelas, e
+ * uma morada antiga numa página legal é pior do que nenhuma.
+ */
+export async function guardarDadoLegal(chave: string, valor: string) {
+  const exec = await exigirSessao();
+  await guardarDefinicao(exec, chave, valor.trim());
+  for (const pagina of ["/termos", "/privacidade", "/legal", "/admin/legal"]) {
+    revalidatePath(pagina);
+  }
+}

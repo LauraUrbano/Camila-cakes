@@ -31,6 +31,12 @@ export const de: Dicionario = {
     produto: "Produkt",
     conta: "Konto",
     menu: "Menü",
+    legal: "Rechtliches",
+    termos: "Nutzungsbedingungen",
+    privacidade: "Datenschutz",
+    informacoes: "Rechtliche Angaben",
+    reclamacoes: "Beschwerdebuch",
+    naoVendemos: "Cakelyo stellt das Werkzeug. Die Bestellung läuft über %s — ebenso Zahlung und Beschwerden.",
   },
 
   home: {
@@ -450,6 +456,7 @@ export const de: Dicionario = {
     falarComigo: "Schreiben Sie mir",
     feitaNo: "Seite erstellt mit Cakelyo ·",
     criaATua: "erstellen Sie Ihre",
+    naoVendemos: "Cakelyo stellt das Werkzeug. Die Bestellung läuft über %s — ebenso Zahlung und Beschwerden.",
     desde: "ab",
     diasAntes: "Tage vorher",
     esgotado: "ausverkauft",

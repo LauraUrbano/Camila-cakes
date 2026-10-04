@@ -287,7 +287,7 @@ export default async function Home() {
 
       <footer className="border-t border-borda">
         <div className="mx-auto max-w-6xl px-6 py-12">
-          <div className="grid gap-10 sm:grid-cols-[1.4fr_1fr_1fr]">
+          <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-[1.4fr_1fr_1fr_1fr]">
             <div>
               <Logo />
               <p className="mt-4 max-w-xs text-sm leading-relaxed text-suave">
@@ -331,6 +331,37 @@ export default async function Home() {
                   <Link href="/assinar" className="hover:text-texto">
                     {t.comum.criarConta}
                   </Link>
+                </li>
+              </ul>
+            </div>
+
+            <div className="text-sm">
+              <p className="font-titulo">{t.comum.legal}</p>
+              <ul className="mt-3 space-y-2 text-suave">
+                <li>
+                  <Link href="/termos" className="hover:text-texto">
+                    {t.comum.termos}
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/privacidade" className="hover:text-texto">
+                    {t.comum.privacidade}
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/legal" className="hover:text-texto">
+                    {t.comum.informacoes}
+                  </Link>
+                </li>
+                <li>
+                  <a
+                    href="https://www.livroreclamacoes.pt/inicio"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="hover:text-texto"
+                  >
+                    {t.comum.reclamacoes} ↗
+                  </a>
                 </li>
               </ul>
             </div>

@@ -28,6 +28,12 @@ export const ptBR: Dicionario = {
     produto: "Produto",
     conta: "Conta",
     menu: "Menu",
+    legal: "Legal",
+    termos: "Termos de serviço",
+    privacidade: "Privacidade",
+    informacoes: "Informações legais",
+    reclamacoes: "Livro de reclamações",
+    naoVendemos: "O Cakelyo dá a ferramenta. O pedido é com %s, e é com ela o pagamento e qualquer reclamação.",
   },
 
   home: {
@@ -447,6 +453,7 @@ export const ptBR: Dicionario = {
     falarComigo: "Falar comigo",
     feitaNo: "Página feita no Cakelyo ·",
     criaATua: "crie a sua",
+    naoVendemos: "O Cakelyo dá a ferramenta. O pedido é com %s, e é com ela o pagamento e qualquer reclamação.",
     desde: "a partir de",
     diasAntes: "dias antes",
     esgotado: "esgotado",
