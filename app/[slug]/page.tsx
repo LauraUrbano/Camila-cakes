@@ -5,6 +5,10 @@ import { produtosDaColecao } from "@/lib/dados";
 import { lojaDoSlug } from "@/lib/fonte";
 import { dicionarioActual } from "@/lib/i18n/servidor";
 import { moeda, precoAPartirDe, restam } from "@/lib/precos";
+import { executorNeon, temBaseDeDados } from "@/lib/bd/cliente";
+import { avaliacoesPublicas } from "@/lib/bd/avaliacoes";
+import { linguaActual } from "@/lib/i18n/servidor";
+import Avaliacoes from "./avaliacoes";
 import { url } from "@/lib/seo";
 import type { Moeda, Produto } from "@/lib/tipos";
 
@@ -82,6 +86,9 @@ export default async function PaginaDaConfeiteira({
   const { confeiteira } = loja;
   const codigo = confeiteira.moeda;
   const ativas = loja.colecoes.filter((colecao) => colecao.ativa);
+  const avaliacoes = temBaseDeDados()
+    ? await avaliacoesPublicas(executorNeon(), slug)
+    : { lista: [], resumo: { media: 0, quantas: 0, porNota: [0, 0, 0, 0, 0] } };
 
   /**
    * Dados estruturados: é assim que o Google percebe que isto é uma
@@ -100,6 +107,15 @@ export default async function PaginaDaConfeiteira({
       addressCountry: confeiteira.pais,
     },
     currenciesAccepted: confeiteira.moeda,
+    ...(avaliacoes.resumo.quantas > 0 && {
+      aggregateRating: {
+        "@type": "AggregateRating",
+        ratingValue: avaliacoes.resumo.media.toFixed(1),
+        reviewCount: avaliacoes.resumo.quantas,
+        bestRating: 5,
+        worstRating: 1,
+      },
+    }),
     makesOffer: loja.produtos.slice(0, 20).map((produto) => ({
       "@type": "Offer",
       name: produto.nome,
@@ -204,6 +220,14 @@ export default async function PaginaDaConfeiteira({
           </p>
         </div>
       </section>
+
+      <Avaliacoes
+        slug={slug}
+        nome={confeiteira.nome}
+        lista={avaliacoes.lista}
+        resumo={avaliacoes.resumo}
+        lingua={await linguaActual()}
+      />
     </main>
   );
 }

@@ -11,6 +11,7 @@ const menu: { href: string; chave: keyof Nav; icone: Nome }[] = [
   { href: "/dashboard", chave: "geral", icone: "casa" },
   { href: "/dashboard/pedidos", chave: "pedidos", icone: "lista" },
   { href: "/dashboard/relatorios", chave: "relatorios", icone: "grafico" },
+  { href: "/dashboard/avaliacoes", chave: "avaliacoes", icone: "conversa" },
   { href: "/dashboard/cardapio", chave: "cardapio", icone: "bolo" },
   { href: "/dashboard/colecoes", chave: "colecoes", icone: "calendario" },
   { href: "/dashboard/pagina", chave: "pagina", icone: "paleta" },
