@@ -3,11 +3,18 @@ import { exigirLoja } from "@/lib/fonte";
 import { dicionarioActual } from "@/lib/i18n/servidor";
 
 import { moeda } from "@/lib/precos";
+import { executorNeon, temBaseDeDados } from "@/lib/bd/cliente";
+import { seoDaPagina } from "@/lib/bd/pagina";
+import SeccaoSeo from "./seo";
 
 export default async function PaginaDaMinhaPagina() {
   const p = (await dicionarioActual()).painel.pagina;
   const { confeiteira } = await exigirLoja();
   const { tema, entregas } = confeiteira;
+
+  const seo = temBaseDeDados()
+    ? await seoDaPagina(executorNeon(), confeiteira.slug)
+    : { titulo: "", descricao: "", versaoDaImagem: 0 };
 
   return (
     <div className="mx-auto max-w-4xl">
@@ -16,7 +23,16 @@ export default async function PaginaDaMinhaPagina() {
         {p.subtitulo}
       </p>
 
-      <section className="mt-8 rounded-2xl border border-borda bg-cartao p-6">
+      <div className="mt-8">
+        <SeccaoSeo
+          slug={confeiteira.slug}
+          nome={confeiteira.nome}
+          cidade={confeiteira.cidade}
+          inicial={seo}
+        />
+      </div>
+
+      <section className="mt-6 rounded-2xl border border-borda bg-cartao p-6">
         <h2 className="font-titulo font-semibold">{p.endereco}</h2>
         <div className="mt-4 space-y-4 text-sm">
           <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl bg-fundo p-4">

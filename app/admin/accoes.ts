@@ -29,7 +29,8 @@ import {
 import { paraSlug } from "@/lib/slug";
 import { definirAcesso } from "@/lib/bd/acesso";
 import { emailDeBoasVindas } from "@/lib/email/mensagens";
-import { emailConfigurado } from "@/lib/email/enviar";
+import { emailConfigurado, enviar, testarLigacao } from "@/lib/email/enviar";
+import { moldar } from "@/lib/email/modelo";
 
 /** Todas as acções daqui exigem sessão; nenhuma confia no que vem do ecrã. */
 async function exigirSessao() {
@@ -253,4 +254,35 @@ export async function guardarDadoLegal(chave: string, valor: string) {
   for (const pagina of ["/termos", "/privacidade", "/legal", "/admin/legal"]) {
     revalidatePath(pagina);
   }
+}
+
+/** Experimenta o SMTP a partir do painel, sem mandar nada a ninguém. */
+export async function testarEmail(): Promise<{ ok: boolean; erro?: string }> {
+  await exigirSessao();
+  return testarLigacao();
+}
+
+/** Manda um email de verdade para o endereço do painel, para se ver como chega. */
+export async function emailDeTeste(): Promise<{ ok: boolean; mensagem: string }> {
+  await exigirSessao();
+  const para = process.env.ADMIN_EMAIL;
+  if (!para) return { ok: false, mensagem: "Falta ADMIN_EMAIL no ambiente." };
+
+  const saiu = await enviar({
+    para,
+    assunto: "Cakelyo — teste de envio",
+    html: moldar({
+      titulo: "O envio está a funcionar.",
+      preTexto: "Se estás a ler isto, o SMTP do Cakelyo está configurado.",
+      remetente: "Cakelyo",
+      paragrafos: [
+        "Este email saiu do painel da plataforma. Se chegou à caixa de entrada e não ao spam, está tudo como deve estar.",
+      ],
+      rodape: "Email de teste enviado a partir do painel do Cakelyo.",
+    }),
+  });
+
+  return saiu
+    ? { ok: true, mensagem: `Enviado para ${para}. Vê a caixa de entrada.` }
+    : { ok: false, mensagem: "Não saiu. O registo do servidor diz porquê." };
 }

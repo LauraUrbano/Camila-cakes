@@ -12,6 +12,7 @@ const menu = [
   { href: "/admin/codigos", rotulo: "Códigos" },
   { href: "/admin/faturacao", rotulo: "Faturação" },
   { href: "/admin/stripe", rotulo: "Stripe" },
+  { href: "/admin/email", rotulo: "Email" },
   { href: "/admin/legal", rotulo: "Empresa" },
 ];
 

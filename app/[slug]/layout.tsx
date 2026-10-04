@@ -5,6 +5,8 @@ import Link from "next/link";
 import { lojaDoSlug } from "@/lib/fonte";
 import { dicionarioActual } from "@/lib/i18n/servidor";
 import { url } from "@/lib/seo";
+import { executorNeon, temBaseDeDados } from "@/lib/bd/cliente";
+import { seoDaPagina } from "@/lib/bd/pagina";
 import { SeletorLingua } from "@/app/lingua";
 
 /** Duas iniciais servem de marca enquanto a confeiteira não carrega um logótipo. */
@@ -35,12 +37,26 @@ export async function generateMetadata({
   if (!loja) return {};
 
   const { confeiteira } = loja;
-  const titulo = `${confeiteira.nome} — bolos por encomenda em ${confeiteira.cidade}`;
+  const seo = temBaseDeDados()
+    ? await seoDaPagina(executorNeon(), slug)
+    : { titulo: "", descricao: "", versaoDaImagem: 0 };
+
+  // O que ela escreveu manda sobre o que nós adivinhamos.
+  const titulo =
+    seo.titulo ||
+    `${confeiteira.nome} — bolos por encomenda em ${confeiteira.cidade}`;
   const descricao =
+    seo.descricao ||
     confeiteira.tagline ||
     confeiteira.bio ||
     `Encomenda bolos a ${confeiteira.nome}, em ${confeiteira.cidade}.`;
-  const foto = loja.produtos.find((p) => p.foto)?.foto;
+
+  // A imagem que ela carregou vem primeiro; sem ela, a foto de um bolo seu;
+  // sem nenhuma, nada — melhor link sem imagem do que link com a nossa.
+  const imagem = seo.versaoDaImagem
+    ? `/${slug}/imagem-partilha?v=${seo.versaoDaImagem}`
+    : loja.produtos.find((p) => p.foto)?.foto;
+  const foto = imagem;
 
   return {
     title: titulo,
