@@ -27,6 +27,7 @@ export const ptBR: Dicionario = {
     comoFunciona: "Como funciona",
     produto: "Produto",
     conta: "Conta",
+    menu: "Menu",
   },
 
   home: {

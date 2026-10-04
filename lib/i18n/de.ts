@@ -30,6 +30,7 @@ export const de: Dicionario = {
     comoFunciona: "So funktioniert's",
     produto: "Produkt",
     conta: "Konto",
+    menu: "Menü",
   },
 
   home: {

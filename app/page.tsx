@@ -3,6 +3,7 @@ import Link from "next/link";
 import Icone, { type Nome } from "@/app/icones";
 import Logo from "@/app/logo";
 import Revelar from "@/app/revelar";
+import MenuTopo from "@/app/menu-topo";
 import Camadas, { type Camada } from "@/app/camadas";
 import VitrineTema, { type Vitrine } from "@/app/vitrine-tema";
 import { SeletorLingua } from "@/app/lingua";
@@ -92,35 +93,8 @@ export default async function Home() {
 
   return (
     <div className="overflow-hidden">
-      <header className="border-b border-borda">
-        <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-5">
-          <Logo />
-          <nav className="flex flex-wrap items-center gap-x-5 gap-y-2 text-sm">
-            <Link href="#como-funciona" className="text-suave hover:text-texto">
-              {t.comum.comoFunciona}
-            </Link>
-            <Link href="/precos" className="text-suave hover:text-texto">
-              {t.comum.precos}
-            </Link>
-            <Link
-              href={`/${lojas[0].confeiteira.slug}`}
-              className="text-suave hover:text-texto"
-            >
-              {t.comum.verExemplo}
-            </Link>
-            <span className="hidden h-4 w-px bg-borda sm:block" />
-            <Link href="/entrar" className="text-suave hover:text-texto">
-              {t.comum.entrar}
-            </Link>
-            <Link
-              href="/assinar"
-              className="rounded-full bg-marca px-4 py-2 text-white"
-            >
-              {t.comum.criarConta}
-            </Link>
-          </nav>
-        </div>
-      </header>
+      <MenuTopo exemplo={lojas[0].confeiteira.slug} />
+
 
       <main>
         <section className="mx-auto grid max-w-6xl items-center gap-14 px-6 py-16 lg:grid-cols-[1.05fr_1fr] lg:py-24">

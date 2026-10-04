@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import Logo from "@/app/logo";
+import MenuTopo from "@/app/menu-topo";
 import { SeletorLingua } from "@/app/lingua";
 import { planos } from "@/lib/dados";
 import { dicionarioActual, moedaActual } from "@/lib/i18n/servidor";
+import { todasAsLojas } from "@/lib/fonte";
 import { url } from "@/lib/seo";
 import FormularioAcesso from "./formulario";
 
@@ -37,22 +38,16 @@ export default async function Assinar({
   const { plano: pedido, periodo: pedidoPeriodo } = await searchParams;
   const t = await dicionarioActual();
   const moeda = await moedaActual();
+  // O "ver exemplo" do menu aponta para a primeira loja que existir.
+  const exemplo = (await todasAsLojas())[0]?.confeiteira.slug ?? "camila-cakes";
 
   const plano = planos.find((p) => p.id === pedido) ?? planos[1];
   const periodo = pedidoPeriodo === "anual" ? "anual" : "mensal";
 
   return (
     <div>
-      <header className="border-b border-borda">
-        <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-5">
-          <Link href="/">
-            <Logo />
-          </Link>
-          <Link href="/precos" className="text-sm text-suave hover:text-texto">
-            {t.comum.precos}
-          </Link>
-        </div>
-      </header>
+      <MenuTopo exemplo={exemplo} />
+
 
       <main className="mx-auto max-w-3xl px-6 py-16">
         <div className="flex items-center gap-4">

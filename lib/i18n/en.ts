@@ -26,6 +26,7 @@ export const en: Dicionario = {
     comoFunciona: "How it works",
     produto: "Product",
     conta: "Account",
+    menu: "Menu",
   },
 
   home: {

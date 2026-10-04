@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import Logo from "@/app/logo";
+import MenuTopo from "@/app/menu-topo";
 import { SeletorLingua } from "@/app/lingua";
 import { comparacao, planos } from "@/lib/dados";
 import { dicionarioActual, moedaActual } from "@/lib/i18n/servidor";
+import { todasAsLojas } from "@/lib/fonte";
 import { url } from "@/lib/seo";
 import TabelaPrecos from "./tabela-precos";
 
@@ -26,27 +27,13 @@ export default async function Precos() {
   // A moeda vem da região de quem chega, não da língua: quem abre a página
   // em Zurique vê francos sem ter de os escolher.
   const moedaLocal = await moedaActual();
+  // O "ver exemplo" do menu aponta para a primeira loja que existir.
+  const exemplo = (await todasAsLojas())[0]?.confeiteira.slug ?? "camila-cakes";
 
   return (
     <div>
-      <header className="border-b border-borda">
-        <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-5">
-          <Link href="/">
-            <Logo />
-          </Link>
-          <div className="flex items-center gap-5 text-sm">
-            <Link href="/dashboard" className="text-suave hover:text-texto">
-              {t.comum.painel}
-            </Link>
-            <Link
-              href="/camila-cakes"
-              className="rounded-full bg-marca px-4 py-2 text-white"
-            >
-              {t.comum.verExemplo}
-            </Link>
-          </div>
-        </div>
-      </header>
+      <MenuTopo exemplo={exemplo} />
+
 
       <main className="mx-auto max-w-6xl px-6 py-16">
         <div className="flex items-center gap-4">

@@ -28,6 +28,7 @@ export const ptPT = {
     comoFunciona: "Como funciona",
     produto: "Produto",
     conta: "Conta",
+    menu: "Menu",
   },
 
   home: {
