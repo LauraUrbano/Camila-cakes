@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { lojaDoPainel } from "@/lib/fonte";
+import { exigirLoja } from "@/lib/fonte";
 import { dicionarioActual } from "@/lib/i18n/servidor";
 import { moeda, restam } from "@/lib/precos";
 
@@ -9,7 +9,7 @@ function totalDoPedido(itens: { total: number }[], taxa: number) {
 
 export default async function VisaoGeral() {
   const g = (await dicionarioActual()).painel.geral;
-  const { confeiteira, colecoes, pedidos, produtos } = await lojaDoPainel();
+  const { confeiteira, colecoes, pedidos, produtos } = await exigirLoja();
 
   const aguardando = pedidos.filter((pedido) => pedido.status === "aguardando");
   const naAgenda = pedidos.filter((pedido) =>

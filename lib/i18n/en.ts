@@ -21,6 +21,11 @@ export const en: Dicionario = {
     lingua: "Language",
     prototipo: "clickable prototype with sample data",
     assinatura: "run your cake business in one place",
+    entrar: "Sign in",
+    criarConta: "Create account",
+    comoFunciona: "How it works",
+    produto: "Product",
+    conta: "Account",
   },
 
   home: {
@@ -67,6 +72,9 @@ export const en: Dicionario = {
     abrirPagina: "Open this page →",
     chamadaTitulo: "Your cake business deserves more than a photo album.",
     chamadaBotao: "See Cakelyo working",
+    mesGratis: "First month free — no card",
+    comecarGratis: "Start free",
+    chamadaAjuda: "First month free. No card, no commitment.",
   },
 
   areas: [
@@ -172,6 +180,25 @@ export const en: Dicionario = {
           "Because Cakelyo invoices from Portugal and your bank treats the charge as an international purchase: it adds IOF tax and an exchange spread, around 7% above the table price. Paying the yearly plan by Pix avoids that — it is a local payment in reais.",
       },
     ],
+  },
+
+  entrar: {
+    titulo: "Sign in to your panel.",
+    subtitulo: "The orders that came in, your calendar and your menu — all in one place.",
+    email: "Email or your page address",
+    emailAjuda: "Either one works. The address is what comes after cakelyo.app/",
+    senha: "Password",
+    botao: "Sign in",
+    aEntrar: "Checking…",
+    esqueceu: "Lost your password? Get in touch and we'll set a new one.",
+    semConta: "No account yet?",
+    pedirAcesso: "Request access — the first month is free.",
+    plataforma: "Platform panel",
+    erroVazio: "Enter your email and password.",
+    erroErrado: "Wrong email or password.",
+    erroSuspensa: "This account is suspended. Please get in touch.",
+    erroFechado: "Sign-in isn't switched on for this server yet.",
+    sair: "Sign out",
   },
 
   assinar: {

@@ -1,8 +1,8 @@
-import { lojaDoPainel } from "@/lib/fonte";
+import { exigirLoja } from "@/lib/fonte";
 import ListaDePedidos from "./lista-de-pedidos";
 
 export default async function PaginaDePedidos() {
-  const loja = await lojaDoPainel();
+  const loja = await exigirLoja();
 
   return (
     <ListaDePedidos

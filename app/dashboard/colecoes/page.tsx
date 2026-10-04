@@ -1,11 +1,11 @@
 import { produtosDaColecao } from "@/lib/dados";
-import { lojaDoPainel } from "@/lib/fonte";
+import { exigirLoja } from "@/lib/fonte";
 import { dicionarioActual } from "@/lib/i18n/servidor";
 
 
 export default async function PaginaDeColecoes() {
   const c = (await dicionarioActual()).painel.colecoes;
-  const loja = await lojaDoPainel();
+  const loja = await exigirLoja();
   const { colecoes } = loja;
 
   return (

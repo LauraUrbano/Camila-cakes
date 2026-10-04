@@ -1,12 +1,12 @@
 import Icone from "@/app/icones";
-import { lojaDoPainel } from "@/lib/fonte";
+import { exigirLoja } from "@/lib/fonte";
 import { dicionarioActual } from "@/lib/i18n/servidor";
 
 import { moeda } from "@/lib/precos";
 
 export default async function PaginaDaMinhaPagina() {
   const p = (await dicionarioActual()).painel.pagina;
-  const { confeiteira } = await lojaDoPainel();
+  const { confeiteira } = await exigirLoja();
   const { tema, entregas } = confeiteira;
 
   return (

@@ -3,7 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { executorNeon, temBaseDeDados } from "@/lib/bd/cliente";
 import { mudarEstadoPedido } from "@/lib/bd/escritas";
-import { lojaDoPainel } from "@/lib/fonte";
+import { exigirLoja } from "@/lib/fonte";
 import type { StatusPedido } from "@/lib/tipos";
 
 /**
@@ -16,7 +16,7 @@ export async function mudarEstado(
 ): Promise<{ ok: boolean }> {
   if (!temBaseDeDados()) return { ok: false };
 
-  const { confeiteira } = await lojaDoPainel();
+  const { confeiteira } = await exigirLoja();
   const ok = await mudarEstadoPedido(
     executorNeon(),
     confeiteira.slug,

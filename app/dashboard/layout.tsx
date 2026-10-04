@@ -4,7 +4,8 @@ import Icone, { type Nome } from "@/app/icones";
 import { Marca } from "@/app/logo";
 import { SeletorLingua } from "@/app/lingua";
 import { dicionarioActual } from "@/lib/i18n/servidor";
-import { lojaDoPainel } from "@/lib/fonte";
+import { exigirLoja } from "@/lib/fonte";
+import { sair } from "@/app/entrar/accoes";
 
 const menu: { href: string; chave: keyof Nav; icone: Nome }[] = [
   { href: "/dashboard", chave: "geral", icone: "casa" },
@@ -33,7 +34,7 @@ export default async function LayoutDoPainel({
   children: ReactNode;
 }) {
   const t = await dicionarioActual();
-  const { confeiteira } = await lojaDoPainel();
+  const { confeiteira } = await exigirLoja();
 
   return (
     <div className="min-h-full lg:grid lg:grid-cols-[15rem_1fr]">
@@ -78,6 +79,15 @@ export default async function LayoutDoPainel({
             </span>
             cakelyo.app/{confeiteira.slug} ↗
           </Link>
+
+          <form action={sair} className="mt-3">
+            <button
+              type="submit"
+              className="w-full rounded-xl border border-borda px-3 py-2.5 text-xs text-suave transition hover:border-marca"
+            >
+              {t.entrar.sair}
+            </button>
+          </form>
         </div>
       </aside>
 

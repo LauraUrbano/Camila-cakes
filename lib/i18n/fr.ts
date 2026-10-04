@@ -25,6 +25,11 @@ export const fr: Dicionario = {
     lingua: "Langue",
     prototipo: "prototype navigable avec des données d'exemple",
     assinatura: "gérez votre activité pâtissière en un seul endroit",
+    entrar: "Se connecter",
+    criarConta: "Créer un compte",
+    comoFunciona: "Comment ça marche",
+    produto: "Produit",
+    conta: "Compte",
   },
 
   home: {
@@ -71,6 +76,9 @@ export const fr: Dicionario = {
     abrirPagina: "Ouvrir cette page →",
     chamadaTitulo: "Votre pâtisserie mérite mieux qu'un album photo.",
     chamadaBotao: "Voir Cakelyo à l'œuvre",
+    mesGratis: "Premier mois offert — sans carte",
+    comecarGratis: "Commencer gratuitement",
+    chamadaAjuda: "Premier mois offert. Sans carte, sans engagement.",
   },
 
   areas: [
@@ -176,6 +184,25 @@ export const fr: Dicionario = {
           "Parce que Cakelyo facture depuis le Portugal et que la banque traite le prélèvement comme un achat international : elle ajoute la taxe IOF et une marge de change, environ 7% au-dessus du prix affiché. Payer la formule annuelle par Pix évite ce coût — c'est un paiement local en reais.",
       },
     ],
+  },
+
+  entrar: {
+    titulo: "Connectez-vous à votre espace.",
+    subtitulo: "Les commandes reçues, votre agenda et votre carte — au même endroit.",
+    email: "E-mail ou adresse de votre page",
+    emailAjuda: "L'un ou l'autre convient. L'adresse est ce qui suit cakelyo.app/",
+    senha: "Mot de passe",
+    botao: "Se connecter",
+    aEntrar: "Vérification…",
+    esqueceu: "Mot de passe perdu ? Écrivez-nous et nous en créons un autre.",
+    semConta: "Pas encore de compte ?",
+    pedirAcesso: "Demandez un accès — le premier mois est offert.",
+    plataforma: "Espace plateforme",
+    erroVazio: "Saisissez votre e-mail et votre mot de passe.",
+    erroErrado: "E-mail ou mot de passe incorrect.",
+    erroSuspensa: "Ce compte est suspendu. Écrivez-nous.",
+    erroFechado: "La connexion n'est pas encore activée sur ce serveur.",
+    sair: "Se déconnecter",
   },
 
   assinar: {

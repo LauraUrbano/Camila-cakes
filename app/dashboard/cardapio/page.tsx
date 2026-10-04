@@ -1,5 +1,5 @@
 import FotoProduto from "@/app/foto-produto";
-import { lojaDoPainel } from "@/lib/fonte";
+import { exigirLoja } from "@/lib/fonte";
 import { dicionarioActual } from "@/lib/i18n/servidor";
 import { moeda, restam } from "@/lib/precos";
 import type { Moeda, Opcao } from "@/lib/tipos";
@@ -40,7 +40,7 @@ function Opcoes({
 
 export default async function PaginaDoCardapio() {
   const c = (await dicionarioActual()).painel.cardapio;
-  const { confeiteira, produtos } = await lojaDoPainel();
+  const { confeiteira, produtos } = await exigirLoja();
   const codigo: Moeda = confeiteira.moeda;
 
   return (

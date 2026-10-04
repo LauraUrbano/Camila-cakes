@@ -4,7 +4,7 @@ import { useActionState } from "react";
 import { Marca } from "@/app/logo";
 import { entrar } from "@/app/admin/accoes";
 
-export default function FormularioEntrada() {
+export default function FormularioEntrada({ pedeEmail }: { pedeEmail: boolean }) {
   const [estado, accao, aEntrar] = useActionState(entrar, {});
 
   return (
@@ -16,10 +16,20 @@ export default function FormularioEntrada() {
       </p>
 
       <form action={accao} className="mt-8 space-y-3">
+        {pedeEmail && (
+          <input
+            name="email"
+            type="email"
+            autoFocus
+            autoComplete="username"
+            placeholder="Email"
+            className="w-full rounded-full border border-borda bg-cartao px-5 py-3 text-sm outline-none focus:border-marca"
+          />
+        )}
         <input
           name="senha"
           type="password"
-          autoFocus
+          autoFocus={!pedeEmail}
           autoComplete="current-password"
           placeholder="Senha"
           className="w-full rounded-full border border-borda bg-cartao px-5 py-3 text-sm outline-none focus:border-marca"

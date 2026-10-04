@@ -6,7 +6,9 @@ export const COOKIE_ADMIN = "cakelyo_admin";
 /**
  * O painel de plataforma é de uma pessoa só, por isso não precisa de contas:
  * precisa de um segredo. Fica em ADMIN_TOKEN, no ambiente — não na base, não
- * no código.
+ * no código. O email (ADMIN_EMAIL) entra como segunda metade da chave: não é
+ * segurança a sério, porque um email não é segredo, mas obriga quem tentar à
+ * sorte a acertar nos dois.
  *
  * O cookie guarda um resumo do segredo, não o segredo: quem o vir não fica a
  * saber a senha. E a comparação é feita em tempo constante, porque comparar
@@ -32,11 +34,31 @@ function igualEmTempoConstante(a: string, b: string): boolean {
   return timingSafeEqual(x, y);
 }
 
-export function senhaCorrecta(tentativa: string): boolean {
+function emailEsperado(): string | undefined {
+  return process.env.ADMIN_EMAIL;
+}
+
+export function credenciaisCorrectas(email: string, tentativa: string): boolean {
   const esperado = segredo();
   if (!esperado) return false;
-  // Compara os resumos para o tamanho não variar com a tentativa.
-  return igualEmTempoConstante(resumo(tentativa), resumo(esperado));
+
+  // Quando não há ADMIN_EMAIL definido, o email não é pedido: serve para o
+  // painel continuar a abrir em ambientes antigos sem partir nada.
+  const emailOk = emailEsperado()
+    ? igualEmTempoConstante(
+        resumo(email.trim().toLowerCase()),
+        resumo(emailEsperado()!.trim().toLowerCase()),
+      )
+    : true;
+
+  // Compara os resumos para o tamanho não variar com a tentativa, e confere
+  // os dois sempre, para o tempo de resposta não dizer qual deles falhou.
+  const senhaOk = igualEmTempoConstante(resumo(tentativa), resumo(esperado));
+  return emailOk && senhaOk;
+}
+
+export function pedeEmail(): boolean {
+  return Boolean(emailEsperado());
 }
 
 export function valorDoCookie(): string {

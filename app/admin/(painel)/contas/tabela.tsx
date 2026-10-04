@@ -1,9 +1,10 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useActionState, useState, useTransition } from "react";
 import Link from "next/link";
 import type { ContaResumo } from "@/lib/bd/admin";
-import { alternarSuspensao, trocarPlano } from "@/app/admin/accoes";
+import { alternarSuspensao, darAcesso, trocarPlano } from "@/app/admin/accoes";
+import type { AcessoDaConta } from "@/lib/bd/acesso";
 
 const planos = ["prova", "atelier", "pastelaria"] as const;
 const nomeDoPlano: Record<string, string> = {
@@ -21,7 +22,81 @@ function quando(iso: string | null) {
   });
 }
 
-export default function TabelaContas({ lista }: { lista: ContaResumo[] }) {
+/** O painel de entrada de uma conta: quem entra, e desde quando. */
+function Acesso({ conta, acesso }: { conta: ContaResumo; acesso?: AcessoDaConta }) {
+  const [aberto, setAberto] = useState(false);
+  const [estado, accao, aGuardar] = useActionState(darAcesso, {});
+
+  return (
+    <div className="mt-5 border-t border-borda pt-5">
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <p className="text-xs text-suave">
+          {acesso?.temSenha ? (
+            <>
+              Entra como{" "}
+              <span className="text-texto">{acesso.email ?? "—"}</span>
+              {acesso.entrouEm
+                ? ` · última entrada ${quando(acesso.entrouEm)}`
+                : " · ainda não entrou"}
+            </>
+          ) : (
+            "Ainda não tem entrada própria."
+          )}
+        </p>
+        <button
+          type="button"
+          onClick={() => setAberto((x) => !x)}
+          className="rounded-full border border-borda px-4 py-1.5 text-xs text-suave transition hover:border-marca"
+        >
+          {acesso?.temSenha ? "Trocar senha" : "Dar entrada"}
+        </button>
+      </div>
+
+      {aberto && (
+        <form action={accao} className="mt-4 grid gap-3 sm:grid-cols-[1fr_1fr_auto]">
+          <input type="hidden" name="slug" value={conta.slug} />
+          <label className="block text-xs">
+            <span className="text-suave">Email dela</span>
+            <input
+              name="email"
+              type="email"
+              defaultValue={acesso?.email ?? ""}
+              className="mt-1 w-full rounded-xl border border-borda px-3 py-2 text-sm outline-none focus:border-marca"
+            />
+          </label>
+          <label className="block text-xs">
+            <span className="text-suave">Senha (dita-lhe tu)</span>
+            <input
+              name="senha"
+              className="mt-1 w-full rounded-xl border border-borda px-3 py-2 font-mono text-sm outline-none focus:border-marca"
+            />
+          </label>
+          <button
+            type="submit"
+            disabled={aGuardar}
+            className="self-end rounded-full bg-marca px-5 py-2.5 text-xs text-white disabled:opacity-50"
+          >
+            {aGuardar ? "A guardar…" : "Guardar"}
+          </button>
+          {estado.erro && (
+            <p className="text-xs text-marca sm:col-span-3">{estado.erro}</p>
+          )}
+          {estado.ok && (
+            <p className="text-xs text-marca sm:col-span-3">{estado.ok}</p>
+          )}
+        </form>
+      )}
+    </div>
+  );
+}
+
+export default function TabelaContas({
+  lista,
+  acessos,
+}: {
+  lista: ContaResumo[];
+  acessos: Record<string, AcessoDaConta>;
+}) {
   const [busca, setBusca] = useState("");
   const [aGravar, gravar] = useTransition();
 
@@ -142,6 +217,8 @@ export default function TabelaContas({ lista }: { lista: ContaResumo[] }) {
                 {c.suspensa ? "Reactivar" : "Suspender"}
               </button>
             </div>
+
+            <Acesso conta={c} acesso={acessos[c.slug]} />
           </article>
         ))}
 

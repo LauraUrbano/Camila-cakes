@@ -94,20 +94,30 @@ export default async function Home() {
       <header className="border-b border-borda">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-5">
           <Logo />
-          <div className="flex items-center gap-5 text-sm">
+          <nav className="flex flex-wrap items-center gap-x-5 gap-y-2 text-sm">
+            <Link href="#como-funciona" className="text-suave hover:text-texto">
+              {t.comum.comoFunciona}
+            </Link>
             <Link href="/precos" className="text-suave hover:text-texto">
               {t.comum.precos}
             </Link>
-            <Link href="/dashboard" className="text-suave hover:text-texto">
-              {t.comum.painel}
-            </Link>
             <Link
               href={`/${lojas[0].confeiteira.slug}`}
-              className="rounded-full bg-marca px-4 py-2 text-white"
+              className="text-suave hover:text-texto"
             >
               {t.comum.verExemplo}
             </Link>
-          </div>
+            <span className="hidden h-4 w-px bg-borda sm:block" />
+            <Link href="/entrar" className="text-suave hover:text-texto">
+              {t.comum.entrar}
+            </Link>
+            <Link
+              href="/assinar"
+              className="rounded-full bg-marca px-4 py-2 text-white"
+            >
+              {t.comum.criarConta}
+            </Link>
+          </nav>
         </div>
       </header>
 
@@ -115,7 +125,7 @@ export default async function Home() {
         <section className="mx-auto grid max-w-6xl items-center gap-14 px-6 py-16 lg:grid-cols-[1.05fr_1fr] lg:py-24">
           <div>
             <p className="inline-block rounded-full bg-marca-suave px-3.5 py-1.5 text-xs text-marca">
-              {t.home.aviso}
+              {t.home.mesGratis}
             </p>
             <h1 className="mt-6 text-[2.6rem] leading-[1.1] sm:text-[3.4rem]">
               {t.home.titulo}{" "}
@@ -126,16 +136,16 @@ export default async function Home() {
             </p>
             <div className="mt-9 flex flex-wrap gap-3">
               <Link
-                href={`/${lojas[0].confeiteira.slug}`}
+                href="/assinar"
                 className="rounded-full bg-marca px-7 py-3.5 text-white"
               >
-                {t.home.verPagina}
+                {t.home.comecarGratis}
               </Link>
               <Link
-                href="/dashboard"
+                href={`/${lojas[0].confeiteira.slug}`}
                 className="rounded-full border border-borda bg-cartao px-7 py-3.5"
               >
-                {t.home.entrarPainel}
+                {t.home.verPagina}
               </Link>
             </div>
           </div>
@@ -185,7 +195,7 @@ export default async function Home() {
           </div>
         </section>
 
-        <section className="border-y border-borda bg-cartao">
+        <section id="como-funciona" className="scroll-mt-4 border-y border-borda bg-cartao">
           <div className="mx-auto grid max-w-6xl gap-10 px-6 py-16 sm:grid-cols-3">
             {t.home.passos.map((passo, i) => (
               <div key={passo.titulo}>
@@ -278,20 +288,80 @@ export default async function Home() {
             <h2 className="mx-auto max-w-lg font-titulo text-3xl leading-snug">
               {t.home.chamadaTitulo}
             </h2>
-            <Link
-              href={`/${lojas[0].confeiteira.slug}`}
-              className="mt-9 inline-block rounded-full bg-marca px-8 py-4 text-white"
-            >
-              {t.home.chamadaBotao}
-            </Link>
+            <div className="mt-9 flex flex-wrap justify-center gap-3">
+              <Link
+                href="/assinar"
+                className="rounded-full bg-marca px-8 py-4 text-white"
+              >
+                {t.home.comecarGratis}
+              </Link>
+              <Link
+                href={`/${lojas[0].confeiteira.slug}`}
+                className="rounded-full border border-borda bg-fundo px-8 py-4"
+              >
+                {t.home.chamadaBotao}
+              </Link>
+            </div>
+            <p className="mt-5 text-sm text-suave">{t.home.chamadaAjuda}</p>
           </div>
         </section>
       </main>
 
-      <footer className="border-t border-borda py-8">
-        <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-4 px-6 text-sm text-suave">
-          <span>Cakelyo · {t.comum.prototipo}</span>
-          <SeletorLingua />
+      <footer className="border-t border-borda">
+        <div className="mx-auto max-w-6xl px-6 py-12">
+          <div className="grid gap-10 sm:grid-cols-[1.4fr_1fr_1fr]">
+            <div>
+              <Logo />
+              <p className="mt-4 max-w-xs text-sm leading-relaxed text-suave">
+                {t.comum.assinatura}
+              </p>
+            </div>
+
+            <div className="text-sm">
+              <p className="font-titulo">{t.comum.produto}</p>
+              <ul className="mt-3 space-y-2 text-suave">
+                <li>
+                  <Link href="#como-funciona" className="hover:text-texto">
+                    {t.comum.comoFunciona}
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/precos" className="hover:text-texto">
+                    {t.comum.precos}
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href={`/${lojas[0].confeiteira.slug}`}
+                    className="hover:text-texto"
+                  >
+                    {t.comum.verExemplo}
+                  </Link>
+                </li>
+              </ul>
+            </div>
+
+            <div className="text-sm">
+              <p className="font-titulo">{t.comum.conta}</p>
+              <ul className="mt-3 space-y-2 text-suave">
+                <li>
+                  <Link href="/entrar" className="hover:text-texto">
+                    {t.comum.entrar}
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/assinar" className="hover:text-texto">
+                    {t.comum.criarConta}
+                  </Link>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <div className="mt-12 flex flex-wrap items-center justify-between gap-4 border-t border-borda pt-6 text-sm text-suave">
+            <span>Cakelyo</span>
+            <SeletorLingua />
+          </div>
         </div>
       </footer>
     </div>

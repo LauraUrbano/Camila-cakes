@@ -23,6 +23,11 @@ export const ptPT = {
     lingua: "Língua",
     prototipo: "protótipo navegável com dados de exemplo",
     assinatura: "gestão do teu negócio de bolos",
+    entrar: "Entrar",
+    criarConta: "Criar conta",
+    comoFunciona: "Como funciona",
+    produto: "Produto",
+    conta: "Conta",
   },
 
   home: {
@@ -70,6 +75,9 @@ export const ptPT = {
     abrirPagina: "Abrir esta página →",
     chamadaTitulo: "O teu negócio de bolos merece mais do que um álbum de fotos.",
     chamadaBotao: "Ver o Cakelyo a funcionar",
+    mesGratis: "Primeiro mês grátis — sem cartão",
+    comecarGratis: "Começar grátis",
+    chamadaAjuda: "Primeiro mês grátis. Sem cartão, sem compromisso.",
   },
 
   areas: [
@@ -176,6 +184,25 @@ export const ptPT = {
           "Porque o Cakelyo fatura de Portugal e o teu banco trata a cobrança como compra internacional: soma IOF e spread cambial, cerca de 7% acima do preço da tabela. Quem paga o plano anual por Pix não tem esse custo — é um pagamento local em reais.",
       },
     ],
+  },
+
+  entrar: {
+    titulo: "Entra no teu painel.",
+    subtitulo: "As encomendas que chegaram, a tua agenda e o teu cardápio — tudo no mesmo sítio.",
+    email: "Email ou endereço da tua página",
+    emailAjuda: "Serve qualquer um dos dois. O endereço é o que vem depois de cakelyo.app/",
+    senha: "Senha",
+    botao: "Entrar",
+    aEntrar: "A verificar…",
+    esqueceu: "Perdeste a senha? Fala connosco e abrimos-te outra.",
+    semConta: "Ainda não tens conta?",
+    pedirAcesso: "Pede acesso — o primeiro mês é grátis.",
+    plataforma: "Painel da plataforma",
+    erroVazio: "Escreve o email e a senha.",
+    erroErrado: "Email ou senha errados.",
+    erroSuspensa: "Esta conta está suspensa. Fala connosco.",
+    erroFechado: "A entrada ainda não está ligada neste servidor.",
+    sair: "Sair",
   },
 
   assinar: {

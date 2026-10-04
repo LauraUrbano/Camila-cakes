@@ -25,6 +25,11 @@ export const de: Dicionario = {
     lingua: "Sprache",
     prototipo: "klickbarer Prototyp mit Beispieldaten",
     assinatura: "Ihr Tortengeschäft an einem Ort",
+    entrar: "Anmelden",
+    criarConta: "Konto erstellen",
+    comoFunciona: "So funktioniert's",
+    produto: "Produkt",
+    conta: "Konto",
   },
 
   home: {
@@ -71,6 +76,9 @@ export const de: Dicionario = {
     abrirPagina: "Diese Seite öffnen →",
     chamadaTitulo: "Ihr Tortengeschäft hat mehr verdient als ein Fotoalbum.",
     chamadaBotao: "Cakelyo in Aktion sehen",
+    mesGratis: "Erster Monat gratis — ohne Karte",
+    comecarGratis: "Gratis starten",
+    chamadaAjuda: "Erster Monat gratis. Ohne Karte, ohne Bindung.",
   },
 
   areas: [
@@ -176,6 +184,25 @@ export const de: Dicionario = {
           "Weil Cakelyo aus Portugal abrechnet und Ihre Bank die Belastung als Auslandskauf behandelt: Sie schlägt IOF-Steuer und Wechselkursaufschlag drauf, rund 7% über dem Tabellenpreis. Wer das Jahrespaket per Pix zahlt, hat diese Kosten nicht — das ist eine lokale Zahlung in Real.",
       },
     ],
+  },
+
+  entrar: {
+    titulo: "Melde dich in deinem Bereich an.",
+    subtitulo: "Die eingegangenen Bestellungen, dein Kalender und deine Karte — alles an einem Ort.",
+    email: "E-Mail oder Adresse deiner Seite",
+    emailAjuda: "Beides geht. Die Adresse ist das, was nach cakelyo.app/ kommt.",
+    senha: "Passwort",
+    botao: "Anmelden",
+    aEntrar: "Wird geprüft…",
+    esqueceu: "Passwort verloren? Melde dich, wir richten ein neues ein.",
+    semConta: "Noch kein Konto?",
+    pedirAcesso: "Zugang anfragen — der erste Monat ist gratis.",
+    plataforma: "Plattform-Bereich",
+    erroVazio: "Gib E-Mail und Passwort ein.",
+    erroErrado: "E-Mail oder Passwort falsch.",
+    erroSuspensa: "Dieses Konto ist gesperrt. Melde dich bei uns.",
+    erroFechado: "Die Anmeldung ist auf diesem Server noch nicht aktiv.",
+    sair: "Abmelden",
   },
 
   assinar: {

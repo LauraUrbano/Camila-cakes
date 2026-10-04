@@ -7,7 +7,7 @@ import { executorNeon, temBaseDeDados } from "@/lib/bd/cliente";
 import {
   COOKIE_ADMIN,
   estaAutenticado,
-  senhaCorrecta,
+  credenciaisCorrectas,
   valorDoCookie,
 } from "@/lib/admin/sessao";
 import {
@@ -27,6 +27,7 @@ import {
   type EstadoInscricao,
 } from "@/lib/bd/inscricoes";
 import { paraSlug } from "@/lib/slug";
+import { definirAcesso } from "@/lib/bd/acesso";
 
 /** Todas as acções daqui exigem sessão; nenhuma confia no que vem do ecrã. */
 async function exigirSessao() {
@@ -39,11 +40,12 @@ export async function entrar(
   _anterior: { erro?: string },
   dados: FormData,
 ): Promise<{ erro?: string }> {
+  const email = String(dados.get("email") ?? "");
   const senha = String(dados.get("senha") ?? "");
-  if (!senhaCorrecta(senha)) {
+  if (!credenciaisCorrectas(email, senha)) {
     // Uma pausa curta torna a força bruta cara sem incomodar quem acerta.
     await new Promise((r) => setTimeout(r, 600));
-    return { erro: "Senha errada." };
+    return { erro: "Email ou senha errados." };
   }
   (await cookies()).set(COOKIE_ADMIN, valorDoCookie(), {
     path: "/admin",
@@ -194,4 +196,36 @@ export async function mudarInscricao(id: string, estado: EstadoInscricao) {
   const exec = await exigirSessao();
   await mudarEstadoInscricao(exec, id, estado);
   revalidatePath("/admin/inscricoes");
+}
+
+/**
+ * Dá entrada própria a uma confeitaria.
+ *
+ * A senha é escolhida aqui e dita a ela — não há email de boas-vindas nem
+ * recuperação automática, por isso quem a define é quem a comunica. Volta a
+ * correr-se isto para a trocar.
+ */
+export async function darAcesso(
+  _anterior: { erro?: string; ok?: string },
+  dados: FormData,
+): Promise<{ erro?: string; ok?: string }> {
+  const exec = await exigirSessao();
+
+  const slug = String(dados.get("slug") ?? "");
+  const email = String(dados.get("email") ?? "").trim();
+  const senha = String(dados.get("senha") ?? "");
+
+  if (!/^[^@\s]+@[^@\s.]+\.[^@\s]{2,}$/.test(email)) {
+    return { erro: "Esse email não parece certo." };
+  }
+  if (senha.length < 8) {
+    return { erro: "A senha precisa de 8 caracteres ou mais." };
+  }
+
+  const guardado = await definirAcesso(exec, slug, email, senha);
+  revalidatePath("/admin/contas");
+
+  return "erro" in guardado
+    ? { erro: "Esse email já está noutra conta." }
+    : { ok: `Entrada aberta para ${email}.` };
 }
