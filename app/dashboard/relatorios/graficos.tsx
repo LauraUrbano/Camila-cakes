@@ -43,9 +43,12 @@ function tecto(maximo: number) {
 export function Colunas({
   dados,
   codigo,
+  rotulo,
 }: {
   dados: Ponto[];
   codigo?: Moeda;
+  /** Descrição do gráfico para quem usa leitor de ecrã. */
+  rotulo?: string;
 }) {
   const t = useT();
   const [sobre, setSobre] = useState<number | null>(null);
@@ -72,7 +75,7 @@ export function Colunas({
         viewBox={`0 0 ${L} ${A}`}
         className="w-full"
         role="img"
-        aria-label={t.painel.relatorios.receitaMes}
+        aria-label={rotulo ?? t.painel.relatorios.receitaMes}
       >
         {[0, 0.5, 1].map((fracao) => {
           const y = alturaPlot - fracao * (alturaPlot - topo);
@@ -165,7 +168,15 @@ export function Colunas({
   );
 }
 
-export function Barras({ dados, codigo }: { dados: Ponto[]; codigo?: Moeda }) {
+export function Barras({
+  dados,
+  codigo,
+  rotulo,
+}: {
+  dados: Ponto[];
+  codigo?: Moeda;
+  rotulo?: string;
+}) {
   const t = useT();
   const formata = formatador(codigo);
   const L = 560;
@@ -180,7 +191,7 @@ export function Barras({ dados, codigo }: { dados: Ponto[]; codigo?: Moeda }) {
       viewBox={`0 0 ${L} ${A}`}
       className="w-full"
       role="img"
-      aria-label={t.painel.relatorios.maisSai}
+      aria-label={rotulo ?? t.painel.relatorios.maisSai}
     >
       {dados.map((ponto, i) => {
         const largura = Math.max(3, (ponto.valor / max) * util);
