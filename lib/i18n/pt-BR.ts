@@ -632,6 +632,7 @@ export const ptBR: Dicionario = {
     tudo: "Tudo",
     procurar: "Procurar um bolo",
     semResultados: "Não há nada com esse filtro.",
+    cardapioVazio: "O cardápio ainda está sendo preparado. Volte daqui a pouco.",
     limpar: "Limpar",
     anterior: "Anterior",
     seguinte: "Próxima",

@@ -635,6 +635,7 @@ export const fr: Dicionario = {
     tudo: "Tout",
     procurar: "Chercher un gâteau",
     semResultados: "Rien ne correspond à ce filtre.",
+    cardapioVazio: "La carte est encore en préparation. Revenez bientôt.",
     limpar: "Effacer",
     anterior: "Précédent",
     seguinte: "Suivant",

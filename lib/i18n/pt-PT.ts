@@ -635,6 +635,7 @@ export const ptPT = {
     tudo: "Tudo",
     procurar: "Procurar um bolo",
     semResultados: "Não há nada com esse filtro.",
+    cardapioVazio: "O cardápio ainda está a ser preparado. Volta daqui a pouco.",
     limpar: "Limpar",
     anterior: "Anterior",
     seguinte: "Seguinte",

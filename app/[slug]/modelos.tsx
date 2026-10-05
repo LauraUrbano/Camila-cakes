@@ -44,6 +44,13 @@ export function Capa({
   /** A melhor imagem que a loja tiver, para os modelos que vivem de foto. */
   foto: string;
 }) {
+  // Uma conta acabada de abrir ainda não tem frase nem apresentação escritas.
+  // Sem isto a capa ficava um rectângulo vazio e a página não dizia em lado
+  // nenhum de quem era — o nome da confeitaria serve de título até ela
+  // escrever o seu.
+  const titulo = confeiteira.tagline.trim() || confeiteira.nome;
+  const apresentacao = confeiteira.bio.trim();
+
   if (modelo === "vitrine") {
     return (
       <section className="relative -mx-6 mb-6 h-[25rem] overflow-hidden sm:h-[28rem] sm:rounded-b-[2.5rem]">
@@ -62,11 +69,13 @@ export function Capa({
         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/45 to-black/10 sm:from-black/70 sm:via-black/25 sm:to-black/5" />
         <div className="relative flex h-full flex-col justify-end p-6 sm:p-12">
           <h1 className="max-w-xl text-[1.75rem] leading-tight font-semibold text-balance text-white sm:text-[2.8rem]">
-            {confeiteira.tagline}
+            {titulo}
           </h1>
-          <p className="mt-3 max-w-lg text-sm leading-relaxed text-white/85 sm:mt-4 sm:text-base">
-            {confeiteira.bio}
-          </p>
+          {apresentacao && (
+            <p className="mt-3 max-w-lg text-sm leading-relaxed text-white/85 sm:mt-4 sm:text-base">
+              {apresentacao}
+            </p>
+          )}
         </div>
       </section>
     );
@@ -76,15 +85,23 @@ export function Capa({
     return (
       <section className="grid items-end gap-7 py-10 sm:grid-cols-[1.15fr_1fr] sm:gap-12 sm:py-14">
         <div>
-          <p className="text-xs tracking-[0.22em] text-marca uppercase">
-            {confeiteira.cidade}
-          </p>
-          <h1 className="mt-4 text-[2rem] leading-[1.08] font-semibold text-balance sm:mt-5 sm:text-[3.2rem]">
-            {confeiteira.tagline}
+          {confeiteira.cidade && (
+            <p className="text-xs tracking-[0.22em] text-marca uppercase">
+              {confeiteira.cidade}
+            </p>
+          )}
+          <h1
+            className={`text-[2rem] leading-[1.08] font-semibold text-balance sm:text-[3.2rem] ${
+              confeiteira.cidade ? "mt-4 sm:mt-5" : ""
+            }`}
+          >
+            {titulo}
           </h1>
-          <p className="mt-5 max-w-md leading-relaxed text-suave sm:mt-6">
-            {confeiteira.bio}
-          </p>
+          {apresentacao && (
+            <p className="mt-5 max-w-md leading-relaxed text-suave sm:mt-6">
+              {apresentacao}
+            </p>
+          )}
         </div>
         <div
           className="h-52 overflow-hidden rounded-[1.5rem] bg-cover bg-center sm:h-80 sm:rounded-[2rem]"
@@ -99,12 +116,10 @@ export function Capa({
 
   return (
     <section className="py-16">
-      <h1 className="max-w-lg text-3xl leading-snug sm:text-[2.6rem]">
-        {confeiteira.tagline}
-      </h1>
-      <p className="mt-6 max-w-xl leading-relaxed text-suave">
-        {confeiteira.bio}
-      </p>
+      <h1 className="max-w-lg text-3xl leading-snug sm:text-[2.6rem]">{titulo}</h1>
+      {apresentacao && (
+        <p className="mt-6 max-w-xl leading-relaxed text-suave">{apresentacao}</p>
+      )}
     </section>
   );
 }
@@ -148,7 +163,7 @@ export function Produtos({
               <Link
                 href={esgotado ? `/${slug}` : `/${slug}/produto/${produto.id}`}
                 aria-disabled={esgotado}
-                className={`group block h-full overflow-hidden rounded-3xl border border-borda bg-cartao transition ${
+                className={`group flex h-full flex-col overflow-hidden rounded-3xl border border-borda bg-cartao transition ${
                   esgotado ? "cursor-not-allowed opacity-55" : "hover:border-marca"
                 }`}
               >
@@ -156,10 +171,10 @@ export function Produtos({
                   foto={produto.foto}
                   nome={produto.nome}
                   cor={produto.cor}
-                  className="h-40 sm:h-44"
+                  className="h-40 shrink-0 sm:h-44"
                   sizes="(min-width: 1024px) 20rem, (min-width: 640px) 50vw, 100vw"
                 />
-                <div className="p-5 sm:p-6">
+                <div className="flex flex-1 flex-col p-5 sm:p-6">
                   <div className="flex items-start justify-between gap-3">
                     <h3 className="font-titulo text-lg">{produto.nome}</h3>
                     <Etiqueta sobrando={sobrando} t={t} />
@@ -167,7 +182,10 @@ export function Produtos({
                   <p className="mt-2 text-sm leading-relaxed text-suave">
                     {produto.descricao}
                   </p>
-                  <div className="mt-5 flex flex-wrap items-baseline justify-between gap-2 text-sm">
+                  {/* O preço encosta ao fundo do cartão: as descrições têm
+                      comprimentos diferentes e, sem isto, o preço de cada
+                      cartão da mesma fila ficava a uma altura diferente. */}
+                  <div className="mt-auto flex flex-wrap items-baseline justify-between gap-2 pt-5 text-sm">
                     <span>
                       <span className="text-suave">{t.desde} </span>
                       <span className="font-medium">
@@ -271,8 +289,12 @@ export function Produtos({
                   className="absolute inset-0 h-full"
                   sizes="(min-width: 640px) 50vw, 100vw"
                 />
+                {/* O véu cobre a metade de baixo do cartão, que é onde o
+                    texto vive. Quando era um gradiente do cartão inteiro, o
+                    título ficava já na parte clara e um bolo fotografado em
+                    neve ou em mármore deixava de se ler. */}
                 {sobreFoto && (
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/25 to-transparent" />
+                  <div className="absolute inset-x-0 bottom-0 h-3/5 bg-gradient-to-t from-black/92 via-black/75 to-transparent" />
                 )}
                 <div
                   className={`absolute inset-x-0 bottom-0 p-5 sm:p-6 ${

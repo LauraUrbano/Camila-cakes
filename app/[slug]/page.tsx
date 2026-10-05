@@ -28,16 +28,19 @@ export default async function PaginaDaConfeiteira({
   const capa = loja.produtos.find((p) => p.foto)?.foto ?? "";
 
   // Um produto pode estar em várias coleções; o cardápio precisa de saber em
-  // quais para poder filtrar. Fora de coleção não aparece — é assim que ela
-  // guarda um bolo sem o publicar.
-  const produtosVisiveis = loja.produtos
-    .map((produto) => ({
-      ...produto,
-      colecoes: ativas
-        .filter((colecao) => colecao.produtoIds.includes(produto.id))
-        .map((colecao) => colecao.id),
-    }))
-    .filter((produto) => produto.colecoes.length > 0);
+  // quais para poder filtrar.
+  //
+  // O que decide se um bolo aparece é o produto estar activo, e mais nada: a
+  // coleção é um filtro, não uma autorização. Quando era também autorização,
+  // um bolo que ela criasse e não arrumasse numa coleção desaparecia da
+  // página sem lhe dizer porquê — e uma loja sem coleção activa ficava com o
+  // cardápio inteiro em branco.
+  const produtosVisiveis = loja.produtos.map((produto) => ({
+    ...produto,
+    colecoes: ativas
+      .filter((colecao) => colecao.produtoIds.includes(produto.id))
+      .map((colecao) => colecao.id),
+  }));
   const avaliacoes = temBaseDeDados()
     ? await avaliacoesPublicas(executorNeon(), slug)
     : { lista: [], resumo: { media: 0, quantas: 0, porNota: [0, 0, 0, 0, 0] } };
@@ -114,7 +117,10 @@ export default async function PaginaDaConfeiteira({
         </section>
       )}
 
-      <section className="grid gap-6 sm:grid-cols-2">
+      {/* Cada cartão com a altura do que tem dentro. Esticados à altura do
+          mais alto, uma confeitaria com uma só forma de entrega ficava com
+          meio cartão vazio ao lado do texto de pagamento. */}
+      <section className="grid items-start gap-6 sm:grid-cols-2">
         <div className="rounded-3xl border border-borda bg-cartao p-7">
           <h3 className="font-titulo">{t.comoRecebe}</h3>
           <ul className="mt-5 space-y-3.5 text-sm">

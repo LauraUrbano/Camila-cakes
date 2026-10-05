@@ -631,6 +631,7 @@ export const en: Dicionario = {
     tudo: "All",
     procurar: "Search for a cake",
     semResultados: "Nothing matches that filter.",
+    cardapioVazio: "The menu is still being put together. Do come back soon.",
     limpar: "Clear",
     anterior: "Previous",
     seguinte: "Next",

@@ -97,7 +97,10 @@ export default function Cardapio({
     }`;
 
   return (
-    <section>
+    // A margem em baixo é o que separa o último bolo do que vem a seguir.
+    // Sem ela os cartões encostavam ao painel de encomenda à medida e lia-se
+    // como uma falha de desenho.
+    <section className="mb-16">
       {/* --------------------------------------------------- os filtros */}
       {(mostrarColecoes || categorias.length > 1 || produtos.length > POR_PAGINA) && (
         <div className="mb-8">
@@ -199,8 +202,11 @@ export default function Cardapio({
           t={t}
         />
       ) : (
+        // Uma loja ainda sem bolos não tem filtro nenhum para culpar: dizer
+        // "não há nada com esse filtro" a quem chega à página de uma
+        // confeitaria que acabou de abrir parece um erro do site.
         <p className="rounded-3xl border border-borda bg-cartao p-10 text-center text-sm text-suave">
-          {t.semResultados}
+          {produtos.length === 0 ? t.cardapioVazio : t.semResultados}
         </p>
       )}
 
