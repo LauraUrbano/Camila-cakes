@@ -4,13 +4,18 @@ import { dicionarioActual } from "@/lib/i18n/servidor";
 
 import { moeda } from "@/lib/precos";
 import { executorNeon, temBaseDeDados } from "@/lib/bd/cliente";
-import { seoDaPagina } from "@/lib/bd/pagina";
+import { aparenciaDaPagina, seoDaPagina } from "@/lib/bd/pagina";
 import SeccaoSeo from "./seo";
+import SeccaoAparencia from "./aparencia";
 
 export default async function PaginaDaMinhaPagina() {
   const p = (await dicionarioActual()).painel.pagina;
   const { confeiteira } = await exigirLoja();
   const { tema, entregas } = confeiteira;
+
+  const aparencia = temBaseDeDados()
+    ? await aparenciaDaPagina(executorNeon(), confeiteira.slug)
+    : { lingua: "", modelo: "classico" };
 
   const seo = temBaseDeDados()
     ? await seoDaPagina(executorNeon(), confeiteira.slug)
@@ -24,6 +29,10 @@ export default async function PaginaDaMinhaPagina() {
       </p>
 
       <div className="mt-8">
+        <SeccaoAparencia inicial={aparencia} cor={tema.marcaSuave} />
+      </div>
+
+      <div className="mt-6">
         <SeccaoSeo
           slug={confeiteira.slug}
           nome={confeiteira.nome}

@@ -7,6 +7,7 @@ import {
   apagarImagemPartilha,
   guardarImagemPartilha,
   guardarSeo,
+  guardarAparencia,
 } from "@/lib/bd/pagina";
 import { dicionarioActual } from "@/lib/i18n/servidor";
 
@@ -52,4 +53,22 @@ export async function removerImagem() {
   await apagarImagemPartilha(executorNeon(), confeiteira.slug);
   revalidatePath("/dashboard/pagina");
   revalidatePath(`/${confeiteira.slug}`);
+}
+
+export async function guardarAparenciaDaPagina(
+  _anterior: EstadoSeo,
+  dados: FormData,
+): Promise<EstadoSeo> {
+  const t = (await dicionarioActual()).painel.pagina.aparencia;
+  const { confeiteira } = await exigirLoja();
+  if (!temBaseDeDados()) return { erro: t.erroGuardar };
+
+  await guardarAparencia(executorNeon(), confeiteira.slug, {
+    lingua: String(dados.get("lingua") ?? ""),
+    modelo: String(dados.get("modelo") ?? "classico"),
+  });
+
+  revalidatePath("/dashboard/pagina");
+  revalidatePath(`/${confeiteira.slug}`);
+  return { ok: t.guardado };
 }

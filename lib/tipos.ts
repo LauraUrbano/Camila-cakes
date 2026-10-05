@@ -87,6 +87,13 @@ export type Confeiteira = {
   pais: Pais;
   /** Cada confeiteira cobra na moeda do país onde trabalha. */
   moeda: Moeda;
+  /**
+   * Língua em que a página dela abre. Vazio segue quem visita, que é o que
+   * serve a quem recebe clientes de vários sítios.
+   */
+  lingua?: string;
+  /** Qual dos modelos de página ela escolheu. Vazio é o clássico. */
+  modelo?: string;
   whatsapp: string;
   instagram: string;
   dominioProprio?: string;

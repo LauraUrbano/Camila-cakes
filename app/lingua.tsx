@@ -55,7 +55,11 @@ export function SeletorLingua() {
         disabled={aTrocar}
         onChange={(evento) => {
           const escolhida = evento.target.value;
-          document.cookie = `${COOKIE_LINGUA}=${escolhida};path=/;max-age=${60 * 60 * 24 * 365};samesite=lax`;
+          const ano = 60 * 60 * 24 * 365;
+          document.cookie = `${COOKIE_LINGUA}=${escolhida};path=/;max-age=${ano};samesite=lax`;
+          // Marca que a escolha é de quem lê. É o que faz a língua da pessoa
+          // ganhar à que a confeitaria definiu para a página dela.
+          document.cookie = `cakelyo_lingua_escolhida=1;path=/;max-age=${ano};samesite=lax`;
           comecar(() => router.refresh());
         }}
         className="rounded-full border border-borda bg-cartao px-3 py-1.5 text-sm text-suave outline-none focus:border-marca"

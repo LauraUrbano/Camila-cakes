@@ -3,13 +3,14 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { produtosDaColecao } from "@/lib/dados";
 import { lojaDoSlug } from "@/lib/fonte";
-import { dicionarioActual } from "@/lib/i18n/servidor";
+import { dicionarioDaLoja } from "@/lib/i18n/servidor";
 import { moeda, precoAPartirDe, restam } from "@/lib/precos";
 import { executorNeon, temBaseDeDados } from "@/lib/bd/cliente";
 import { avaliacoesPublicas } from "@/lib/bd/avaliacoes";
 import { linguaActual } from "@/lib/i18n/servidor";
 import Avaliacoes from "./avaliacoes";
 import { url } from "@/lib/seo";
+import { Capa, Produtos, eModelo, larguraDoModelo, type Modelo } from "./modelos";
 import type { Moeda, Produto } from "@/lib/tipos";
 
 function CardProduto({
@@ -21,7 +22,7 @@ function CardProduto({
   produto: Produto;
   slug: string;
   codigo: Moeda;
-  t: Awaited<ReturnType<typeof dicionarioActual>>["loja"];
+  t: Awaited<ReturnType<typeof dicionarioDaLoja>>["loja"];
 }) {
   const sobrando = restam(produto);
   const esgotado = sobrando === 0;
@@ -79,13 +80,15 @@ export default async function PaginaDaConfeiteira({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const t = (await dicionarioActual()).loja;
   const loja = await lojaDoSlug(slug);
   if (!loja) notFound();
-
+  const t = (await dicionarioDaLoja(loja.confeiteira.lingua)).loja;
   const { confeiteira } = loja;
   const codigo = confeiteira.moeda;
   const ativas = loja.colecoes.filter((colecao) => colecao.ativa);
+  const modelo: Modelo = eModelo(confeiteira.modelo) ? confeiteira.modelo : "classico";
+  // A capa dos modelos de fotografia usa a melhor imagem que a loja tiver.
+  const capa = loja.produtos.find((p) => p.foto)?.foto ?? "";
   const avaliacoes = temBaseDeDados()
     ? await avaliacoesPublicas(executorNeon(), slug)
     : { lista: [], resumo: { media: 0, quantas: 0, porNota: [0, 0, 0, 0, 0] } };
@@ -126,19 +129,12 @@ export default async function PaginaDaConfeiteira({
   };
 
   return (
-    <main className="mx-auto max-w-4xl px-6">
+    <main className={`mx-auto ${larguraDoModelo(modelo)} px-6`}>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(dados) }}
       />
-      <section className="py-16">
-        <h1 className="max-w-lg text-3xl leading-snug sm:text-[2.6rem]">
-          {confeiteira.tagline}
-        </h1>
-        <p className="mt-6 max-w-xl leading-relaxed text-suave">
-          {confeiteira.bio}
-        </p>
-      </section>
+      <Capa modelo={modelo} confeiteira={confeiteira} foto={capa} />
 
       {ativas.map((colecao) => {
         const itens = produtosDaColecao(loja, colecao);
@@ -158,17 +154,27 @@ export default async function PaginaDaConfeiteira({
               </div>
               <span className="text-xs text-suave">{colecao.periodo}</span>
             </div>
-            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              {itens.map((produto) => (
-                <CardProduto
-                  key={produto.id}
-                  produto={produto}
-                  slug={slug}
-                  codigo={codigo}
-                  t={t}
-                />
-              ))}
-            </div>
+            {modelo === "classico" ? (
+              <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                {itens.map((produto) => (
+                  <CardProduto
+                    key={produto.id}
+                    produto={produto}
+                    slug={slug}
+                    codigo={codigo}
+                    t={t}
+                  />
+                ))}
+              </div>
+            ) : (
+              <Produtos
+                modelo={modelo}
+                itens={itens}
+                slug={slug}
+                codigo={codigo}
+                t={t}
+              />
+            )}
           </section>
         );
       })}

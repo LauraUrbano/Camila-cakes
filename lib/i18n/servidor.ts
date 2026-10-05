@@ -36,3 +36,28 @@ export async function moedaActual(): Promise<Moeda> {
   }
   return negociarMoeda((await headers()).get("accept-language"));
 }
+
+export const COOKIE_ESCOLHIDA = "cakelyo_lingua_escolhida";
+
+/**
+ * A língua de uma página de confeitaria.
+ *
+ * Três camadas, por esta ordem: o que quem lê escolheu no rodapé ganha
+ * sempre; depois a língua que a confeitaria definiu para a sua página; e só
+ * depois o que o browser pediu. Uma confeitaria de Lisboa deixa de mostrar a
+ * sua própria página em francês a uma cliente de férias — mas essa cliente
+ * continua a poder trocar.
+ */
+export async function linguaDaLoja(preferida?: string): Promise<Lingua> {
+  const biscoitos = await cookies();
+  const escolheu = biscoitos.get(COOKIE_ESCOLHIDA)?.value === "1";
+  const guardada = biscoitos.get(COOKIE_LINGUA)?.value;
+
+  if (escolheu && eLingua(guardada)) return guardada;
+  if (eLingua(preferida)) return preferida;
+  return linguaActual();
+}
+
+export async function dicionarioDaLoja(preferida?: string): Promise<Dicionario> {
+  return dicionario(await linguaDaLoja(preferida));
+}

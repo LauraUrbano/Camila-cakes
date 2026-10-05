@@ -112,3 +112,33 @@ export async function imagemPartilha(
 
   return { bytes, tipo: linha.imagem_partilha_tipo ?? "image/jpeg" };
 }
+
+export type Aparencia = { lingua: string; modelo: string };
+
+export async function aparenciaDaPagina(
+  exec: Executor,
+  slug: string,
+): Promise<Aparencia> {
+  const [linha] = await exec<{ lingua: string | null; modelo: string | null }>(
+    `select lingua, modelo from confeiteiras where slug = $1`,
+    [slug],
+  );
+  return {
+    lingua: linha?.lingua ?? "",
+    modelo: linha?.modelo ?? "classico",
+  };
+}
+
+export async function guardarAparencia(
+  exec: Executor,
+  slug: string,
+  dados: Aparencia,
+): Promise<void> {
+  await exec(
+    `update confeiteiras set
+       lingua = nullif($2, ''),
+       modelo = $3
+     where slug = $1`,
+    [slug, dados.lingua, dados.modelo],
+  );
+}

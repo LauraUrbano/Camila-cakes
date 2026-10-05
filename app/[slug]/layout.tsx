@@ -3,7 +3,9 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { lojaDoSlug } from "@/lib/fonte";
-import { dicionarioActual } from "@/lib/i18n/servidor";
+import { linguaDaLoja } from "@/lib/i18n/servidor";
+import { dicionario } from "@/lib/i18n";
+import { ProvedorLingua } from "@/app/lingua";
 import { url } from "@/lib/seo";
 import { executorNeon, temBaseDeDados } from "@/lib/bd/cliente";
 import { seoDaPagina } from "@/lib/bd/pagina";
@@ -86,9 +88,14 @@ export default async function LayoutDaConfeiteira({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const t = (await dicionarioActual()).loja;
   const loja = await lojaDoSlug(slug);
   if (!loja) notFound();
+
+  // A página abre na língua que a confeitaria escolheu, a não ser que quem
+  // lê já tenha escolhido outra no rodapé.
+  const lingua = await linguaDaLoja(loja.confeiteira.lingua);
+  const dicionarioDaPagina = dicionario(lingua);
+  const t = dicionarioDaPagina.loja;
 
   const { confeiteira } = loja;
 
@@ -108,6 +115,10 @@ export default async function LayoutDaConfeiteira({
   } as CSSProperties;
 
   return (
+    // O provedor volta a ser posto aqui, por dentro do da aplicação: os
+    // ecrãs da loja falam a língua da loja, e o rodapé que troca de língua
+    // continua a funcionar porque os provedores aninham-se.
+    <ProvedorLingua t={dicionarioDaPagina} lingua={lingua}>
     <div style={tema} className="min-h-full bg-fundo text-texto">
       <header className="border-b border-borda bg-cartao/70 backdrop-blur">
         <div className="mx-auto flex max-w-4xl items-center justify-between px-6 py-5">
@@ -162,5 +173,6 @@ export default async function LayoutDaConfeiteira({
         </div>
       </footer>
     </div>
+    </ProvedorLingua>
   );
 }

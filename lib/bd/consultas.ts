@@ -51,6 +51,8 @@ export async function lojasDaBase(exec: Executor): Promise<Loja[]> {
     tema: Confeiteira["tema"];
     aceita_personalizado: boolean;
     aviso_pagamento: string;
+    lingua: string | null;
+    modelo: string | null;
   }>(`select * from confeiteiras order by criada_em, slug`);
 
   const lojas: Loja[] = [];
@@ -76,6 +78,8 @@ export async function lojasDaBase(exec: Executor): Promise<Loja[]> {
       cidade: c.cidade,
       pais: c.pais,
       moeda: c.moeda,
+      lingua: c.lingua ?? undefined,
+      modelo: c.modelo ?? undefined,
       whatsapp: c.whatsapp,
       instagram: c.instagram,
       dominioProprio: c.dominio_proprio ?? undefined,
