@@ -2,7 +2,7 @@ import type { ReactNode } from "react";
 import Link from "next/link";
 import { SeletorLingua } from "@/app/lingua";
 import MenuTopo from "@/app/menu-topo";
-import { todasAsLojas } from "@/lib/fonte";
+import { vitrines } from "@/lib/fonte";
 
 const paginas = [
   { href: "/termos", rotulo: "Termos de serviço" },
@@ -15,7 +15,7 @@ export default async function LayoutLegal({
 }: {
   children: ReactNode;
 }) {
-  const exemplo = (await todasAsLojas())[0]?.confeiteira.slug ?? "camila-cakes";
+  const exemplo = (await vitrines())[0]?.slug ?? "camila-cakes";
 
   return (
     <div className="flex min-h-screen flex-col">

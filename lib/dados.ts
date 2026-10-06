@@ -761,11 +761,12 @@ export function lojaPorSlug(slug: string): Loja | undefined {
   return lojas.find((loja) => loja.confeiteira.slug === slug);
 }
 
-export function produtoPorId(loja: Loja, id: string) {
+/** Basta a lista de produtos: estas funções servem tanto a loja como a montra. */
+export function produtoPorId(loja: Pick<Loja, "produtos">, id: string) {
   return loja.produtos.find((produto) => produto.id === id);
 }
 
-export function produtosDaColecao(loja: Loja, colecao: Colecao) {
+export function produtosDaColecao(loja: Pick<Loja, "produtos">, colecao: Colecao) {
   return colecao.produtoIds
     .map((id) => produtoPorId(loja, id))
     .filter((produto): produto is Produto => Boolean(produto));

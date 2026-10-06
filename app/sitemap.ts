@@ -1,5 +1,5 @@
 import type { MetadataRoute } from "next";
-import { todasAsLojas } from "@/lib/fonte";
+import { todasAsMontras } from "@/lib/fonte";
 import { url } from "@/lib/seo";
 
 /**
@@ -15,7 +15,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   ];
 
   try {
-    const lojas = await todasAsLojas();
+    const lojas = await todasAsMontras();
     const paginas = lojas.flatMap((loja) => [
       {
         url: url(`/${loja.confeiteira.slug}`),

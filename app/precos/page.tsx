@@ -4,7 +4,7 @@ import MenuTopo from "@/app/menu-topo";
 import { SeletorLingua } from "@/app/lingua";
 import { comparacao, planos } from "@/lib/dados";
 import { dicionarioActual, moedaActual } from "@/lib/i18n/servidor";
-import { todasAsLojas } from "@/lib/fonte";
+import { vitrines } from "@/lib/fonte";
 import { url } from "@/lib/seo";
 import TabelaPrecos from "./tabela-precos";
 
@@ -28,7 +28,7 @@ export default async function Precos() {
   // em Zurique vê francos sem ter de os escolher.
   const moedaLocal = await moedaActual();
   // O "ver exemplo" do menu aponta para a primeira loja que existir.
-  const exemplo = (await todasAsLojas())[0]?.confeiteira.slug ?? "camila-cakes";
+  const exemplo = (await vitrines())[0]?.slug ?? "camila-cakes";
 
   return (
     <div>

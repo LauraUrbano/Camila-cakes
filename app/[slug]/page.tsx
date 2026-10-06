@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { lojaDoSlug } from "@/lib/fonte";
+import { montraDoSlug } from "@/lib/fonte";
 import { dicionarioDaLoja } from "@/lib/i18n/servidor";
 import { moeda, precoAPartirDe } from "@/lib/precos";
 import { executorNeon, temBaseDeDados } from "@/lib/bd/cliente";
@@ -17,7 +17,7 @@ export default async function PaginaDaConfeiteira({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const loja = await lojaDoSlug(slug);
+  const loja = await montraDoSlug(slug);
   if (!loja) notFound();
   const t = (await dicionarioDaLoja(loja.confeiteira.lingua)).loja;
   const { confeiteira } = loja;

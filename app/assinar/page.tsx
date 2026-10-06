@@ -4,7 +4,7 @@ import MenuTopo from "@/app/menu-topo";
 import { SeletorLingua } from "@/app/lingua";
 import { planos } from "@/lib/dados";
 import { dicionarioActual, moedaActual } from "@/lib/i18n/servidor";
-import { todasAsLojas } from "@/lib/fonte";
+import { vitrines } from "@/lib/fonte";
 import { url } from "@/lib/seo";
 import FormularioAcesso from "./formulario";
 
@@ -39,7 +39,7 @@ export default async function Assinar({
   const t = await dicionarioActual();
   const moeda = await moedaActual();
   // O "ver exemplo" do menu aponta para a primeira loja que existir.
-  const exemplo = (await todasAsLojas())[0]?.confeiteira.slug ?? "camila-cakes";
+  const exemplo = (await vitrines())[0]?.slug ?? "camila-cakes";
 
   const plano = planos.find((p) => p.id === pedido) ?? planos[1];
   const periodo = pedidoPeriodo === "anual" ? "anual" : "mensal";

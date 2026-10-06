@@ -2,7 +2,7 @@ import type { ReactNode, CSSProperties } from "react";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { lojaDoSlug } from "@/lib/fonte";
+import { montraDoSlug } from "@/lib/fonte";
 import { linguaDaLoja } from "@/lib/i18n/servidor";
 import { dicionario } from "@/lib/i18n";
 import { ProvedorLingua } from "@/app/lingua";
@@ -35,7 +35,7 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  const loja = await lojaDoSlug(slug);
+  const loja = await montraDoSlug(slug);
   if (!loja) return {};
 
   const { confeiteira } = loja;
@@ -88,7 +88,7 @@ export default async function LayoutDaConfeiteira({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const loja = await lojaDoSlug(slug);
+  const loja = await montraDoSlug(slug);
   if (!loja) notFound();
 
   // A página abre na língua que a confeitaria escolheu, a não ser que quem
